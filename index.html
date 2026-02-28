@@ -1,0 +1,1593 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Open Graph / SNS 공유 미리보기 -->
+<meta property="og:type" content="article">
+<meta property="og:title" content="Anthropic vs Pentagon — AI 안전 가드레일 vs 무제한 군사 사용">
+<meta property="og:description" content="2026.02.28 실시간 상황도: 트럼프·헤그세스·머스크 vs 다리오 아모데이·샘 알트만·직원 연대 — 누가 AI 전쟁의 규칙을 결정하는가?">
+<meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/The_Pentagon%2C_cropped_square.png/1200px-The_Pentagon%2C_cropped_square.png">
+<meta property="og:locale" content="ko_KR">
+
+<!-- Twitter/X Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Anthropic vs Pentagon — AI 안전 가드레일 vs 무제한 군사 사용">
+<meta name="twitter:description" content="2026.02.28 실시간 상황도: 트럼프·머스크 vs 아모데이·알트만 — 누가 AI 전쟁의 규칙을 결정하는가?">
+<meta name="twitter:image" content="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/The_Pentagon%2C_cropped_square.png/1200px-The_Pentagon%2C_cropped_square.png">
+
+<title>Anthropic vs Pentagon Standoff — 2026.02.28</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --red: #B8372A;
+  --red-light: #F9EFED;
+  --red-bg: #F2DDD9;
+  --blue: #3D6B99;
+  --blue-light: #EDF2F7;
+  --blue-bg: #D6E2EE;
+  --green: #3D7A5F;
+  --green-light: #EDF5F0;
+  --green-bg: #D4E8DC;
+  --orange: #C2672A;
+  --orange-light: #F9F0EA;
+  --orange-bg: #F0DDD0;
+  --purple: #6B5299;
+  --purple-light: #F0ECF5;
+  --purple-bg: #DDD6EA;
+  --yellow: #9E7C2B;
+  --yellow-light: #F7F2E6;
+  --yellow-bg: #EDE3C8;
+  --gray: #6B6560;
+  --gray-light: #F5F0EB;
+  --dark: #2D2926;
+  --text: #3D3632;
+  --text-secondary: #6B6560;
+  --text-tertiary: #9B9490;
+  --border: #DDD5CC;
+  --bg: #FAF6F1;
+  --bg-secondary: #F1ECE4;
+  --bg-card: #FFFFFF;
+  --accent: #C5713A;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--bg-secondary);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+/* Header */
+.header {
+  text-align: center;
+  margin-bottom: 56px;
+  position: relative;
+}
+
+.header::after {
+  content: '';
+  position: absolute;
+  bottom: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 200px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+}
+
+.header h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.8rem;
+  font-weight: 900;
+  color: var(--dark);
+  margin-bottom: 8px;
+  letter-spacing: -1px;
+}
+
+.header h1 span.emoji { font-style: normal; }
+
+.header .subtitle {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  font-weight: 400;
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.header .date {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  color: var(--text-tertiary);
+  margin-top: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+/* Timeline bar */
+.timeline-bar {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 24px 32px;
+  margin-bottom: 48px;
+  overflow-x: auto;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+
+.timeline-bar h3 {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: var(--text-tertiary);
+  margin-bottom: 16px;
+  font-weight: 700;
+}
+
+.timeline {
+  display: flex;
+  align-items: flex-start;
+  gap: 0;
+  position: relative;
+  min-width: 950px;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  top: 20px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--border);
+}
+
+.tl-item {
+  flex: 1;
+  position: relative;
+  padding-top: 34px;
+  text-align: center;
+  min-width: 100px;
+}
+
+.tl-item::before {
+  content: '';
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  border: 2.5px solid;
+  z-index: 2;
+  background: var(--bg);
+}
+
+.tl-item.red::before { border-color: var(--red); background: var(--red-bg); }
+.tl-item.blue::before { border-color: var(--blue); background: var(--blue-bg); }
+.tl-item.green::before { border-color: var(--green); background: var(--green-bg); }
+.tl-item.orange::before { border-color: var(--orange); background: var(--orange-bg); }
+.tl-item.yellow::before { border-color: var(--yellow); background: var(--yellow-bg); }
+
+.tl-item .tl-date {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--text-tertiary);
+  margin-bottom: 4px;
+  font-weight: 700;
+}
+
+.tl-item .tl-event {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  line-height: 1.45;
+  padding: 0 4px;
+}
+
+/* Main battlefield */
+.battlefield {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 0;
+  margin-bottom: 48px;
+}
+
+.side {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* Center divider */
+.center-divide {
+  width: 72px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.center-divide::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: repeating-linear-gradient(
+    180deg,
+    var(--border) 0px,
+    var(--border) 6px,
+    transparent 6px,
+    transparent 12px
+  );
+}
+
+.center-divide .vs {
+  background: var(--bg);
+  border: 2px solid var(--accent);
+  color: var(--accent);
+  font-family: 'Playfair Display', serif;
+  font-weight: 900;
+  font-size: 1.1rem;
+  padding: 10px 14px;
+  border-radius: 50%;
+  z-index: 2;
+  position: sticky;
+  top: 50%;
+}
+
+/* Section headers */
+.side-header {
+  padding: 16px 24px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.side-header.pro-govt {
+  background: linear-gradient(135deg, #F9EFED, #F2DDD9);
+  border: 1px solid #E0C5BE;
+}
+
+.side-header.pro-anthropic {
+  background: linear-gradient(135deg, #EDF2F7, #D6E2EE);
+  border: 1px solid #B8CEDE;
+}
+
+.side-header h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem;
+  font-weight: 900;
+  color: var(--dark);
+  margin-bottom: 2px;
+}
+
+.side-header p {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+}
+
+/* Person cards */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px;
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.card:hover {
+  border-color: #C5B8AC;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 24px rgba(45,41,38,0.08);
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+}
+
+.card.red::before { background: var(--red); }
+.card.blue::before { background: var(--blue); }
+.card.green::before { background: var(--green); }
+.card.orange::before { background: var(--orange); }
+.card.purple::before { background: var(--purple); }
+.card.yellow::before { background: var(--yellow); }
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.card-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.card.red .card-avatar { background: var(--red-bg); color: var(--red); }
+.card.blue .card-avatar { background: var(--blue-bg); color: var(--blue); }
+.card.green .card-avatar { background: var(--green-bg); color: var(--green); }
+.card.orange .card-avatar { background: var(--orange-bg); color: var(--orange); }
+.card.purple .card-avatar { background: var(--purple-bg); color: var(--purple); }
+.card.yellow .card-avatar { background: var(--yellow-bg); color: var(--yellow); }
+
+.card-name {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--dark);
+}
+
+.card-role {
+  font-size: 0.72rem;
+  color: var(--text-tertiary);
+  margin-top: 1px;
+}
+
+.card-stance {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.65;
+  margin-bottom: 12px;
+}
+
+.card-quote {
+  border-left: 3px solid;
+  padding: 10px 14px;
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+  font-style: italic;
+  border-radius: 0 8px 8px 0;
+}
+
+.card.red .card-quote { border-color: var(--red); background: var(--red-light); }
+.card.blue .card-quote { border-color: var(--blue); background: var(--blue-light); }
+.card.green .card-quote { border-color: var(--green); background: var(--green-light); }
+.card.orange .card-quote { border-color: var(--orange); background: var(--orange-light); }
+.card.purple .card-quote { border-color: var(--purple); background: var(--purple-light); }
+.card.yellow .card-quote { border-color: var(--yellow); background: var(--yellow-light); }
+
+/* Tags */
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 0.62rem;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+.tag-red { background: var(--red-bg); color: var(--red); }
+.tag-blue { background: var(--blue-bg); color: var(--blue); }
+.tag-green { background: var(--green-bg); color: var(--green); }
+.tag-orange { background: var(--orange-bg); color: var(--orange); }
+.tag-purple { background: var(--purple-bg); color: var(--purple); }
+.tag-yellow { background: var(--yellow-bg); color: var(--yellow); }
+.tag-gray { background: #EBE5DD; color: var(--gray); }
+
+/* Sections */
+.section-title {
+  text-align: center;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.45rem;
+  font-weight: 900;
+  color: var(--dark);
+  margin-bottom: 8px;
+}
+
+.section-subtitle {
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--text-tertiary);
+  margin-bottom: 24px;
+}
+
+/* Core argument section */
+.core-section {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 32px;
+  margin-bottom: 48px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+
+.core-grid {
+  display: grid;
+  grid-template-columns: 1fr 60px 1fr;
+  gap: 0;
+  align-items: start;
+}
+
+.core-side { padding: 16px; }
+
+.core-side h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.core-side ul {
+  list-style: none;
+  padding: 0;
+}
+
+.core-side li {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  padding: 8px 0;
+  border-bottom: 1px solid #EBE5DD;
+  line-height: 1.55;
+}
+
+.core-side li::before {
+  content: '→ ';
+  font-weight: 700;
+}
+
+.core-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.core-center span {
+  writing-mode: vertical-lr;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--text-tertiary);
+  letter-spacing: 4px;
+  text-transform: uppercase;
+}
+
+/* Supply chain */
+.supply-chain {
+  background: var(--bg);
+  border: 2px solid #E0BAA8;
+  border-radius: 16px;
+  padding: 32px;
+  margin-bottom: 48px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+
+.sc-flow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.sc-node {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 16px;
+  text-align: center;
+  min-width: 110px;
+}
+
+.sc-node.blocked {
+  border-color: var(--red);
+  background: var(--red-light);
+  position: relative;
+}
+
+.sc-node.blocked::after {
+  content: '✕';
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: var(--red);
+  color: white;
+  font-size: 0.65rem;
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}
+
+.sc-node .sc-name {
+  font-weight: 700;
+  font-size: 0.82rem;
+  color: var(--dark);
+}
+
+.sc-node .sc-detail {
+  font-size: 0.68rem;
+  color: var(--text-tertiary);
+  margin-top: 3px;
+}
+
+.sc-arrow { font-size: 1.1rem; color: var(--text-tertiary); }
+.sc-arrow.cut { color: var(--red); font-weight: 700; }
+
+/* Grids */
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 14px;
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 14px;
+}
+
+/* Impact cards */
+.impact-card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+
+.impact-card h3 {
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.impact-card p {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  line-height: 1.65;
+}
+
+/* ============== 2D SPECTRUM ============== */
+.spectrum-2d {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 32px 32px 24px 32px;
+  margin-bottom: 48px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+
+.spectrum-2d h2 {
+  text-align: center;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  color: var(--dark);
+  margin-bottom: 4px;
+}
+
+.spectrum-2d .spec-subtitle {
+  text-align: center;
+  font-size: 0.78rem;
+  color: var(--text-tertiary);
+  margin-bottom: 50px;
+}
+
+.spec-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.spec-chart {
+  position: relative;
+  width: 100%;
+  height: 620px;
+  margin-left: 75px;
+  margin-bottom: 55px;
+}
+
+/* Grid lines */
+.spec-chart::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(0deg, transparent, transparent calc(25% - 1px), #E8E0D8 calc(25% - 1px), #E8E0D8 25%),
+    repeating-linear-gradient(90deg, transparent, transparent calc(25% - 1px), #E8E0D8 calc(25% - 1px), #E8E0D8 25%);
+  border-radius: 8px;
+  pointer-events: none;
+}
+
+/* Quadrant backgrounds */
+.spec-chart::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(135deg,
+      rgba(184, 55, 42, 0.05) 0%,
+      transparent 30%),
+    linear-gradient(45deg,
+      rgba(61, 107, 153, 0.05) 0%,
+      transparent 30%),
+    linear-gradient(225deg,
+      rgba(194, 103, 42, 0.05) 0%,
+      transparent 30%),
+    linear-gradient(315deg,
+      rgba(61, 122, 95, 0.05) 0%,
+      transparent 30%);
+  border-radius: 8px;
+  pointer-events: none;
+}
+
+/* Axis lines */
+.x-axis {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #C5B8AC;
+  transform: translateY(-1px);
+}
+
+.y-axis {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: #C5B8AC;
+  transform: translateX(-1px);
+}
+
+/* Axis labels */
+.axis-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  position: absolute;
+  white-space: nowrap;
+}
+
+.axis-label.top {
+  top: -36px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--red);
+}
+
+.axis-label.bottom {
+  bottom: -42px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--green);
+}
+
+.axis-label.left {
+  left: -70px;
+  top: 50%;
+  transform: translateY(-50%) rotate(-90deg);
+  color: var(--red);
+}
+
+.axis-label.right {
+  right: -70px;
+  top: 50%;
+  transform: translateY(-50%) rotate(90deg);
+  color: var(--blue);
+}
+
+/* Quadrant labels */
+.q-label {
+  position: absolute;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 4px;
+  pointer-events: none;
+}
+
+.q-label.q1 { top: 12px; left: 12px; background: rgba(184,55,42,0.08); color: var(--red); }
+.q-label.q2 { top: 12px; right: 12px; background: rgba(61,107,153,0.08); color: var(--blue); }
+.q-label.q3 { bottom: 12px; left: 12px; background: rgba(194,103,42,0.08); color: var(--orange); }
+.q-label.q4 { bottom: 12px; right: 12px; background: rgba(61,122,95,0.08); color: var(--green); }
+
+/* Person dots */
+.dot {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 3;
+  cursor: default;
+  transition: z-index 0s, transform 0.2s;
+}
+
+.dot:hover {
+  z-index: 10;
+  transform: translate(-50%, -50%) scale(1.12);
+}
+
+.dot-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin: 0 auto;
+  border: 2.5px solid;
+  background: var(--bg);
+  box-shadow: 0 2px 8px rgba(45,41,38,0.12);
+}
+
+.dot-circle.sm {
+  width: 34px;
+  height: 34px;
+  font-size: 0.65rem;
+}
+
+.dot-circle.lg {
+  width: 48px;
+  height: 48px;
+  font-size: 0.85rem;
+}
+
+.dot-circle.red { border-color: var(--red); color: var(--red); }
+.dot-circle.blue { border-color: var(--blue); color: var(--blue); }
+.dot-circle.green { border-color: var(--green); color: var(--green); }
+.dot-circle.orange { border-color: var(--orange); color: var(--orange); }
+.dot-circle.purple { border-color: var(--purple); color: var(--purple); }
+.dot-circle.yellow { border-color: var(--yellow); color: var(--yellow); }
+
+.dot-label {
+  font-size: 0.62rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-top: 3px;
+  white-space: nowrap;
+}
+
+.dot-sub {
+  font-size: 0.52rem;
+  color: var(--text-tertiary);
+  white-space: nowrap;
+}
+
+/* Legend */
+.spec-legend {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+}
+
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid;
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 32px 0;
+  border-top: 1px solid var(--border);
+  color: var(--text-tertiary);
+  font-size: 0.72rem;
+  line-height: 1.8;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .battlefield {
+    grid-template-columns: 1fr;
+  }
+  .center-divide {
+    width: 100%;
+    height: 40px;
+    flex-direction: row;
+  }
+  .center-divide::before {
+    top: 50%;
+    left: 0;
+    right: 0;
+    width: auto;
+    height: 2px;
+    background: repeating-linear-gradient(90deg, var(--border) 0px, var(--border) 6px, transparent 6px, transparent 12px);
+  }
+  .core-grid {
+    grid-template-columns: 1fr;
+  }
+  .core-center { height: 40px; }
+  .core-center span { writing-mode: horizontal-tb; }
+  .header h1 { font-size: 1.8rem; }
+  .spec-chart { height: 500px; margin-left: 50px; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<!-- HEADER -->
+<div class="header">
+  <h1>🇺🇸 Anthropic vs. Pentagon 🛡️</h1>
+  <div class="subtitle">AI 안전 가드레일 vs. 무제한 군사 사용 — 실리콘밸리와 국방부의 역사적 대치</div>
+  <div class="date">2026.02.28 — Real-Time Situation Map</div>
+</div>
+
+<!-- TIMELINE -->
+<div class="timeline-bar">
+  <h3>📅 사건 타임라인</h3>
+  <div class="timeline">
+    <div class="tl-item green">
+      <div class="tl-date">2025 여름</div>
+      <div class="tl-event">Anthropic, 펜타곤과 최대 $200M 계약 체결. Claude 기밀 네트워크 투입</div>
+    </div>
+    <div class="tl-item green">
+      <div class="tl-date">2026.01</div>
+      <div class="tl-event">Claude, 베네수엘라 마두로 생포 작전에 활용</div>
+    </div>
+    <div class="tl-item orange">
+      <div class="tl-date">2026.02 초</div>
+      <div class="tl-event">펜타곤, "모든 합법적 목적" 무제한 사용 요구 시작</div>
+    </div>
+    <div class="tl-item orange">
+      <div class="tl-date">02.25</div>
+      <div class="tl-event">헤그세스, Anthropic에 최후통첩 — 금요일 5:01PM 마감</div>
+    </div>
+    <div class="tl-item blue">
+      <div class="tl-date">02.26</div>
+      <div class="tl-event">아모데이: "양심상 수용 불가" 공식 성명</div>
+    </div>
+    <div class="tl-item blue">
+      <div class="tl-date">02.27 새벽</div>
+      <div class="tl-event">Google·OpenAI 직원 300명+, 공개 연대 서한</div>
+    </div>
+    <div class="tl-item yellow">
+      <div class="tl-date">02.27 오전</div>
+      <div class="tl-event">알트만: "같은 레드라인 공유" — 별도 협상 시작</div>
+    </div>
+    <div class="tl-item red">
+      <div class="tl-date">02.27 오후</div>
+      <div class="tl-event">🔥 트럼프: 전 기관 Anthropic 사용 중단 명령</div>
+    </div>
+    <div class="tl-item red">
+      <div class="tl-date">02.27 오후</div>
+      <div class="tl-event">헤그세스: "공급망 국가안보 위험" 지정</div>
+    </div>
+    <div class="tl-item yellow">
+      <div class="tl-date">02.27 저녁</div>
+      <div class="tl-event">펜타곤, OpenAI 레드라인 수용 — 계약 협상 중</div>
+    </div>
+  </div>
+</div>
+
+<!-- CORE ARGUMENT -->
+<div class="core-section">
+  <h2 class="section-title">⚔️ 핵심 쟁점: "누가 결정하는가?"</h2>
+  <div style="height: 12px;"></div>
+  <div class="core-grid">
+    <div class="core-side">
+      <h3 style="color: var(--red);">🔴 정부 측 논리</h3>
+      <ul>
+        <li>민주적으로 선출된 정부만이 군사 결정권을 가진다</li>
+        <li>비선출 기업이 국방 운용을 좌우해선 안 된다</li>
+        <li>기존 법률과 정책이 이미 감시·자율무기를 규제한다</li>
+        <li>전시 소프트웨어 공급사가 정치적 이유로 서비스를 끊으면 전투원의 생명이 위험해진다</li>
+        <li>"민간인", "무고한", "자율적" 같은 용어의 정의를 기업이 할 수 없다</li>
+      </ul>
+    </div>
+    <div class="core-center"><span>V S</span></div>
+    <div class="core-side">
+      <h3 style="color: var(--blue);">🔵 Anthropic 측 논리</h3>
+      <ul>
+        <li>현재 AI 기술은 자율 살상·대규모 감시에 안전하게 사용될 수준이 아니다</li>
+        <li>군의 AI 사용을 규율하는 법률이 의회에서 단 하나도 통과되지 않았다</li>
+        <li>같은 제한을 Anthropic에는 거부하고 OpenAI에는 수용 — 정치적 대립의 증거</li>
+        <li>미국 시민 대량 감시는 수정헌법 4조 위반 소지가 있다</li>
+        <li>한국전쟁 시대 법률(DPA)로 AI 전쟁의 미래를 결정하는 것은 민주주의적이지 않다</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN BATTLEFIELD -->
+<div class="battlefield">
+
+  <!-- LEFT: PRO-GOVERNMENT -->
+  <div class="side">
+    <div class="side-header pro-govt">
+      <h2>🔴 정부·친정부 진영</h2>
+      <p>"선출된 권력이 결정한다"</p>
+    </div>
+
+    <div class="card red">
+      <div class="card-header">
+        <div class="card-avatar">DT</div>
+        <div>
+          <div class="card-name">도널드 트럼프</div>
+          <div class="card-role">미국 대통령 · 최고사령관</div>
+        </div>
+      </div>
+      <div class="card-stance">전 연방기관에 Anthropic 기술 사용 즉각 중단을 지시. "급진 좌파 워크 기업"으로 규정, 6개월 유예 후 완전 퇴출 선언. 불이행 시 "대통령의 모든 권한" 동원 위협.</div>
+      <div class="card-quote">"군대가 어떻게 싸우고 이기는지를 급진 좌파 워크 기업이 결정하게 두지 않겠다!"</div>
+      <div class="tags">
+        <span class="tag tag-red">최종 결정자</span>
+        <span class="tag tag-red">DPA 위협</span>
+        <span class="tag tag-orange">블랙리스트</span>
+      </div>
+    </div>
+
+    <div class="card red">
+      <div class="card-header">
+        <div class="card-avatar">PH</div>
+        <div>
+          <div class="card-name">피트 헤그세스</div>
+          <div class="card-role">전쟁부(국방부) 장관</div>
+        </div>
+      </div>
+      <div class="card-stance">Anthropic을 "공급망 국가안보 위험"으로 공식 지정. 모든 군 계약업체에 Anthropic 거래 금지 — 통상 중국·러시아 기업에 적용하는 수준의 제재.</div>
+      <div class="card-quote">"실리콘밸리 이념을 미국인의 생명 위에 놓은 비겁한 기업 덕 시그널링이다."</div>
+      <div class="tags">
+        <span class="tag tag-red">Supply-Chain Risk</span>
+        <span class="tag tag-red">5:01PM 최후통첩</span>
+      </div>
+    </div>
+
+    <div class="card red">
+      <div class="card-header">
+        <div class="card-avatar">EM</div>
+        <div>
+          <div class="card-name">에밀 마이클</div>
+          <div class="card-role">국방부 연구·공학 차관 · 前 Uber 임원</div>
+        </div>
+      </div>
+      <div class="card-stance">AI 기업 협상 총괄. 아모데이를 "거짓말쟁이"·"신 콤플렉스"로 공격. 마감 직전까지 타협안 제시했으나 동시에 헤그세스는 제재를 트윗하는 이중 행보.</div>
+      <div class="card-quote">"다리오 아모데이는 미군을 개인적으로 통제하고 싶어하며 국가 안보를 위험에 빠뜨리고 있다."</div>
+      <div class="tags">
+        <span class="tag tag-red">협상 총괄</span>
+        <span class="tag tag-orange">실리콘밸리 출신</span>
+      </div>
+    </div>
+
+    <div class="card red">
+      <div class="card-header">
+        <div class="card-avatar">EM</div>
+        <div>
+          <div class="card-name">일론 머스크</div>
+          <div class="card-role">xAI CEO · X 소유주 · DOGE</div>
+        </div>
+      </div>
+      <div class="card-stance">"Anthropic은 서양 문명을 혐오한다"고 공격. Grok이 기밀 환경 사용 승인을 받은 상황에서 Anthropic 퇴출은 xAI에 직접적 이익. Claude의 "비서구적 관점 고려" 지침을 문화 전쟁으로 프레이밍.</div>
+      <div class="tags">
+        <span class="tag tag-red">직접 공격</span>
+        <span class="tag tag-yellow">Grok = 최대 수혜</span>
+        <span class="tag tag-orange">이해충돌</span>
+      </div>
+    </div>
+
+    <div class="card orange">
+      <div class="card-header">
+        <div class="card-avatar">PL</div>
+        <div>
+          <div class="card-name">팔머 럭키</div>
+          <div class="card-role">Anduril CEO · 방산 기업 창업자</div>
+        </div>
+      </div>
+      <div class="card-stance">핵심을 민주주의 문제로 프레이밍: "민간인"·"무고한"·"자율적"의 정의를 기업이 하면 선출된 정부의 권한이 침식된다. 미사일 회사가 같은 조건을 걸었다면? 이라는 비유로 반론.</div>
+      <div class="card-quote">"헌법 공화국이 여전히 나라를 운영할 만큼 충분하다고 나는 여전히 믿는다."</div>
+      <div class="tags">
+        <span class="tag tag-orange">민주주의 프레이밍</span>
+        <span class="tag tag-yellow">방산 수혜자</span>
+      </div>
+    </div>
+
+    <div class="card orange">
+      <div class="card-header">
+        <div class="card-avatar">AK</div>
+        <div>
+          <div class="card-name">알렉스 카프</div>
+          <div class="card-role">Palantir CEO · "평생 진보주의자"</div>
+        </div>
+      </div>
+      <div class="card-stance">"누가 결정하는가?"가 핵심 질문이라며 정부 측 지지. 전투원이 의존하는 소프트웨어의 신뢰를 강조. 자신은 트럼프에 투표할 계획이 없다고 밝히면서도 정부 결정권을 옹호.</div>
+      <div class="card-quote">"전투원의 생명이 소프트웨어에 달려 있을 때, 인기가 없어졌다고 끊는 회사를 절대 신뢰하지 않을 것이다."</div>
+      <div class="tags">
+        <span class="tag tag-orange">자칭 진보</span>
+        <span class="tag tag-yellow">Palantir 수혜</span>
+        <span class="tag tag-purple">모델 불가지론</span>
+      </div>
+    </div>
+
+    <div class="card red">
+      <div class="card-header">
+        <div class="card-avatar">SP</div>
+        <div>
+          <div class="card-name">숀 파넬</div>
+          <div class="card-role">펜타곤 수석 대변인</div>
+        </div>
+      </div>
+      <div class="card-stance">"군은 미국인 대량 감시나 자율 무기에 관심이 없다"며 "상식적 요청"이라 주장. 구체적 AI 사용 계획은 미공개.</div>
+      <div class="tags">
+        <span class="tag tag-red">공식 대변인</span>
+        <span class="tag tag-gray">"합법적 목적" 프레임</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CENTER -->
+  <div class="center-divide">
+    <div class="vs">VS</div>
+  </div>
+
+  <!-- RIGHT: PRO-ANTHROPIC -->
+  <div class="side">
+    <div class="side-header pro-anthropic">
+      <h2>🔵 Anthropic·안전 진영</h2>
+      <p>"기술적 한계와 시민 자유를 지켜야 한다"</p>
+    </div>
+
+    <div class="card blue">
+      <div class="card-header">
+        <div class="card-avatar">DA</div>
+        <div>
+          <div class="card-name">다리오 아모데이</div>
+          <div class="card-role">Anthropic CEO · 공동창업자</div>
+        </div>
+      </div>
+      <div class="card-stance">두 가지 레드라인만 고수: ①미국 시민 대량 감시 금지 ②자율 살상 무기 금지. 군 협력 자체는 거부하지 않았으며, Claude는 이미 기밀 네트워크와 마두로 작전에 활용 중.</div>
+      <div class="card-quote">"양심상 그들의 요구를 수용할 수 없다. 이 두 위협은 본질적으로 모순적이다."</div>
+      <div class="tags">
+        <span class="tag tag-blue">레드라인 고수</span>
+        <span class="tag tag-blue">양심적 거부</span>
+        <span class="tag tag-green">이미 군 협력 중</span>
+      </div>
+    </div>
+
+    <div class="card blue">
+      <div class="card-header">
+        <div class="card-avatar">✊</div>
+        <div>
+          <div class="card-name">Google·OpenAI 직원 연대</div>
+          <div class="card-role">300+ Google · 60+ OpenAI (2026.02.27)</div>
+        </div>
+      </div>
+      <div class="card-stance">"We Will Not Be Divided" 공개 서한. 펜타곤이 기업을 분열시키려 한다고 지적. 경영진에게 Anthropic과 같은 입장 고수를 촉구.</div>
+      <div class="card-quote">"우리는 분열되지 않을 것이다. 이 전략은 우리가 서로의 입장을 모를 때만 효과가 있다."</div>
+      <div class="tags">
+        <span class="tag tag-blue">공개 연대</span>
+        <span class="tag tag-green">산업 연대</span>
+        <span class="tag tag-purple">사측 압박</span>
+      </div>
+    </div>
+
+    <div class="card green">
+      <div class="card-header">
+        <div class="card-avatar">SA</div>
+        <div>
+          <div class="card-name">샘 알트만</div>
+          <div class="card-role">OpenAI CEO · 경쟁자이자 연대자</div>
+        </div>
+      </div>
+      <div class="card-stance">"동일한 레드라인을 공유한다"고 공개 선언. 동시에 펜타곤과 별도 협상 진행 — 기밀 배포 + 자사 안전 스택 유지를 조건으로 제시. 펜타곤은 OpenAI의 조건을 수용한 것으로 보도.</div>
+      <div class="card-quote">"DPA 위협은 적절하지 않다. Anthropic과의 차이에도 불구하고 나는 그들을 신뢰한다."</div>
+      <div class="tags">
+        <span class="tag tag-green">레드라인 공유</span>
+        <span class="tag tag-yellow">별도 딜 추진</span>
+        <span class="tag tag-purple">경쟁+연대</span>
+      </div>
+    </div>
+
+    <div class="card blue">
+      <div class="card-header">
+        <div class="card-avatar">JD</div>
+        <div>
+          <div class="card-name">제프 딘</div>
+          <div class="card-role">Google 수석 과학자 · DeepMind</div>
+        </div>
+      </div>
+      <div class="card-stance">개인 자격으로 대량 감시 반대 입장 표명. "수정헌법 4조 위반이며 표현의 자유에 위축 효과"라고 발언. Google DeepMind 공식 입장은 미발표.</div>
+      <div class="tags">
+        <span class="tag tag-blue">개인 자격 발언</span>
+        <span class="tag tag-green">수정헌법 4조</span>
+      </div>
+    </div>
+
+    <div class="card green">
+      <div class="card-header">
+        <div class="card-avatar">DB</div>
+        <div>
+          <div class="card-name">딘 볼</div>
+          <div class="card-role">前 트럼프 AI 자문 · AI Action Plan 공저자</div>
+        </div>
+      </div>
+      <div class="card-stance">트럼프 AI 정책을 직접 설계한 인물이면서도 펜타곤 대응을 "완전히 다른 차원의 미친 짓"으로 평가. 공급망 위험 지정과 필수 서비스 요구의 모순을 정면 지적.</div>
+      <div class="card-quote">"DOD 납품업체에 Anthropic을 못 쓰게 하면서, DOD는 Anthropic을 써야 한다고 하는 것 — 완전히 미친 짓이다."</div>
+      <div class="tags">
+        <span class="tag tag-green">트럼프 내부자 비판</span>
+        <span class="tag tag-purple">모순 지적</span>
+      </div>
+    </div>
+
+    <div class="card purple">
+      <div class="card-header">
+        <div class="card-avatar">Pz</div>
+        <div>
+          <div class="card-name">Prinz</div>
+          <div class="card-role">X 유저 · 기술 분석가</div>
+        </div>
+      </div>
+      <div class="card-stance">공급망 위험 지정의 실질적 파급효과 분석: Anthropic은 AWS·GCP·Azure를 통해 서빙하는데, 세 클라우드 모두 미군과 거래 중. 문자 그대로 적용 시 전체 서빙 인프라 차단.</div>
+      <div class="tags">
+        <span class="tag tag-purple">공급망 분석</span>
+        <span class="tag tag-red">AWS·GCP·Azure 위험</span>
+      </div>
+    </div>
+
+    <div class="card purple">
+      <div class="card-header">
+        <div class="card-avatar">MR</div>
+        <div>
+          <div class="card-name">Milk Road AI</div>
+          <div class="card-role">X 유저 · AI 뉴스레터</div>
+        </div>
+      </div>
+      <div class="card-stance">양측의 구조적 문제 지적: 의회가 군사 AI 법률을 단 한 건도 통과시키지 않았고, 행정부와 민간 기업이 비공식적으로 AI 전쟁의 규칙을 만들고 있음.</div>
+      <div class="card-quote">"어느 쪽이 이기든, 시스템은 고장났다."</div>
+      <div class="tags">
+        <span class="tag tag-purple">시스템 비판</span>
+        <span class="tag tag-gray">입법 공백 지적</span>
+      </div>
+    </div>
+
+    <div class="card green">
+      <div class="card-header">
+        <div class="card-avatar">GA</div>
+        <div>
+          <div class="card-name">그레고리 앨런</div>
+          <div class="card-role">CSIS 선임 자문</div>
+        </div>
+      </div>
+      <div class="card-stance">"국방부 내 사용자들은 Anthropic과 Claude를 사랑한다" — 사용 제한이 실제 문제를 일으킨 적이 없다고 증언.</div>
+      <div class="tags">
+        <span class="tag tag-green">실무자 관점</span>
+        <span class="tag tag-gray">제한 미작동 증언</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SUPPLY CHAIN -->
+<div class="supply-chain">
+  <h2 class="section-title" style="color: var(--red);">⛓️ "Supply-Chain Risk" 지정의 연쇄 효과</h2>
+  <div class="section-subtitle">Anthropic의 전체 클라우드 서빙 인프라가 위협받는 구조</div>
+  <div class="sc-flow">
+    <div class="sc-node blocked">
+      <div class="sc-name">🏢 Anthropic</div>
+      <div class="sc-detail">Claude API</div>
+    </div>
+    <div class="sc-arrow cut">→✕→</div>
+    <div class="sc-node">
+      <div class="sc-name">☁️ AWS</div>
+      <div class="sc-detail">Bedrock · 1대 파트너</div>
+    </div>
+    <div class="sc-arrow">+</div>
+    <div class="sc-node">
+      <div class="sc-name">☁️ Google Cloud</div>
+      <div class="sc-detail">Vertex AI</div>
+    </div>
+    <div class="sc-arrow">+</div>
+    <div class="sc-node">
+      <div class="sc-name">☁️ Azure</div>
+      <div class="sc-detail">Microsoft</div>
+    </div>
+    <div class="sc-arrow cut">→✕→</div>
+    <div class="sc-node">
+      <div class="sc-name">🎖️ 미 국방부</div>
+      <div class="sc-detail">+ 모든 군 계약업체</div>
+    </div>
+  </div>
+  <p style="text-align: center; font-size: 0.78rem; color: var(--red); margin-top: 14px; line-height: 1.6;">
+    ⚠️ Amazon, Microsoft, Google 모두 미군과 거래 중 → 문자 그대로 적용 시 3대 클라우드 전체에서 Anthropic 서빙 불가<br>
+    <span style="color: var(--text-tertiary);">이는 화웨이·카스퍼스키 등 외국 적성국 기업에 적용해 온 수준의 제재</span>
+  </p>
+</div>
+
+<!-- GEOPOLITICAL -->
+<div style="margin-bottom: 48px;">
+  <h2 class="section-title">🌍 지정학적 파급 — 글로벌 관전자들</h2>
+  <div class="section-subtitle">이 사건을 주시하고 있는 국가·세력과 그들의 전략적 계산</div>
+  <div class="grid-3">
+    <div class="card purple">
+      <div class="card-header">
+        <div class="card-avatar">🇨🇳</div>
+        <div>
+          <div class="card-name">중국</div>
+          <div class="card-role">AI 패권 경쟁자 · 군-민 융합 전략</div>
+        </div>
+      </div>
+      <div class="card-stance">미국 AI 내부 분열을 가장 환영하는 국가. 미국이 자국 AI 기업을 블랙리스트하는 동안 중국은 AI를 제한 없이 군사화. DeepSeek·Qwen으로 격차를 좁히는 중.</div>
+      <div class="tags">
+        <span class="tag tag-purple">최대 수혜국</span>
+        <span class="tag tag-red">군-민 융합</span>
+      </div>
+    </div>
+
+    <div class="card yellow">
+      <div class="card-header">
+        <div class="card-avatar">🇮🇳</div>
+        <div>
+          <div class="card-name">인도 (모디)</div>
+          <div class="card-role">비동맹 AI 전략 · 자체 AI 미션</div>
+        </div>
+      </div>
+      <div class="card-stance">"무제한 사용" 선례가 생기면 국내 감시 인프라(아드하르)에 AI를 통합하려는 의지 자극. 미-중 AI 갈등에서 전략적 중립 유지하며 양쪽 기술 확보 시도.</div>
+      <div class="tags">
+        <span class="tag tag-yellow">전략적 관망</span>
+        <span class="tag tag-orange">감시 인프라</span>
+      </div>
+    </div>
+
+    <div class="card green">
+      <div class="card-header">
+        <div class="card-avatar">🇪🇺</div>
+        <div>
+          <div class="card-name">유럽연합</div>
+          <div class="card-role">AI Act 체제 · 세계 최초 AI 규제</div>
+        </div>
+      </div>
+      <div class="card-stance">Anthropic 입장이 EU 규제 철학과 가장 부합. 미국이 '가드레일 해제'를 강제하면 EU 시장 접근에 새 갈등. "미국식 거버넌스 실패" 사례로 활용할 유인.</div>
+      <div class="tags">
+        <span class="tag tag-green">Anthropic 부합</span>
+        <span class="tag tag-purple">규제 선례</span>
+      </div>
+    </div>
+
+    <div class="card orange">
+      <div class="card-header">
+        <div class="card-avatar">🇬🇧</div>
+        <div>
+          <div class="card-name">영국</div>
+          <div class="card-role">Five Eyes · AI Safety Institute</div>
+        </div>
+      </div>
+      <div class="card-stance">Five Eyes 동맹 핵심 파트너. "공급망 위험" 지정이 공유 시스템에 미칠 영향이 관건. AI Safety Institute는 안전 가드레일 연구 기관으로 Anthropic에 학술적 공감.</div>
+      <div class="tags">
+        <span class="tag tag-orange">Five Eyes 영향</span>
+        <span class="tag tag-green">AI 안전 공감</span>
+      </div>
+    </div>
+
+    <div class="card yellow">
+      <div class="card-header">
+        <div class="card-avatar">🏛️</div>
+        <div>
+          <div class="card-name">미국 의회</div>
+          <div class="card-role">입법부 — 군사 AI 규제법 0건</div>
+        </div>
+      </div>
+      <div class="card-stance">이 갈등의 근본 원인: 군사 AI 법률을 단 하나도 통과시키지 않았음. 행정부와 기업이 비공식적으로 규칙을 만들고 있는 상황.</div>
+      <div class="tags">
+        <span class="tag tag-yellow">입법 공백</span>
+        <span class="tag tag-red">근본 원인</span>
+      </div>
+    </div>
+
+    <div class="card purple">
+      <div class="card-header">
+        <div class="card-avatar">🇷🇺</div>
+        <div>
+          <div class="card-name">러시아</div>
+          <div class="card-role">제재 대상국</div>
+        </div>
+      </div>
+      <div class="card-stance">미국이 자국 기업에 적성국 수준 제재를 가하는 전례를 선전 소재로 활용 가능. 미국 AI 내분을 정보전 차원에서 활용할 가능성.</div>
+      <div class="tags">
+        <span class="tag tag-purple">정보전 활용</span>
+        <span class="tag tag-gray">선전 소재</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- IMPACT ANALYSIS -->
+<div style="margin-bottom: 48px;">
+  <h2 class="section-title">💰 수혜자와 피해자 — 핵심 모순</h2>
+  <div style="height: 16px;"></div>
+  <div class="grid-3">
+    <div class="impact-card" style="border-left: 4px solid var(--green);">
+      <h3 style="color: var(--green);">📈 최대 수혜자</h3>
+      <p>
+        <strong>xAI (Grok)</strong> — Claude 퇴출 후 기밀 네트워크 진입 승인<br><br>
+        <strong>Palantir</strong> — "모델 불가지론적" 플랫폼 가치 입증<br><br>
+        <strong>Anduril</strong> — 방산 계약 확대 가속<br><br>
+        <strong>OpenAI</strong> — 같은 레드라인으로 펜타곤 수용 획득<br><br>
+        <strong>중국</strong> — 미국 내부 분열로 시간 확보
+      </p>
+    </div>
+    <div class="impact-card" style="border-left: 4px solid var(--red);">
+      <h3 style="color: var(--red);">📉 최대 피해자</h3>
+      <p>
+        <strong>Anthropic</strong> — $200M 계약 + 공급망 위기. 단, "원칙 있는 기업" 브랜딩 강화 가능<br><br>
+        <strong>미군 현장</strong> — Claude 의존 시스템 6개월 전환은 "엄청난 골치"<br><br>
+        <strong>AI 안전 연구</strong> — 가드레일이 "워크"로 정치화될 위험<br><br>
+        <strong>클라우드 3사</strong> — 해석에 따라 사업 전체 불확실성
+      </p>
+    </div>
+    <div class="impact-card" style="border-left: 4px solid var(--yellow);">
+      <h3 style="color: var(--yellow);">⚖️ 핵심 모순</h3>
+      <p>
+        <strong>같은 조건, 다른 결과</strong> — Anthropic 거부 ↔ OpenAI 수용 = 정치적 대립<br><br>
+        <strong>자기모순적 제재</strong> — "위험" 지정 + "필수 서비스" 6개월 요구<br><br>
+        <strong>민주주의 공백</strong> — 양측 모두 "민주주의"를 주장하나, 의회 입법은 0건
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ============== 2D SPECTRUM ============== -->
+<div class="spectrum-2d">
+  <h2>🎯 2차원 입장 스펙트럼</h2>
+  <div class="spec-subtitle">가로축: 무제한 군사 사용 ↔ 가드레일 필수 · 세로축: 국가 권력 ↔ 풀뿌리/민간</div>
+
+  <div class="spec-wrapper">
+    <div class="spec-chart">
+      <!-- Axes -->
+      <div class="x-axis"></div>
+      <div class="y-axis"></div>
+
+      <!-- Axis labels -->
+      <div class="axis-label top">▲ 국가 권력 (행정부·군)</div>
+      <div class="axis-label bottom">▼ 풀뿌리 (직원·시민사회·논객)</div>
+      <div class="axis-label left">◀ 무제한 사용</div>
+      <div class="axis-label right">가드레일 필수 ▶</div>
+
+      <!-- Quadrant labels -->
+      <div class="q-label q1">국가권력 × 무제한 사용</div>
+      <div class="q-label q2">국가권력 × 가드레일</div>
+      <div class="q-label q3">민간/풀뿌리 × 무제한 사용</div>
+      <div class="q-label q4">민간/풀뿌리 × 가드레일</div>
+
+      <!-- ===== Q1: State Power × Unrestricted (top-left) ===== -->
+
+      <!-- Trump: far left, very top -->
+      <div class="dot" style="left: 8%; top: 8%;">
+        <div class="dot-circle lg red">DT</div>
+        <div class="dot-label">트럼프</div>
+        <div class="dot-sub">대통령 · 최고사령관</div>
+      </div>
+
+      <!-- Hegseth: far left, near top -->
+      <div class="dot" style="left: 15%; top: 14%;">
+        <div class="dot-circle red">PH</div>
+        <div class="dot-label">헤그세스</div>
+        <div class="dot-sub">전쟁부 장관</div>
+      </div>
+
+      <!-- Emil Michael -->
+      <div class="dot" style="left: 20%; top: 22%;">
+        <div class="dot-circle sm red">EM</div>
+        <div class="dot-label">에밀 마이클</div>
+        <div class="dot-sub">국방 차관</div>
+      </div>
+
+      <!-- Sean Parnell -->
+      <div class="dot" style="left: 24%; top: 10%;">
+        <div class="dot-circle sm red">SP</div>
+        <div class="dot-label">숀 파넬</div>
+        <div class="dot-sub">펜타곤 대변인</div>
+      </div>
+
+      <!-- ===== Q2: State Power × Guardrails (top-right) — mostly empty ===== -->
+
+      <!-- US Congress: top center — legislative vacuum -->
+      <div class="dot" style="left: 50%; top: 10%;">
+        <div class="dot-circle yellow">🏛️</div>
+        <div class="dot-label">미국 의회</div>
+        <div class="dot-sub">입법 공백 · 법률 0건</div>
+      </div>
+
+      <!-- UK -->
+      <div class="dot" style="left: 60%; top: 18%;">
+        <div class="dot-circle sm orange">🇬🇧</div>
+        <div class="dot-label">영국</div>
+        <div class="dot-sub">Five Eyes · AI Safety</div>
+      </div>
+
+      <!-- EU -->
+      <div class="dot" style="left: 68%; top: 14%;">
+        <div class="dot-circle sm green">🇪🇺</div>
+        <div class="dot-label">EU</div>
+        <div class="dot-sub">AI Act 체제</div>
+      </div>
+
+      <!-- ===== Mid-level: Corporate Leaders ===== -->
+
+      <!-- Elon Musk: left side, mid (corporate + state ally) -->
+      <div class="dot" style="left: 18%; top: 38%;">
+        <div class="dot-circle lg orange">EM</div>
+        <div class="dot-label">일론 머스크</div>
+        <div class="dot-sub">xAI · DOGE · 이해충돌</div>
+      </div>
+
+      <!-- Alex Karp: center-left, corporate -->
+      <div class="dot" style="left: 33%; top: 42%;">
+        <div class="dot-circle orange">AK</div>
+        <div class="dot-label">알렉스 카프</div>
+        <div class="dot-sub">Palantir · "진보지만"</div>
+      </div>
+
+      <!-- Palmer Luckey -->
+      <div class="dot" style="left: 26%; top: 48%;">
+        <div class="dot-circle orange">PL</div>
+        <div class="dot-label">팔머 럭키</div>
+        <div class="dot-sub">Anduril · 방산</div>
+      </div>
+
+      <!-- Sam Altman: center-right, corporate -->
+      <div class="dot" style="left: 62%; top: 40%;">
+        <div class="dot-circle lg green">SA</div>
+        <div class="dot-label">샘 알트만</div>
+        <div class="dot-sub">OpenAI · 레드라인+딜 병행</div>
+      </div>
+
+      <!-- Dario Amodei: right, corporate -->
+      <div class="dot" style="left: 82%; top: 42%;">
+        <div class="dot-circle lg blue">DA</div>
+        <div class="dot-label">다리오 아모데이</div>
+        <div class="dot-sub">Anthropic · 레드라인 고수</div>
+      </div>
+
+      <!-- Jeff Dean: right, mid-high (Google leadership) -->
+      <div class="dot" style="left: 74%; top: 35%;">
+        <div class="dot-circle sm blue">JD</div>
+        <div class="dot-label">제프 딘</div>
+        <div class="dot-sub">Google 수석과학자</div>
+      </div>
+
+      <!-- China: far left, mid (state + corporate fused) -->
+      <div class="dot" style="left: 6%; top: 35%;">
+        <div class="dot-circle purple">🇨🇳</div>
+        <div class="dot-label">중국</div>
+        <div class="dot-sub">군-민 융합 · 수혜국</div>
+      </div>
+
+      <!-- India: center, mid-high (state) -->
+      <div class="dot" style="left: 42%; top: 25%;">
+        <div class="dot-circle sm yellow">🇮🇳</div>
+        <div class="dot-label">인도 (모디)</div>
+        <div class="dot-sub">전략적 관망</div>
+      </div>
+
+      <!-- Russia: far left, high -->
+      <div class="dot" style="left: 10%; top: 25%;">
+        <div class="dot-circle sm purple">🇷🇺</div>
+        <div class="dot-label">러시아</div>
+        <div class="dot-sub">정보전 활용</div>
+      </div>
+
+      <!-- ===== Q3 & Q4: Grassroots / Analysts ===== -->
+
+      <!-- Jack Prescott: left, bottom -->
+      <div class="dot" style="left: 30%; top: 72%;">
+        <div class="dot-circle sm yellow">JP</div>
+        <div class="dot-label">잭 프레스콧</div>
+        <div class="dot-sub">$PLTR 강세론</div>
+      </div>
+
+      <!-- Dean Ball: center-right, bottom-mid (former advisor → now analyst) -->
+      <div class="dot" style="left: 64%; top: 62%;">
+        <div class="dot-circle sm green">DB</div>
+        <div class="dot-label">딘 볼</div>
+        <div class="dot-sub">前 트럼프 AI자문</div>
+      </div>
+
+      <!-- Gregory Allen: center-right, mid-bottom -->
+      <div class="dot" style="left: 58%; top: 68%;">
+        <div class="dot-circle sm green">GA</div>
+        <div class="dot-label">그레고리 앨런</div>
+        <div class="dot-sub">CSIS 자문</div>
+      </div>
+
+      <!-- Prinz: right, bottom -->
+      <div class="dot" style="left: 72%; top: 75%;">
+        <div class="dot-circle sm purple">Pz</div>
+        <div class="dot-label">Prinz</div>
+        <div class="dot-sub">공급망 분석</div>
+      </div>
+
+      <!-- Milk Road AI: center, bottom -->
+      <div class="dot" style="left: 50%; top: 80%;">
+        <div class="dot-circle sm purple">MR</div>
+        <div class="dot-label">Milk Road AI</div>
+        <div class="dot-sub">"시스템이 고장났다"</div>
+      </div>
+
+      <!-- Google/OpenAI employees: right, very bottom -->
+      <div class="dot" style="left: 80%; top: 82%;">
+        <div class="dot-circle lg blue">✊</div>
+        <div class="dot-label">직원 연대 360명+</div>
+        <div class="dot-sub">풀뿌리 · 공개 서한</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Legend -->
+  <div class="spec-legend">
+    <div class="legend-item"><div class="legend-dot" style="border-color: var(--red); background: var(--red-light);"></div>미 행정부/정부 측</div>
+    <div class="legend-item"><div class="legend-dot" style="border-color: var(--orange); background: var(--orange-light);"></div>친정부 기업 리더</div>
+    <div class="legend-item"><div class="legend-dot" style="border-color: var(--blue); background: var(--blue-light);"></div>Anthropic·안전 진영</div>
+    <div class="legend-item"><div class="legend-dot" style="border-color: var(--green); background: var(--green-light);"></div>조건부 지지·중재자</div>
+    <div class="legend-item"><div class="legend-dot" style="border-color: var(--purple); background: var(--purple-light);"></div>관전자·분석가·외국</div>
+    <div class="legend-item"><div class="legend-dot" style="border-color: var(--yellow); background: var(--yellow-light);"></div>전략적 관망·중립</div>
+  </div>
+
+  <!-- Insight box -->
+  <div style="margin-top: 20px; padding: 16px 20px; background: #F7F2E6; border: 1px solid #E0D5C0; border-radius: 10px;">
+    <p style="font-size: 0.8rem; color: #6B5A3E; line-height: 1.65;">
+      <strong>📌 읽는 법:</strong> 좌상단(Q1)은 국가 권력으로 무제한 사용을 추진하는 세력, 우하단(Q4)은 시민·풀뿌리 차원에서 가드레일을 지지하는 세력입니다.
+      주목할 점은 <strong>우상단(Q2)이 거의 비어 있다</strong>는 것 — 가드레일을 법제화한 국가 권력이 부재함을 의미합니다. 미 의회가 이 공백의 중심에 위치합니다.
+      또한 <strong>샘 알트만</strong>은 기업 리더이면서 양쪽에 걸쳐 있고, <strong>일론 머스크</strong>는 DOGE를 통한 정부 내 지위로 인해 기업보다 국가 쪽에 가까이 위치합니다.
+    </p>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  본 다이어그램은 2026년 2월 28일 기준 공개 보도 및 소셜 미디어 발언을 기반으로 작성되었습니다.<br>
+  출처: CNN, Axios, NPR, AP, Bloomberg, Fortune, TechCrunch, The Hill, CNBC, X(Twitter) 등<br>
+  <span style="color: #C5B8AC;">이 상황은 현재진행형이며, 각 인물의 입장은 변동될 수 있습니다.</span>
+</div>
+
+</div>
+</body>
+</html>
