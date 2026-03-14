@@ -732,6 +732,7 @@ section:last-of-type { border-bottom: none; }
 <!-- NAV -->
 <nav class="sticky-nav">
   <div class="sticky-nav-inner">
+    <a href="#chart">유가 차트</a>
     <a href="#timeline">14일 타임라인</a>
     <a href="#clocks">비동시적 위기 시계</a>
     <a href="#gap">공급 갭 해부</a>
@@ -745,6 +746,23 @@ section:last-of-type { border-bottom: none; }
 
 <main class="container">
 
+<!-- SECTION 0: OIL PRICE CHART -->
+<section id="chart" class="fade-in">
+  <div class="section-label">SECTION 00 — BRENT CRUDE PRICE TRAJECTORY</div>
+  <h2 class="section-title">Brent 원유 가격 추이: 2월 1일 ~ 3월 14일</h2>
+  <p class="section-desc">
+    2월 내내 $64~$76 밴드에서 이란 핵 협상 기대와 제재 우려가 교차하며 등락했다.
+    2월 28일 개전과 동시에 가격 구조가 완전히 파괴되었다.
+  </p>
+  <div style="background:var(--bg-card);border:1px solid var(--border-light);border-radius:var(--radius-lg);padding:28px 24px 20px;box-shadow:var(--shadow-sm);overflow-x:auto;">
+    <canvas id="oilChart" style="width:100%;height:380px;"></canvas>
+  </div>
+  <div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:12px;font-size:11px;color:var(--text-muted);">
+    <span>● 데이터 출처: Trading Economics, EIA STEO (3/10), CNBC, Barchart, 기고문 내 인용 수치</span>
+    <span>● 주말·공휴일은 직전 거래일 종가 기준</span>
+  </div>
+</section>
+
 <!-- SECTION 1: TIMELINE -->
 <section id="timeline" class="fade-in">
   <div class="section-label">SECTION 01 — CHRONOLOGY</div>
@@ -756,7 +774,7 @@ section:last-of-type { border-bottom: none; }
 
   <div class="timeline">
     <div class="tl-item" data-severity="mid">
-      <div class="tl-day">D+1~4 — 2월 28일 ~ 3월 3일</div>
+      <div class="tl-day">D+1~4 (2/28~3/3)</div>
       <div class="tl-headline">미·이스라엘 이란 공습 개시 → 이란 즉각 보복</div>
       <div class="tl-body">
         사우디 라스 타누라 정유소(55만 b/d), 카타르 LNG 시설 피격. 유럽 천연가스 2거래일 만에 48% 급등.<br>
@@ -766,7 +784,7 @@ section:last-of-type { border-bottom: none; }
     </div>
 
     <div class="tl-item" data-severity="mid">
-      <div class="tl-day">D+5~7 — 3월 4~6일</div>
+      <div class="tl-day">D+5~7 (3/4~3/6)</div>
       <div class="tl-headline">트럼프 해군 호송·보험 보증 발표 → 시장 일시 안도 → 기뢰 확인</div>
       <div class="tl-body">
         CENTCOM, 이란 기뢰 부설선 16척 격침 확인 — 이미 기뢰가 살포된 상태.<br>
@@ -776,7 +794,7 @@ section:last-of-type { border-bottom: none; }
     </div>
 
     <div class="tl-item" data-severity="high">
-      <div class="tl-day">D+8~10 — 3월 7~9일</div>
+      <div class="tl-day">D+8~10 (3/7~3/9)</div>
       <div class="tl-headline">걸프 아랍 4국 감산 불가피 — 총 약 670만 b/d 차단</div>
       <div class="tl-body">
         사우디·UAE·쿠웨이트·이라크, 유일한 수출 경로인 해협 봉쇄로 저장 용량 한계 도달.<br>
@@ -786,7 +804,7 @@ section:last-of-type { border-bottom: none; }
     </div>
 
     <div class="tl-item" data-severity="mid">
-      <div class="tl-day">D+10~11 — 3월 10일</div>
+      <div class="tl-day">D+10~11 (3/10)</div>
       <div class="tl-headline">정책 신호 vs 물리적 현실 — 정반대 방향</div>
       <div class="tl-body">
         트럼프, 폭스뉴스 인터뷰에서 "매우 곧 종결" 시사 + 제재 면제 검토 신호.<br>
@@ -796,7 +814,7 @@ section:last-of-type { border-bottom: none; }
     </div>
 
     <div class="tl-item" data-severity="high">
-      <div class="tl-day">D+12~14 — 3월 11~13일</div>
+      <div class="tl-day">D+12~14 (3/11~3/13)</div>
       <div class="tl-headline">IEA 역대 최대 전략비축유 방출 (4억 배럴) → 실패</div>
       <div class="tl-body">
         52년 역사상 최대 규모 조정 방출. WTI 급락 후 수시간 내 재상승.<br>
@@ -806,7 +824,7 @@ section:last-of-type { border-bottom: none; }
     </div>
 
     <div class="tl-item" data-severity="critical">
-      <div class="tl-day">D+14 — 3월 13~14일 ★ 질적 전환점</div>
+      <div class="tl-day">D+14 (3/13~3/14) ★ 질적 전환점</div>
       <div class="tl-headline">카르그 섬 타격 · MEU 태평양→중동 전개 · 북한 미사일 · 중국 어선단</div>
       <div class="tl-body">
         ① 트럼프, 이란 석유 수출 90% 처리하는 카르그 섬 군사 시설 "궤멸" 발표<br>
@@ -842,7 +860,7 @@ section:last-of-type { border-bottom: none; }
     <div class="clock-card" data-urgency="critical">
       <div class="clock-flag">🇯🇵</div>
       <div class="clock-country">일본</div>
-      <div class="clock-deadline critical">D+30~40</div>
+      <div class="clock-deadline critical">D+30~40 <span style="font-size:14px;font-weight:400;color:var(--text-muted)">(3/30~4/9)</span></div>
       <div class="clock-detail">
         원유 95% 중동 의존, 70%가 호르무즈 직접 통과. LNG 재고 3주분에 불과 — 전력의 40%가 LNG.<br>
         후쿠시마 이후 원전 폐쇄로 카타르 LNG가 생명선이었으나, 카타르 시설이 D+1 피격.<br>
@@ -854,7 +872,7 @@ section:last-of-type { border-bottom: none; }
     <div class="clock-card" data-urgency="critical">
       <div class="clock-flag">🇰🇷</div>
       <div class="clock-country">한국</div>
-      <div class="clock-deadline critical">D+30~40</div>
+      <div class="clock-deadline critical">D+30~40 <span style="font-size:14px;font-weight:400;color:var(--text-muted)">(3/30~4/9)</span></div>
       <div class="clock-detail">
         원유 70.7%, LNG 20.4% 중동 의존. 석유·가스가 발전량의 약 35%.<br>
         KOSPI 12% 이상 하락, 서킷브레이커 발동. 1997년 이후 최초 유류 가격 상한제 검토 (1,900원/L).<br>
@@ -866,7 +884,7 @@ section:last-of-type { border-bottom: none; }
     <div class="clock-card" data-urgency="high">
       <div class="clock-flag">🇮🇳</div>
       <div class="clock-country">인도</div>
-      <div class="clock-deadline high">D+20~30</div>
+      <div class="clock-deadline high">D+20~30 <span style="font-size:14px;font-weight:400;color:var(--text-muted)">(3/20~3/30)</span></div>
       <div class="clock-detail">
         일 소비 약 550만 b/d 중 45~50%가 호르무즈 통과. 러시아 원유 구매 30일 면제 확보.<br>
         그러나 LPG의 62% 수입, 그 90%가 호르무즈 경유. <strong>전략 LPG 비축 없음.</strong><br>
@@ -902,7 +920,7 @@ section:last-of-type { border-bottom: none; }
     <div class="clock-card" data-urgency="moderate">
       <div class="clock-flag">🇺🇸</div>
       <div class="clock-country">미국</div>
-      <div class="clock-deadline moderate">D+60~90 (정치적)</div>
+      <div class="clock-deadline moderate">D+60~90 <span style="font-size:14px;font-weight:400;color:var(--text-muted)">(4/29~5/29)</span></div>
       <div class="clock-detail">
         호르무즈 통과량 중 미국행 2.5%. SPR ~4.15억 배럴 보유. 셰일 증산은 3~6개월 시차.<br>
         캘리포니아 예외: 정유소 원유 61% 수입, 30%가 호르무즈 경유. 주유소 가격 이미 전국 이탈치.<br>
@@ -940,7 +958,7 @@ section:last-of-type { border-bottom: none; }
   <div class="callout">
     <div class="callout-title">🔑 비동시성의 전략적 함의</div>
     <div class="callout-body">
-      일본·한국이 D+35에 비명을 지를 때, 미국은 아직 정치적으로 위기를 흡수 중이고, 인도는 이미 거리 수준 LPG 소요를 겪고 있을 수 있다.
+      일본·한국이 D+35(4/4)에 비명을 지를 때, 미국은 아직 정치적으로 위기를 흡수 중이고, 인도는 이미 거리 수준 LPG 소요를 겪고 있을 수 있다.
       <strong>휴전 협상은 모든 당사자가 동시에 해결을 원해야 성립</strong>하지만, 그 조건은 충족되지 않는다.
       이 비동시성은 이란의 전략적 자산이며, 베이징의 협상 레버리지를 매일 키운다.
     </div>
@@ -966,7 +984,7 @@ section:last-of-type { border-bottom: none; }
           <td>LNG (전력 40%)</td>
           <td class="mono">LNG 3주</td>
           <td><span class="vuln-badge extreme">EXTREME</span></td>
-          <td class="mono">D+30~40</td>
+          <td class="mono">D+30~40<br><span style="font-size:10px;color:var(--text-muted)">3/30~4/9</span></td>
         </tr>
         <tr>
           <td>🇰🇷 한국</td>
@@ -974,7 +992,7 @@ section:last-of-type { border-bottom: none; }
           <td>LNG (발전 35%)</td>
           <td class="mono">LNG 3~4주</td>
           <td><span class="vuln-badge extreme">EXTREME</span></td>
-          <td class="mono">D+30~40</td>
+          <td class="mono">D+30~40<br><span style="font-size:10px;color:var(--text-muted)">3/30~4/9</span></td>
         </tr>
         <tr>
           <td>🇮🇳 인도</td>
@@ -982,7 +1000,7 @@ section:last-of-type { border-bottom: none; }
           <td>LPG (조리 연료)</td>
           <td class="mono">전략 LPG 비축 無</td>
           <td><span class="vuln-badge high">HIGH</span></td>
-          <td class="mono">D+20~30</td>
+          <td class="mono">D+20~30<br><span style="font-size:10px;color:var(--text-muted)">3/20~3/30</span></td>
         </tr>
         <tr>
           <td>🌏 동남아</td>
@@ -1006,7 +1024,7 @@ section:last-of-type { border-bottom: none; }
           <td>정치적 유가</td>
           <td class="mono">SPR 4.15억 bbl</td>
           <td><span class="vuln-badge moderate">MODERATE</span></td>
-          <td class="mono">D+60~90</td>
+          <td class="mono">D+60~90<br><span style="font-size:10px;color:var(--text-muted)">4/29~5/29</span></td>
         </tr>
         <tr>
           <td>🇨🇳 중국</td>
@@ -1172,22 +1190,22 @@ section:last-of-type { border-bottom: none; }
 
   <div class="cascade">
     <div class="cascade-node" style="border-color:var(--red-danger);">
-      <strong>호르무즈 해협 봉쇄 (D+0)</strong>
+      <strong>호르무즈 해협 봉쇄 (D+0 · 2/28)</strong>
       <span>전 세계 원유·LNG 일일 통과량 20% 차단. 약 20 mb/d 공급 중단</span>
     </div>
     <div class="cascade-arrow"></div>
     <div class="cascade-node" style="border-color:var(--orange-warn);">
-      <strong>에너지 비축 소진 경쟁 (D+1~14)</strong>
+      <strong>에너지 비축 소진 경쟁 (D+1~14 · 3/1~3/13)</strong>
       <span>SPR 방출·파이프라인 우회로 65% 이상 갭 미해소. 국가별 위기 시계 작동 개시</span>
     </div>
     <div class="cascade-arrow"></div>
     <div class="cascade-node" style="border-color:var(--orange-warn);">
-      <strong>미군 전력 재배치 (D+14)</strong>
+      <strong>미군 전력 재배치 (D+14 · 3/14)</strong>
       <span>태평양 유일 전진배치 해병원정대(31st MEU) → 중동 전개. 해협 물리적 탈환 준비</span>
     </div>
     <div class="cascade-arrow"></div>
     <div class="cascade-node" style="border-color:var(--gold);">
-      <strong>서태평양 억제력 공백 (D+14~)</strong>
+      <strong>서태평양 억제력 공백 (D+14~ · 3/14~)</strong>
       <span>중국 해상민병대 3차 진형(동중국해), 북한 최대 규모 미사일. 수시간 내 공백 시험</span>
     </div>
     <div class="cascade-arrow"></div>
@@ -1202,7 +1220,7 @@ section:last-of-type { border-bottom: none; }
     </div>
     <div class="cascade-arrow"></div>
     <div class="cascade-node" style="border-color:var(--china-red);">
-      <strong>파리 → 베이징 (D+14~17 → 3/31)</strong>
+      <strong>파리 → 베이징 (D+16~17 · 3/15~16 → D+31 · 3/31)</strong>
       <span>Bessent·He Lifeng 파리 회담 → 트럼프 방중(3/31). 무역 협상으로 시작, 3개 전구 동시 조율로 전환</span>
     </div>
   </div>
@@ -1287,7 +1305,7 @@ section:last-of-type { border-bottom: none; }
       <div class="scenario-title">외교 교착 · 군사적 강행</div>
       <span class="scenario-prob" style="background:var(--red-light);color:var(--red-danger);">고위험 시나리오</span>
       <div class="scenario-body">
-        외교 실패 → 미군 D+25~30 해협 강행 개통 시도. 성공 시에도 "무장 호송 하의 해협"은 
+        외교 실패 → 미군 D+25~30(3/25~30) 해협 강행 개통 시도. 성공 시에도 "무장 호송 하의 해협"은 
         전쟁 전 일일 ~100회 통과의 극히 일부(10~15회)만 가능. 태평양 노출 지속.
       </div>
       <div class="scenario-stakes">
@@ -1412,7 +1430,7 @@ section:last-of-type { border-bottom: none; }
       <div class="watch-icon military">⚓</div>
       <div>
         <div class="watch-title">미 해군 호송 작전 개시</div>
-        <div class="watch-desc">D+30 이전 사고 없는 호송 시작 시 군사적 해결 경로 작동. CENTCOM 호송 회랑 선언, 보험시장 재가입 여부 확인. 부분 성공(일 10~15회 통과)도 공급 수학 변경.</div>
+        <div class="watch-desc">D+30(3/30) 이전 사고 없는 호송 시작 시 군사적 해결 경로 작동. CENTCOM 호송 회랑 선언, 보험시장 재가입 여부 확인. 부분 성공(일 10~15회 통과)도 공급 수학 변경.</div>
       </div>
     </div>
     <div class="watch-item">
@@ -1462,13 +1480,13 @@ section:last-of-type { border-bottom: none; }
   <div class="callout" style="margin-top:24px;">
     <div class="callout-title">📌 핵심 타임라인 종합</div>
     <div class="callout-body" style="font-family:'JetBrains Mono',monospace;font-size:12px;line-height:2;">
-      D+14 (오늘) ··· 파리 회담 전야. MEU 루존 해협 통과 확인<br>
-      D+15~16 ····· Bessent · He Lifeng 파리 회담<br>
-      D+20~25 ····· MEU 아라비아해 도착 예상. 인도 LPG 사회적 임계 구간<br>
-      D+25~30 ····· 해협 군사적 강행 개통 가능 창. 일본·한국 LNG 임계 접근<br>
-      D+30~40 ····· 일본·한국 LNG 물리적 소진 임계. 배급 또는 그리드 불안정<br>
-      D+45 (3/31) · 트럼프 방중 — 시진핑과 정상회담<br>
-      D+60~90 ····· 미국 SPR 가시적 압축. 주유소 가격 선거 이슈화<br>
+      D+14 · 3/14 (오늘) ··· 파리 회담 전야. MEU 루존 해협 통과 확인<br>
+      D+16~17 · 3/15~16 · Bessent · He Lifeng 파리 회담<br>
+      D+20~25 · 3/20~25 · MEU 아라비아해 도착 예상. 인도 LPG 사회적 임계 구간 (3/20~30)<br>
+      D+25~30 · 3/25~30 · 해협 군사적 강행 개통 가능 창. 일본·한국 LNG 임계 접근<br>
+      D+30~40 · 3/30~4/9 · 일본·한국 LNG 물리적 소진 임계. 배급 또는 그리드 불안정<br>
+      D+31 · 3/31 ····· 트럼프 방중 — 시진핑과 정상회담<br>
+      D+60~90 · 4/29~5/29 · 미국 SPR 가시적 압축. 주유소 가격 선거 이슈화<br>
     </div>
   </div>
 </section>
@@ -1513,6 +1531,252 @@ window.addEventListener('scroll', () => {
     }
   });
 });
+</script>
+<script>
+// ===== BRENT CRUDE OIL PRICE CHART =====
+(function(){
+  const canvas = document.getElementById('oilChart');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+
+  function resize(){
+    const rect = canvas.parentElement.getBoundingClientRect();
+    canvas.width = rect.width * dpr;
+    canvas.height = 380 * dpr;
+    canvas.style.width = rect.width + 'px';
+    canvas.style.height = '380px';
+    ctx.scale(dpr, dpr);
+    draw(rect.width, 380);
+  }
+
+  // Brent price data: [date_label, price, isWeekend]
+  // Sources: Trading Economics, EIA STEO, CNBC, Barchart, article citations
+  const data = [
+    // February 2026
+    ['2/3', 73.8, false],
+    ['2/4', 74.5, false],
+    ['2/5', 73.2, false],
+    ['2/6', 74.8, false],
+    ['2/7', 75.2, false],
+    ['2/10', 68.0, false],  // Iran talks optimism -> drop
+    ['2/11', 69.3, false],
+    ['2/12', 64.5, false],  // Diplomatic progress
+    ['2/13', 65.1, false],
+    ['2/14', 66.2, false],
+    ['2/18', 67.5, false],  // Tension re-escalation
+    ['2/19', 70.3, false],
+    ['2/20', 72.5, false],
+    ['2/21', 73.8, false],
+    ['2/24', 74.1, false],
+    ['2/25', 73.5, false],
+    ['2/26', 72.8, false],
+    ['2/27', 71.3, false],  // Pre-war close
+    // War begins 2/28
+    ['2/28', 77.2, false],  // D+0 WAR START
+    // March 2026
+    ['3/3', 85.0, false],   // D+3
+    ['3/4', 88.5, false],   // D+4 IRGC closure
+    ['3/5', 91.0, false],   // D+5
+    ['3/6', 93.5, false],   // D+6 mines confirmed
+    ['3/7', 101.0, false],  // D+7
+    ['3/9', 94.0, false],   // D+9 (EIA writing at $94)
+    ['3/10', 79.5, false],  // D+10 Trump "very soon" -> crash
+    ['3/11', 96.0, false],  // D+11 IEA 400M bbl -> bounce
+    ['3/12', 100.5, false], // D+12 tankers struck
+    ['3/13', 103.1, false], // D+13 $103.14 close
+    ['3/14', 101.2, false], // D+14 today
+  ];
+
+  const warStartIdx = data.findIndex(d => d[0] === '2/28');
+
+  // Key events
+  const events = [
+    { idx: data.findIndex(d=>d[0]==='2/10'), label: '이란 핵 협상\n낙관론', color: '#2471A3', side: 'top' },
+    { idx: warStartIdx, label: '⚔️ 개전\nD+0', color: '#C0392B', side: 'top', major: true },
+    { idx: data.findIndex(d=>d[0]==='3/4'), label: 'IRGC\n해협 폐쇄 선언', color: '#C0392B', side: 'bottom' },
+    { idx: data.findIndex(d=>d[0]==='3/7'), label: '$119.50\n장중 최고', color: '#D35400', side: 'top' },
+    { idx: data.findIndex(d=>d[0]==='3/10'), label: '트럼프\n"곧 종결"', color: '#1E8449', side: 'bottom' },
+    { idx: data.findIndex(d=>d[0]==='3/11'), label: 'IEA SPR\n4억 배럴', color: '#2471A3', side: 'top' },
+    { idx: data.findIndex(d=>d[0]==='3/13'), label: '카르그 섬\n타격', color: '#C0392B', side: 'bottom' },
+    { idx: data.findIndex(d=>d[0]==='3/14'), label: 'D+14\nMEU 전개', color: '#922B21', side: 'top', major: true },
+  ];
+
+  function draw(W, H) {
+    ctx.clearRect(0,0,W,H);
+    const pad = { top: 60, right: 30, bottom: 50, left: 52 };
+    const cw = W - pad.left - pad.right;
+    const ch = H - pad.top - pad.bottom;
+    const prices = data.map(d=>d[1]);
+    const minP = 55;
+    const maxP = 125;
+    const rangeP = maxP - minP;
+
+    function x(i){ return pad.left + (i/(data.length-1))*cw; }
+    function y(p){ return pad.top + (1-(p-minP)/rangeP)*ch; }
+
+    // War zone background
+    if(warStartIdx >= 0){
+      ctx.fillStyle = 'rgba(192,57,43,0.06)';
+      ctx.fillRect(x(warStartIdx), pad.top, cw - (warStartIdx/(data.length-1))*cw, ch);
+      // War start line
+      ctx.strokeStyle = '#C0392B';
+      ctx.lineWidth = 2;
+      ctx.setLineDash([6,4]);
+      ctx.beginPath();
+      ctx.moveTo(x(warStartIdx), pad.top);
+      ctx.lineTo(x(warStartIdx), pad.top+ch);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      // Label
+      ctx.fillStyle = '#C0392B';
+      ctx.font = 'bold 11px "Noto Sans KR", sans-serif';
+      ctx.textAlign = 'left';
+      ctx.fillText('⚔️ 전쟁 발발 (2/28)', x(warStartIdx)+6, pad.top+16);
+    }
+
+    // Grid lines
+    ctx.strokeStyle = '#E8E4DC';
+    ctx.lineWidth = 0.5;
+    for(let p = 60; p <= 120; p += 10){
+      ctx.beginPath();
+      ctx.moveTo(pad.left, y(p));
+      ctx.lineTo(pad.left+cw, y(p));
+      ctx.stroke();
+      ctx.fillStyle = '#8A8A8A';
+      ctx.font = '10px "JetBrains Mono", monospace';
+      ctx.textAlign = 'right';
+      ctx.fillText('$'+p, pad.left-6, y(p)+3);
+    }
+
+    // $100 line emphasis
+    ctx.strokeStyle = 'rgba(192,57,43,0.3)';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([4,4]);
+    ctx.beginPath();
+    ctx.moveTo(pad.left, y(100));
+    ctx.lineTo(pad.left+cw, y(100));
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = 'rgba(192,57,43,0.5)';
+    ctx.font = '9px "JetBrains Mono", monospace';
+    ctx.textAlign = 'left';
+    ctx.fillText('$100', pad.left+cw+4, y(100)+3);
+
+    // Intraday high annotation
+    const highY = y(119.5);
+    ctx.strokeStyle = 'rgba(211,84,0,0.4)';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([2,3]);
+    ctx.beginPath();
+    const highIdx = data.findIndex(d=>d[0]==='3/7');
+    ctx.moveTo(x(highIdx)-20, highY);
+    ctx.lineTo(x(highIdx)+40, highY);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = '#D35400';
+    ctx.font = '9px "JetBrains Mono", monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText('장중 $119.50', x(highIdx)+10, highY-6);
+
+    // Area fill under line
+    ctx.beginPath();
+    ctx.moveTo(x(0), y(data[0][1]));
+    for(let i=1;i<data.length;i++) ctx.lineTo(x(i), y(data[i][1]));
+    ctx.lineTo(x(data.length-1), pad.top+ch);
+    ctx.lineTo(x(0), pad.top+ch);
+    ctx.closePath();
+    const grad = ctx.createLinearGradient(0, pad.top, 0, pad.top+ch);
+    grad.addColorStop(0, 'rgba(192,57,43,0.12)');
+    grad.addColorStop(0.5, 'rgba(183,149,11,0.06)');
+    grad.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = grad;
+    ctx.fill();
+
+    // Price line - before war
+    ctx.strokeStyle = '#2471A3';
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    ctx.moveTo(x(0), y(data[0][1]));
+    for(let i=1;i<=warStartIdx;i++) ctx.lineTo(x(i), y(data[i][1]));
+    ctx.stroke();
+
+    // Price line - after war
+    ctx.strokeStyle = '#C0392B';
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    ctx.moveTo(x(warStartIdx), y(data[warStartIdx][1]));
+    for(let i=warStartIdx+1;i<data.length;i++) ctx.lineTo(x(i), y(data[i][1]));
+    ctx.stroke();
+
+    // Data points
+    data.forEach((d,i) => {
+      ctx.beginPath();
+      ctx.arc(x(i), y(d[1]), 3, 0, Math.PI*2);
+      ctx.fillStyle = i >= warStartIdx ? '#C0392B' : '#2471A3';
+      ctx.fill();
+    });
+
+    // X-axis labels (every few)
+    ctx.fillStyle = '#8A8A8A';
+    ctx.font = '10px "JetBrains Mono", monospace';
+    ctx.textAlign = 'center';
+    data.forEach((d,i) => {
+      if(i % 3 === 0 || i === data.length-1 || i === warStartIdx){
+        ctx.fillStyle = i === warStartIdx ? '#C0392B' : '#8A8A8A';
+        ctx.font = i === warStartIdx ? 'bold 10px "JetBrains Mono", monospace' : '10px "JetBrains Mono", monospace';
+        ctx.fillText(d[0], x(i), pad.top+ch+16);
+      }
+    });
+
+    // Event annotations
+    events.forEach(ev => {
+      if(ev.idx < 0) return;
+      const ex = x(ev.idx);
+      const ey = y(data[ev.idx][1]);
+      const lines = ev.label.split('\n');
+      const isTop = ev.side === 'top';
+      const offset = isTop ? -14 : 18;
+
+      // Tick line
+      ctx.strokeStyle = ev.color;
+      ctx.lineWidth = ev.major ? 1.5 : 0.8;
+      ctx.globalAlpha = 0.5;
+      ctx.beginPath();
+      ctx.moveTo(ex, ey);
+      ctx.lineTo(ex, ey + (isTop ? -10 : 10));
+      ctx.stroke();
+      ctx.globalAlpha = 1;
+
+      ctx.fillStyle = ev.color;
+      ctx.font = ev.major ? 'bold 10px "Noto Sans KR", sans-serif' : '9px "Noto Sans KR", sans-serif';
+      ctx.textAlign = 'center';
+      lines.forEach((line, li) => {
+        ctx.fillText(line, ex, ey + offset + (isTop ? -1 : 1)*li*12);
+      });
+    });
+
+    // Legend
+    ctx.font = '11px "Noto Sans KR", sans-serif';
+    ctx.textAlign = 'left';
+    // Pre-war
+    ctx.fillStyle = '#2471A3';
+    ctx.fillRect(pad.left, H-18, 14, 3);
+    ctx.fillText('전쟁 전 (이란 핵 협상기)', pad.left+20, H-13);
+    // Post-war
+    ctx.fillStyle = '#C0392B';
+    ctx.fillRect(pad.left+180, H-18, 14, 3);
+    ctx.fillText('전쟁 후 (호르무즈 봉쇄)', pad.left+200, H-13);
+    // Shaded area
+    ctx.fillStyle = 'rgba(192,57,43,0.15)';
+    ctx.fillRect(pad.left+370, H-20, 14, 8);
+    ctx.fillStyle = '#8A8A8A';
+    ctx.fillText('전쟁 구간', pad.left+390, H-13);
+  }
+
+  resize();
+  window.addEventListener('resize', resize);
+})();
 </script>
 </body>
 </html>
