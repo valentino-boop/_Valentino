@@ -1,0 +1,1485 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🧠 진짜 신경망 — 전파 시각화</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&family=Outfit:wght@400;600;800;900&family=JetBrains+Mono:wght@400;700&family=Black+Han+Sans&family=Nanum+Gothic:wght@700;800&family=Nanum+Pen+Script&family=Do+Hyeon&family=Jua&family=Gothic+A1:wght@700;900&family=Gamja+Flower&display=swap');
+
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#f4f6f9;--panel:#ffffff;--border:#d8dde6;
+    --c1:#0891b2;--c2:#7c3aed;--c3:#d97706;--c4:#059669;--c5:#db2777;--red:#dc2626;
+    --text:#1a1a2e;--dim:#3a3a4a;
+  }
+  body{background:var(--bg);color:var(--text);font-family:'Noto Sans KR',sans-serif;min-height:100vh}
+  body::before{content:'';position:fixed;inset:0;pointer-events:none;
+    background:radial-gradient(ellipse at 30% 20%,rgba(8,145,178,0.04),transparent 60%),
+               radial-gradient(ellipse at 70% 80%,rgba(124,58,237,0.04),transparent 60%)}
+
+  .container{position:relative;z-index:1;max-width:1360px;margin:0 auto;padding:14px}
+  .header{text-align:center;margin-bottom:14px}
+  .header h1{font-family:'Outfit';font-size:1.3rem;font-weight:900;
+    background:linear-gradient(135deg,var(--c1),var(--c2));
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:2px}
+  .badge{display:inline-block;margin-top:4px;padding:2px 10px;border-radius:20px;
+    font-size:0.6rem;font-weight:700;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);color:var(--c4)}
+
+  .main{display:grid;grid-template-columns:300px 1fr 280px;gap:14px}
+  @media(max-width:1060px){.main{grid-template-columns:1fr;max-width:500px;margin:0 auto}}
+
+  .panel{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px;position:relative;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.06)}
+  .panel::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;
+    background:linear-gradient(90deg,transparent,var(--c1),transparent)}
+  .ptitle{font-family:'Outfit';font-size:0.62rem;font-weight:800;text-transform:uppercase;
+    letter-spacing:2px;color:var(--c1);margin-bottom:10px;display:flex;align-items:center;gap:5px}
+  .ptitle .dot{width:5px;height:5px;background:currentColor;border-radius:50%;animation:pulse 2s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+  .train-panel::before{background:linear-gradient(90deg,transparent,var(--c4),transparent)}
+  .train-panel .ptitle{color:var(--c4)} .train-panel .ptitle .dot{background:var(--c4)}
+
+  .mode-tabs{display:flex;gap:3px;margin-bottom:10px;background:rgba(0,0,0,0.03);border-radius:8px;padding:3px}
+  .mtab{flex:1;padding:6px 4px;border:none;border-radius:6px;background:transparent;
+    color:var(--dim);cursor:pointer;font-family:'Noto Sans KR';font-size:0.7rem;font-weight:700;transition:all .15s}
+  .mtab.on{background:rgba(8,145,178,0.1);color:var(--c1)}
+
+  .step-box{margin-bottom:10px;padding:10px;background:rgba(0,0,0,0.02);border:1px solid var(--border);border-radius:10px}
+  .step-hdr{display:flex;align-items:center;gap:6px;margin-bottom:5px}
+  .step-n{font-family:'Outfit';font-size:0.55rem;font-weight:900;color:var(--c1);
+    background:rgba(6,182,212,0.1);border:1px solid rgba(6,182,212,0.2);
+    border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center}
+  .step-l{font-size:0.76rem;font-weight:700}
+  .step-d{font-size:0.68rem;color:var(--dim);line-height:1.4;margin-bottom:5px}
+
+  .btn{padding:8px 12px;border:1px solid var(--border);border-radius:8px;
+    background:rgba(0,0,0,0.02);color:var(--text);font-family:'Noto Sans KR';
+    font-size:0.76rem;font-weight:700;cursor:pointer;transition:all .15s;width:100%}
+  .btn:hover:not(:disabled){background:rgba(8,145,178,0.08);border-color:var(--c1)}
+  .btn:disabled{opacity:.35;cursor:not-allowed}
+  .btn.go{background:linear-gradient(135deg,rgba(5,150,105,0.1),rgba(8,145,178,0.1));border-color:var(--c4)}
+
+  .st{font-family:'JetBrains Mono';font-size:0.6rem;color:var(--dim);margin-top:3px;min-height:14px;line-height:1.3;word-break:break-all}
+  .st .ok{color:var(--c4)} .st .warn{color:var(--c3)} .st .err{color:var(--red)}
+
+  .pbar-wrap{margin-top:5px}
+  .pbar{width:100%;height:6px;background:rgba(0,0,0,0.06);border-radius:3px;overflow:hidden}
+  .pfill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--c4),var(--c1));width:0%;transition:width .2s}
+  .ptxt{font-family:'JetBrains Mono';font-size:0.55rem;color:var(--dim);margin-top:2px;display:flex;justify-content:space-between}
+
+  .arch-box{margin-top:6px;padding:7px;background:rgba(124,58,237,0.04);border:1px solid rgba(124,58,237,0.12);border-radius:7px}
+  .arch-t{font-size:0.62rem;color:var(--c2);margin-bottom:3px;font-weight:700}
+  .arch-l{display:flex;align-items:center;gap:5px;margin:2px 0;font-family:'JetBrains Mono';font-size:0.56rem;color:var(--dim)}
+  .arch-i{width:6px;height:6px;border-radius:2px;flex-shrink:0}
+
+  .chart-t{font-size:0.58rem;color:var(--dim);margin-top:6px;margin-bottom:2px}
+  .chart-c{width:100%;height:60px;background:rgba(0,0,0,0.03);border-radius:5px;border:1px solid var(--border)}
+
+  .elog{margin-top:3px;max-height:70px;overflow-y:auto;font-family:'JetBrains Mono';font-size:0.52rem;color:var(--dim);line-height:1.3}
+  .elog::-webkit-scrollbar{width:2px} .elog::-webkit-scrollbar-thumb{background:var(--border)}
+  .elog .g{color:var(--c4)}
+
+  .data-s{margin-top:4px}
+  .data-s canvas{border:1px solid var(--border);border-radius:2px;margin:1px;image-rendering:pixelated}
+
+  /* TF status */
+  .tf-status{font-size:0.58rem;padding:4px 8px;border-radius:6px;margin-bottom:8px;text-align:center}
+  .tf-status.loading{background:rgba(217,119,6,0.08);border:1px solid rgba(217,119,6,0.25);color:var(--c3)}
+  .tf-status.ready{background:rgba(5,150,105,0.08);border:1px solid rgba(5,150,105,0.25);color:var(--c4)}
+  .tf-status.fail{background:rgba(220,38,38,0.08);border:1px solid rgba(220,38,38,0.25);color:var(--red)}
+
+  /* CENTER PANEL */
+  .center-panel::before{background:linear-gradient(90deg,transparent,var(--c2),transparent)}
+  .center-panel .ptitle{color:var(--c2)} .center-panel .ptitle .dot{background:var(--c2)}
+  .center-panel{max-height:calc(100vh - 80px);overflow-y:auto}
+  .center-panel::-webkit-scrollbar{width:4px} .center-panel::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+
+  .draw-area{display:flex;gap:10px;align-items:start;margin-bottom:10px}
+  .cbox{position:relative;width:180px;height:180px;flex-shrink:0;
+    border:2px solid rgba(124,58,237,0.25);border-radius:10px;overflow:hidden}
+  #drawCanvas{width:180px;height:180px;cursor:crosshair;display:block;background:#000;touch-action:none}
+  .dhint{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    pointer-events:none;color:rgba(124,58,237,0.35);font-size:0.72rem;font-weight:700;text-align:center;transition:opacity .2s;line-height:1.4}
+  .dhint.hidden{opacity:0}
+
+  .draw-ctrl{display:flex;flex-direction:column;gap:5px;flex:1}
+  .draw-ctrl .sbtn{padding:7px;border:1px solid var(--border);border-radius:7px;background:transparent;
+    color:var(--text);font-size:0.72rem;font-weight:700;cursor:pointer;font-family:'Noto Sans KR';transition:all .15s}
+  .draw-ctrl .sbtn:hover:not(:disabled){border-color:var(--c2)}
+  .draw-ctrl .sbtn:disabled{opacity:.3;cursor:not-allowed}
+  .draw-ctrl .sbtn.pri{background:linear-gradient(135deg,rgba(124,58,237,0.1),rgba(219,39,119,0.1));border-color:var(--c5)}
+  .prev-row{display:flex;gap:8px;margin-top:4px}
+  .prev-row .plbl{font-size:0.5rem;color:var(--dim);text-align:center;margin-bottom:1px}
+  .prev-row canvas{border:1px solid var(--border);border-radius:2px;image-rendering:pixelated}
+  .speed-ctrl{display:flex;align-items:center;gap:5px;margin-top:6px}
+  .speed-ctrl label{font-size:0.6rem;color:var(--dim)}
+  .speed-ctrl input[type=range]{flex:1;accent-color:var(--c5);height:4px}
+
+  .net-zone{position:relative;border:1px solid var(--border);border-radius:10px;overflow:hidden;
+    background:linear-gradient(180deg,rgba(124,58,237,0.02),rgba(8,145,178,0.02))}
+  #netCanvas{width:100%;height:380px;display:block}
+  .phase-banner{position:absolute;top:8px;left:50%;transform:translateX(-50%);
+    padding:3px 14px;border-radius:20px;font-family:'Outfit';font-size:0.7rem;font-weight:800;
+    background:rgba(219,39,119,0.1);border:1px solid rgba(219,39,119,0.3);color:var(--c5);
+    opacity:0;transition:opacity .3s;pointer-events:none}
+  .phase-banner.show{opacity:1}
+  .net-legend{position:absolute;bottom:6px;left:6px;display:flex;gap:8px;
+    background:rgba(255,255,255,0.85);padding:3px 8px;border-radius:5px;border:1px solid var(--border);backdrop-filter:blur(4px)}
+  .lg-i{display:flex;align-items:center;gap:3px;font-size:0.5rem;color:var(--dim)}
+  .lg-d{width:6px;height:6px;border-radius:50%}
+
+  /* RIGHT PANEL */
+  .res-panel::before{background:linear-gradient(90deg,transparent,var(--c3),transparent)}
+  .res-panel .ptitle{color:var(--c3)} .res-panel .ptitle .dot{background:var(--c3)}
+
+  .result-big{text-align:center;margin:10px 0}
+  .result-ch{font-family:'Black Han Sans','Outfit';font-size:5rem;line-height:1;
+    background:linear-gradient(135deg,var(--c3),var(--red));
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+    filter:drop-shadow(0 0 20px rgba(245,158,11,0.3));transition:all .3s}
+  .result-ch.idle{-webkit-text-fill-color:initial;background:none;color:#b0b0b0;font-size:2.5rem;filter:none;font-family:'Outfit'}
+  .conf-l{font-size:0.68rem;color:var(--dim);margin-top:2px}
+  .conf-v{font-family:'JetBrains Mono';font-size:1.1rem;font-weight:700;color:var(--c3)}
+
+  .t5{margin-top:10px;padding:8px;background:rgba(217,119,6,0.04);border:1px solid rgba(217,119,6,0.15);border-radius:8px}
+  .t5 h4{font-size:0.62rem;color:var(--c3);margin-bottom:5px;letter-spacing:1px;text-transform:uppercase}
+  .t5-i{display:flex;align-items:center;gap:5px;padding:2px 5px;border-radius:5px;margin-bottom:2px}
+  .t5-i:first-child{background:rgba(217,119,6,0.08)}
+  .t5-r{font-family:'Outfit';font-size:0.52rem;color:var(--dim);width:10px}
+  .t5-i:first-child .t5-r{color:var(--c3)}
+  .t5-c{font-family:'Black Han Sans';font-size:0.95rem;width:18px;text-align:center}
+  .t5-i:first-child .t5-c{color:var(--c3)}
+  .t5-b{flex:1;height:5px;background:rgba(0,0,0,0.06);border-radius:3px;overflow:hidden}
+  .t5-bf{height:100%;border-radius:3px;background:var(--c3)}
+  .t5-p{font-family:'JetBrains Mono';font-size:0.48rem;color:var(--dim);width:30px;text-align:right}
+
+  .bars{margin-top:10px;display:flex;flex-direction:column;gap:2px;max-height:260px;overflow-y:auto}
+  .bars::-webkit-scrollbar{width:2px} .bars::-webkit-scrollbar-thumb{background:var(--border)}
+  .br{display:flex;align-items:center;gap:4px}
+  .br-l{font-size:0.65rem;font-weight:700;width:16px;text-align:right;color:var(--dim);flex-shrink:0}
+  .br-t{flex:1;height:10px;background:rgba(0,0,0,0.05);border-radius:5px;overflow:hidden}
+  .br-f{height:100%;border-radius:5px;background:linear-gradient(90deg,var(--c3),var(--red));width:0%;transition:width .4s cubic-bezier(.22,1,.36,1)}
+  .br-p{font-family:'JetBrains Mono';font-size:0.5rem;color:var(--dim);width:34px;text-align:right;flex-shrink:0}
+  .br.top .br-l{color:var(--c3)} .br.top .br-p{color:var(--c3)}
+
+  .info-box{margin-top:10px;padding:10px;border-radius:8px;font-size:0.66rem;color:var(--dim);line-height:1.5}
+  .info-box.a{background:rgba(217,119,6,0.04);border:1px solid rgba(217,119,6,0.15)}
+  .info-box h4{font-size:0.72rem;color:var(--c3);margin-bottom:4px}
+
+  /* Layer explanation section */
+  .layer-explain{margin-top:12px;display:flex;flex-direction:column;gap:8px}
+  .le-card{display:flex;gap:10px;padding:10px 12px;border-radius:10px;border:1px solid var(--border);background:rgba(0,0,0,0.015)}
+  .le-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;
+    font-size:1.1rem;flex-shrink:0;font-weight:900}
+  .le-body{flex:1;min-width:0}
+  .le-title{font-size:0.74rem;font-weight:800;margin-bottom:2px;display:flex;align-items:center;gap:5px}
+  .le-title .le-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+  .le-desc{font-size:0.66rem;color:var(--dim);line-height:1.55}
+  .le-desc b{color:var(--text)}
+  .le-section-title{font-family:'Outfit';font-size:0.8rem;font-weight:800;margin-top:6px;padding-bottom:4px;
+    border-bottom:1px solid var(--border);display:flex;align-items:center;gap:6px}
+  .le-section-title .emoji{font-size:1rem}
+
+  .concept-cards{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+  .cc{padding:10px;border-radius:10px;border:1px solid var(--border);background:rgba(0,0,0,0.015)}
+  .cc h5{font-size:0.72rem;font-weight:800;margin-bottom:4px;display:flex;align-items:center;gap:4px}
+  .cc p{font-size:0.64rem;color:var(--dim);line-height:1.55}
+  .cc p b{color:var(--text)}
+
+  /* Bio neuron popup modal */
+  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:1000;
+    align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(2px)}
+  .modal-overlay.open{display:flex}
+  .modal{background:var(--panel);border:1px solid var(--border);border-radius:16px;
+    max-width:780px;width:100%;max-height:90vh;overflow-y:auto;padding:20px;position:relative;
+    box-shadow:0 8px 40px rgba(0,0,0,0.12)}
+  .modal::-webkit-scrollbar{width:4px} .modal::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+  .modal-close{position:absolute;top:12px;right:12px;width:28px;height:28px;border-radius:50%;
+    border:1px solid var(--border);background:var(--panel);color:var(--dim);font-size:14px;
+    cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s}
+  .modal-close:hover{border-color:var(--red);color:var(--red)}
+  .modal-title{font-family:'Outfit';font-size:1rem;font-weight:800;color:var(--text);margin-bottom:4px}
+  .modal-sub{font-size:0.72rem;color:var(--dim);margin-bottom:14px;line-height:1.4}
+  .modal-divider{border:none;border-top:1px solid var(--border);margin:14px 0}
+  .modal-section-title{font-family:'Outfit';font-size:0.8rem;font-weight:800;color:var(--text);margin-bottom:6px;
+    display:flex;align-items:center;gap:6px}
+  .modal-note{font-size:0.68rem;color:var(--dim);text-align:center;margin:6px 0 10px;line-height:1.4}
+  .net-ctrl{display:flex;align-items:center;gap:10px;font-size:0.72rem;color:var(--dim);margin:8px 0}
+  .net-ctrl button{padding:5px 12px;border:1px solid var(--border);border-radius:6px;background:var(--panel);
+    color:var(--text);font-size:0.68rem;font-weight:700;cursor:pointer;font-family:'Noto Sans KR';transition:all .15s}
+  .net-ctrl button:hover{border-color:var(--c2);background:rgba(124,58,237,0.06)}
+  .net-ctrl label{display:flex;align-items:center;gap:4px}
+  .bio-compare{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+  .bio-card{padding:10px;border-radius:10px;border:1px solid var(--border);background:rgba(0,0,0,0.015)}
+  .bio-card h5{font-size:0.72rem;font-weight:800;margin-bottom:4px;color:var(--text)}
+  .bio-card p{font-size:0.64rem;color:var(--dim);line-height:1.5}
+
+  .bio-btn{padding:4px 12px;border:1px solid var(--c2);border-radius:6px;
+    background:rgba(124,58,237,0.06);color:var(--c2);font-size:0.62rem;font-weight:700;
+    cursor:pointer;font-family:'Noto Sans KR';transition:all .15s;margin-left:8px}
+  .bio-btn:hover{background:rgba(124,58,237,0.12)}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <h1>🧠 REAL CNN — 전파 시각화</h1>
+    <span class="badge">✦ TensorFlow.js 실제 역전파 학습 · 신경망 전파 애니메이션</span>
+    <button class="bio-btn" onclick="openBioModal()">🧬 뇌의 신경망 구조 보기</button>
+  </div>
+
+  <div class="main">
+    <!-- LEFT -->
+    <div class="panel train-panel">
+      <div class="ptitle"><span class="dot"></span>1단계: 학습</div>
+
+      <div class="tf-status loading" id="tfStatus">⏳ TensorFlow.js 로딩 중...</div>
+
+      <div class="mode-tabs">
+        <button class="mtab on" id="tD" onclick="setMode('digit')">숫자 0~9</button>
+        <button class="mtab" id="tJ" onclick="setMode('jamo')">한글 자모</button>
+        <button class="mtab" id="tA" onclick="setMode('all')">전체</button>
+      </div>
+
+      <!-- STEP 1: Data + Auto Model Build -->
+      <div class="step-box">
+        <div class="step-hdr"><span class="step-n">1</span><span class="step-l">데이터 준비 & 모델 구성</span></div>
+        <div class="step-d" id="dataDesc">MNIST 손글씨 숫자를 다운로드하고 8층 CNN을 자동 구성합니다.</div>
+        <button class="btn go" id="bLoad" onclick="prepareAll()" disabled>📦 데이터 + 모델 준비</button>
+        <div class="st" id="stLoad"></div>
+        <div class="data-s" id="dataS"></div>
+        <div class="arch-box" id="archBox" style="display:none">
+          <div class="arch-t">실제 8-Layer CNN 구조</div>
+          <div id="archL"></div>
+        </div>
+      </div>
+
+      <!-- STEP 2: Train -->
+      <div class="step-box">
+        <div class="step-hdr"><span class="step-n">2</span><span class="step-l">학습 시작!</span></div>
+        <div class="step-d">역전파(Backpropagation)로 가중치를 조정합니다.</div>
+        <button class="btn go" id="bTrain" onclick="trainModel()" disabled>🚀 학습 시작</button>
+        <div class="pbar-wrap" id="pWrap" style="display:none">
+          <div class="pbar"><div class="pfill" id="pFill"></div></div>
+          <div class="ptxt"><span id="pLbl">0%</span><span id="eLbl"></span></div>
+        </div>
+        <div class="elog" id="eLog"></div>
+        <div class="chart-t">📉 손실(Loss)</div>
+        <canvas class="chart-c" id="lossC"></canvas>
+        <div class="chart-t">📈 정확도(Accuracy)</div>
+        <canvas class="chart-c" id="accC"></canvas>
+      </div>
+    </div>
+
+    <!-- CENTER -->
+    <div class="panel center-panel">
+      <div class="ptitle"><span class="dot"></span>2단계: 테스트 & 신경망 전파</div>
+
+      <div class="draw-area">
+        <div class="cbox">
+          <canvas id="drawCanvas" width="180" height="180"></canvas>
+          <div class="dhint" id="dhint">학습 완료 후<br>글자를 그리세요</div>
+        </div>
+        <div class="draw-ctrl">
+          <button class="sbtn" onclick="clearCanvas()">지우기</button>
+          <button class="sbtn pri" id="bPred" onclick="runPropagation()" disabled>⚡ 전파 시작</button>
+          <div class="prev-row">
+            <div><div class="plbl">28×28</div><canvas id="prevC" width="28" height="28" style="width:48px;height:48px"></canvas></div>
+            <div><div class="plbl">Conv1 맵</div><canvas id="featC" width="28" height="28" style="width:48px;height:48px"></canvas></div>
+          </div>
+          <div class="speed-ctrl">
+            <label>전파 속도</label>
+            <input type="range" min="1" max="10" value="4" id="speedS">
+          </div>
+        </div>
+      </div>
+
+      <div class="net-zone">
+        <canvas id="netCanvas"></canvas>
+        <div class="phase-banner" id="phaseBan"></div>
+        <div class="net-legend">
+          <div class="lg-i"><div class="lg-d" style="background:#0891b2"></div>입력층</div>
+          <div class="lg-i"><div class="lg-d" style="background:#059669"></div>Conv2D</div>
+          <div class="lg-i"><div class="lg-d" style="background:#7c3aed"></div>MaxPool</div>
+          <div class="lg-i"><div class="lg-d" style="background:#d97706"></div>Flatten/출력</div>
+          <div class="lg-i"><div class="lg-d" style="background:#db2777"></div>Dense</div>
+          <div class="lg-i"><div class="lg-d" style="background:linear-gradient(90deg,#db2777,#888)"></div>전파신호</div>
+          <div class="lg-i"><div class="lg-d" style="background:#ddd;border:1px solid #bbb"></div>죽은뉴런(0)</div>
+          <div class="lg-i"><div class="lg-d" style="background:#eee;border:1px dashed #dc2626"></div>Dropout</div>
+        </div>
+      </div>
+
+      <!-- LAYER EXPLANATION -->
+      <div class="layer-explain">
+        <div class="le-section-title"><span class="emoji">🧱</span> 신경망 각 층(Layer)이 하는 일</div>
+
+        <div class="le-card">
+          <div class="le-icon" style="background:rgba(8,145,178,0.1);color:#0891b2">①</div>
+          <div class="le-body">
+            <div class="le-title"><div class="le-dot" style="background:#0891b2"></div>입력층 (28×28×1)</div>
+            <div class="le-desc">
+              그림을 <b>28칸 × 28칸 = 784개의 점</b>으로 쪼갭니다. 각 점은 0(검정)~255(흰색) 사이 숫자로 바뀌어요.<br>
+              ×1은 "흑백"이라는 뜻! 컬러 사진이면 ×3(빨강/초록/파랑)이 됩니다.
+            </div>
+          </div>
+        </div>
+
+        <div class="le-card">
+          <div class="le-icon" style="background:rgba(5,150,105,0.1);color:#059669">②③</div>
+          <div class="le-body">
+            <div class="le-title"><div class="le-dot" style="background:#059669"></div>Conv2D — 합성곱층 (필터 16개 → 32개)</div>
+            <div class="le-desc">
+              작은 돋보기(3×3 필터)를 그림 위에서 <b>슬라이드</b>하며 패턴을 찾아요.<br>
+              첫 번째 Conv는 "가로선", "세로선", "꺾임" 같은 <b>단순한 특징</b>을 16가지 찾습니다.<br>
+              두 번째 Conv는 그 특징들을 조합해 "동그라미", "ㄱ 모양" 같은 <b>복잡한 특징</b>을 32가지 찾아요.<br>
+              <b>필터 16개</b> = 돋보기 16개로 각각 다른 패턴을 동시에 탐색한다는 뜻!
+            </div>
+          </div>
+        </div>
+
+        <div class="le-card">
+          <div class="le-icon" style="background:rgba(124,58,237,0.1);color:#7c3aed">④⑤</div>
+          <div class="le-body">
+            <div class="le-title"><div class="le-dot" style="background:#7c3aed"></div>MaxPool — 최대풀링층 (2×2)</div>
+            <div class="le-desc">
+              2×2칸 중에서 <b>가장 큰 값만</b> 남기고 나머지는 버려요. 그래서 크기가 절반으로 줄어듭니다.<br>
+              28×28 → <b>14×14</b> → <b>7×7</b>로 점점 작아져요.<br>
+              왜 줄일까? 중요한 특징만 남기고, 글씨 위치가 약간 달라도 같은 글자로 인식하게 해줍니다!
+            </div>
+          </div>
+        </div>
+
+        <div class="le-card">
+          <div class="le-icon" style="background:rgba(217,119,6,0.1);color:#d97706">⑥</div>
+          <div class="le-body">
+            <div class="le-title"><div class="le-dot" style="background:#d97706"></div>Flatten — 펴기층</div>
+            <div class="le-desc">
+              7×7×32 = <b>1,568개</b>의 숫자를 한 줄로 쭉 늘어놓습니다.<br>
+              2차원 이미지 → 1차원 숫자 목록으로 바꾸는 단계예요. 여기부터는 일반 신경망처럼 계산합니다.
+            </div>
+          </div>
+        </div>
+
+        <div class="le-card">
+          <div class="le-icon" style="background:rgba(219,39,119,0.1);color:#db2777">⑦</div>
+          <div class="le-body">
+            <div class="le-title"><div class="le-dot" style="background:#db2777"></div>Dense — 완전연결층 (128개 뉴런)</div>
+            <div class="le-desc">
+              1,568개의 숫자가 <b>128개의 뉴런</b>과 전부 연결됩니다. 뉴런이란 뇌세포를 흉내 낸 계산 장치예요.<br>
+              각 뉴런은 입력 숫자들에 <b>가중치(중요도)</b>를 곱하고 더해서 하나의 결과를 만듭니다.<br>
+              <b>Dropout 30%</b>: 학습할 때 뉴런 30%를 랜덤으로 꺼서 "특정 뉴런에 의존하지 않도록" 훈련시켜요.
+            </div>
+          </div>
+        </div>
+
+        <div class="le-card">
+          <div class="le-icon" style="background:rgba(217,119,6,0.1);color:#d97706">⑧</div>
+          <div class="le-body">
+            <div class="le-title"><div class="le-dot" style="background:#d97706"></div>출력층 — Softmax</div>
+            <div class="le-desc">
+              128개 뉴런의 결과를 받아서 <b>각 글자일 확률</b>로 바꿉니다.<br>
+              예: [0→2%, 1→5%, 2→1%, ..., 7→85%, ...] → "7일 확률이 85%로 가장 높으니 답은 7!"<br>
+              <b>Softmax</b>는 모든 확률을 합치면 정확히 100%가 되도록 만드는 수학 공식이에요.
+            </div>
+          </div>
+        </div>
+
+        <div class="le-section-title"><span class="emoji">📚</span> 핵심 개념 쉽게 이해하기</div>
+
+        <div class="concept-cards">
+          <div class="cc">
+            <h5>🏋️ 학습(Training)이란?</h5>
+            <p>
+              신경망에게 <b>문제(그림)</b>와 <b>정답(숫자/글자)</b>을 수만 번 보여주는 거예요.<br><br>
+              처음에는 아무것도 모르지만, 틀릴 때마다 <b>"어디서 틀렸지?"</b>를 계산하고 가중치를 조금씩 수정해요.<br><br>
+              마치 시험 문제를 풀고 → 채점하고 → 오답노트 쓰기를 수만 번 반복하는 것과 같아요!
+            </p>
+          </div>
+          <div class="cc">
+            <h5>🔢 파라미터(Parameter)란?</h5>
+            <p>
+              신경망 안에 있는 <b>조절 가능한 숫자</b>예요. 이 모델에는 약 <b>3만 개</b>가 있어요.<br><br>
+              예: Conv 필터의 3×3=9개 칸 안의 숫자, Dense 층의 가중치 등이 모두 파라미터입니다.<br><br>
+              학습 = 이 3만 개 숫자를 <b>최적의 값</b>으로 찾아가는 과정!
+            </p>
+          </div>
+          <div class="cc">
+            <h5>↩️ 역전파(Backpropagation)</h5>
+            <p>
+              정답과 비교해서 <b>"얼마나 틀렸는지"(Loss)</b>를 계산한 뒤,<br>
+              출력층 → Dense → Flatten → Conv 순서로 <b>거꾸로 돌아가면서</b> 각 파라미터를 수정해요.<br><br>
+              Loss가 작아지는 방향으로 조금씩! 이것이 신경망이 똑똑해지는 핵심 원리입니다.
+            </p>
+          </div>
+          <div class="cc">
+            <h5>📊 정확도(Accuracy) & 손실(Loss)</h5>
+            <p>
+              <b>정확도</b>: 100문제 중 몇 개 맞췄나? → 95%면 100개 중 95개 정답!<br><br>
+              <b>손실</b>: "얼마나 자신 있게 틀렸나"를 나타내는 숫자. 0에 가까울수록 좋아요.<br><br>
+              학습이 잘 되면 정확도는 ↑올라가고, 손실은 ↓내려갑니다.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="panel res-panel">
+      <div class="ptitle"><span class="dot"></span>3단계: 결과</div>
+      <div class="result-big">
+        <div class="result-ch idle" id="resCh">?</div>
+        <div class="conf-l">확신도</div>
+        <div class="conf-v" id="confV">—</div>
+      </div>
+      <div class="t5"><h4>TOP-5 후보</h4><div id="t5list"></div></div>
+      <div class="bars" id="barsBox"></div>
+      <div class="info-box a">
+        <h4>🔬 학습 원리</h4>
+        <div id="statsT">
+          모델 준비 후 파라미터 수가 표시됩니다.<br><br>
+          <b>역전파</b>: 틀린 만큼 → 반대 방향으로 가중치 수정<br>
+          이 과정을 수만 번 반복하면 패턴을 배웁니다!
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TensorFlow.js — load with error handling -->
+<script>
+// TF.js load check
+let tfReady = false;
+let tfLoadError = null;
+
+function checkTF() {
+  if (typeof tf !== 'undefined' && tf.version) {
+    tfReady = true;
+    const el = document.getElementById('tfStatus');
+    el.className = 'tf-status ready';
+    el.textContent = '✓ TensorFlow.js ' + tf.version.tfjs + ' 로드 완료';
+    document.getElementById('bLoad').disabled = false;
+  }
+}
+
+// Try loading TF.js dynamically with fallback
+function loadTFJS() {
+  const urls = [
+    'https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.17.0/dist/tf.min.js',
+    'https://cdnjs.cloudflare.com/ajax/libs/tensorflow/4.17.0/tf.min.js',
+    'https://unpkg.com/@tensorflow/tfjs@4.17.0/dist/tf.min.js'
+  ];
+
+  let idx = 0;
+  function tryNext() {
+    if (idx >= urls.length) {
+      const el = document.getElementById('tfStatus');
+      el.className = 'tf-status fail';
+      el.textContent = '✗ TensorFlow.js 로드 실패 — 네트워크 확인 필요';
+      return;
+    }
+    // Check if already loaded (from <script> tag in head)
+    if (typeof tf !== 'undefined') { checkTF(); return; }
+
+    const s = document.createElement('script');
+    s.src = urls[idx];
+    s.onload = () => checkTF();
+    s.onerror = () => { idx++; tryNext(); };
+    document.head.appendChild(s);
+  }
+
+  // First check if the head script already loaded it
+  if (typeof tf !== 'undefined') { checkTF(); return; }
+  // Wait a moment then try
+  setTimeout(() => {
+    if (typeof tf !== 'undefined') { checkTF(); return; }
+    tryNext();
+  }, 2000);
+}
+
+// Start after head script has time to load
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    if (typeof tf !== 'undefined') checkTF();
+    else loadTFJS();
+  }, 500);
+});
+</script>
+
+<script>
+// ================================================================
+// GLOBALS
+// ================================================================
+let model=null,trained=false,currentMode='digit',trainData=null,classLabels=[];
+const CONSONANTS='ㄱㄴㄷㄹㅁㅂㅅㅇㅈㅊㅋㅌㅍㅎ'.split('');
+const VOWELS='ㅏㅑㅓㅕㅗㅛㅜㅠㅡㅣ'.split('');
+const DIGITS_L='0123456789'.split('');
+const JAMO=[...CONSONANTS,...VOWELS],ALL_LABELS=[...DIGITS_L,...JAMO];
+const KR_FONTS=['Noto Sans KR','Black Han Sans','Nanum Gothic','Nanum Pen Script','Do Hyeon','Jua','Gothic A1','Gamja Flower','sans-serif','serif'];
+const lossH=[],accH=[];
+
+// ================================================================
+// NETWORK VIS
+// ================================================================
+const NC=document.getElementById('netCanvas'),NX=NC.getContext('2d');
+let nW=0,nH=0,dpr=1,layerDefs=[],layerNodes=[],conns=[],particles=[],trails=[],animating=false,propPhase=-1;
+
+function getLD(){
+  const nO=classLabels.length||10;
+  return [
+    {label:'입력층',sub:'28×28×1',cnt:8,color:'#0891b2'},
+    {label:'Conv2D',sub:'16필터',cnt:7,color:'#059669'},
+    {label:'MaxPool',sub:'14×14',cnt:5,color:'#7c3aed'},
+    {label:'Conv2D',sub:'32필터',cnt:7,color:'#059669'},
+    {label:'MaxPool',sub:'7×7',cnt:5,color:'#7c3aed'},
+    {label:'Flatten',sub:'1568',cnt:6,color:'#d97706'},
+    {label:'Dense',sub:'128',cnt:6,color:'#db2777'},
+    {label:'출력',sub:`${nO}클래스`,cnt:Math.min(nO,12),color:'#d97706'}
+  ];
+}
+
+function layoutNet(){
+  dpr=window.devicePixelRatio||1;
+  const r=NC.getBoundingClientRect();nW=r.width;nH=r.height;
+  NC.width=nW*dpr;NC.height=nH*dpr;
+  layerDefs=getLD();
+  const px=70,uW=nW-px*2;
+  layerNodes=[];
+  layerDefs.forEach((ld,li)=>{
+    ld.x=px+(uW/(layerDefs.length-1))*li;
+    const nodes=[],sp=Math.min(36,((nH-80)/(ld.cnt+1))),tH=(ld.cnt-1)*sp,sY=nH/2-tH/2;
+    for(let ni=0;ni<ld.cnt;ni++)
+      nodes.push({x:ld.x,y:sY+ni*sp,r:li===7?15:11,glow:0,tGlow:0,
+        label:li===7&&ni<classLabels.length?classLabels[ni]:null,prob:0,
+        dead:false,dropped:false,activation:0});
+    layerNodes.push(nodes);
+  });
+  conns=[];
+  for(let li=0;li<layerNodes.length-1;li++)
+    layerNodes[li].forEach((a,ai)=>layerNodes[li+1].forEach((b,bi)=>
+      conns.push({fl:li,fi:ai,tl:li+1,ti:bi,ax:a.x,ay:a.y,bx:b.x,by:b.y})));
+}
+
+function spawn(fromL,toL,cnt){
+  const spd=(11-parseInt(document.getElementById('speedS').value))*0.25+0.4;
+  const src=layerNodes[fromL],dst=layerNodes[toL];
+  for(let i=0;i<cnt;i++){
+    const s=src[Math.floor(Math.random()*src.length)],d=dst[Math.floor(Math.random()*dst.length)];
+    particles.push({sx:s.x,sy:s.y,dx:d.x,dy:d.y,t:0,dur:spd*(0.5+Math.random()*0.5),
+      delay:Math.random()*spd*0.3,alive:true,toL,fromL,strength:0.5});
+  }
+}
+
+function updateP(dt){
+  particles.forEach(p=>{if(!p.alive)return;if(p.delay>0){p.delay-=dt;return;}
+    p.t+=dt;if(p.t>=p.dur){
+      p.alive=false;
+      layerNodes[p.toL].forEach(n=>{n.tGlow=Math.min(1,n.tGlow+0.12);});
+      // Save as permanent trail
+      const str=p.strength||0.5;
+      trails.push({sx:p.sx,sy:p.sy,dx:p.dx,dy:p.dy,strength:str,fromL:p.fromL||0,alpha:str*0.6,born:Date.now()});
+    }});
+  particles=particles.filter(p=>p.alive);
+}
+
+let lastT=0;
+function render(ts){
+  requestAnimationFrame(render);const dt=Math.min((ts-lastT)/1000,0.05);lastT=ts;
+  updateP(dt);
+  layerNodes.forEach(l=>l.forEach(n=>{n.glow+=(n.tGlow-n.glow)*0.07;if(!animating)n.tGlow*=0.997;}));
+  NX.save();NX.scale(dpr,dpr);NX.clearRect(0,0,nW,nH);
+
+  // Grid
+  NX.strokeStyle='rgba(0,0,0,0.04)';NX.lineWidth=0.5;
+  for(let x=0;x<nW;x+=40){NX.beginPath();NX.moveTo(x,0);NX.lineTo(x,nH);NX.stroke();}
+  for(let y=0;y<nH;y+=40){NX.beginPath();NX.moveTo(0,y);NX.lineTo(nW,y);NX.stroke();}
+
+  // Connections — weight by node activation
+  conns.forEach(c=>{
+    const srcN=layerNodes[c.fl][c.fi],dstN=layerNodes[c.tl][c.ti];
+    const srcDead=srcN.dead||srcN.dropped;
+    const dstDead=dstN.dead||dstN.dropped;
+    const b=Math.max(srcN.glow,dstN.glow);
+    NX.beginPath();NX.moveTo(c.ax,c.ay);NX.lineTo(c.bx,c.by);
+    if(srcDead||dstDead){
+      // Dead/dropped connection — very faint
+      NX.strokeStyle='rgba(200,210,220,0.04)';NX.lineWidth=0.2;
+    }else if(b>0.25){
+      const strength=Math.min(1,(srcN.activation||0.3)*(dstN.activation||0.3)*4);
+      NX.strokeStyle=hexA(layerDefs[c.fl].color,0.06+b*0.2*strength);
+      NX.lineWidth=0.3+b*1.8*strength;
+    }else{
+      NX.strokeStyle='rgba(180,190,210,0.06)';NX.lineWidth=0.3;
+    }
+    NX.stroke();
+  });
+
+  // Trails — permanent paths left by particles
+  trails.forEach(tr=>{
+    const age=(Date.now()-tr.born)/1000;
+    // Slow pulse animation to keep trails alive-looking
+    const pulse=0.6+0.4*Math.sin(age*1.5+tr.sx*0.1);
+    const a=tr.alpha*pulse;
+    if(a<0.005)return;
+    NX.beginPath();NX.moveTo(tr.sx,tr.sy);NX.lineTo(tr.dx,tr.dy);
+    const w=0.5+tr.strength*2;
+    NX.lineWidth=w;
+    // Gradient line color based on source layer
+    const col=layerDefs[tr.fromL]?layerDefs[tr.fromL].color:'#db2777';
+    NX.strokeStyle=hexA(col,a);
+    NX.stroke();
+    // Small glow dot at destination
+    if(tr.strength>0.3){
+      NX.beginPath();NX.arc(tr.dx,tr.dy,1.5+tr.strength,0,Math.PI*2);
+      NX.fillStyle=hexA(col,a*0.5);NX.fill();
+    }
+  });
+
+  // Particles
+  particles.forEach(p=>{
+    if(p.delay>0||!p.alive)return;
+    const pr=p.t/p.dur,e=pr<0.5?2*pr*pr:1-Math.pow(-2*pr+2,2)/2;
+    const x=p.sx+(p.dx-p.sx)*e,y=p.sy+(p.dy-p.sy)*e,sz=2.5+Math.sin(pr*Math.PI)*4;
+    const g=NX.createRadialGradient(x,y,0,x,y,sz*3.5);
+    g.addColorStop(0,'rgba(236,72,153,0.7)');g.addColorStop(0.4,'rgba(236,72,153,0.15)');g.addColorStop(1,'rgba(236,72,153,0)');
+    NX.fillStyle=g;NX.beginPath();NX.arc(x,y,sz*3.5,0,Math.PI*2);NX.fill();
+    NX.fillStyle='rgba(219,39,119,0.95)';NX.beginPath();NX.arc(x,y,sz*0.5,0,Math.PI*2);NX.fill();
+    for(let t=1;t<=4;t++){
+      const tp=Math.max(0,pr-t*0.018),te=tp<0.5?2*tp*tp:1-Math.pow(-2*tp+2,2)/2;
+      NX.fillStyle=`rgba(236,72,153,${0.3-t*0.06})`;
+      NX.beginPath();NX.arc(p.sx+(p.dx-p.sx)*te,p.sy+(p.dy-p.sy)*te,sz*0.25,0,Math.PI*2);NX.fill();
+    }
+  });
+
+  // Nodes
+  layerDefs.forEach((ld,li)=>{
+    const rgb=hexRgb(ld.color);
+    layerNodes[li].forEach((n,ni)=>{
+      const g=n.glow;
+      const isDead=n.dead;
+      const isDropped=n.dropped;
+
+      if(isDropped){
+        // Dropped node: gray with X
+        NX.beginPath();NX.arc(n.x,n.y,n.r,0,Math.PI*2);
+        NX.fillStyle='rgba(180,180,180,0.08)';NX.fill();
+        NX.strokeStyle='rgba(180,180,180,0.25)';NX.lineWidth=1;NX.stroke();
+        NX.setLineDash([2,2]);
+        NX.beginPath();NX.moveTo(n.x-n.r*0.5,n.y-n.r*0.5);NX.lineTo(n.x+n.r*0.5,n.y+n.r*0.5);
+        NX.moveTo(n.x+n.r*0.5,n.y-n.r*0.5);NX.lineTo(n.x-n.r*0.5,n.y+n.r*0.5);
+        NX.strokeStyle='rgba(220,38,38,0.5)';NX.lineWidth=1.5;NX.stroke();
+        NX.setLineDash([]);
+      }else if(isDead&&g<0.1){
+        // Dead node (ReLU=0): dim hollow circle
+        NX.beginPath();NX.arc(n.x,n.y,n.r,0,Math.PI*2);
+        NX.fillStyle='rgba(200,200,200,0.05)';NX.fill();
+        NX.strokeStyle='rgba(180,180,180,0.2)';NX.lineWidth=0.8;NX.stroke();
+        // Small "0" label
+        NX.font='600 7px "JetBrains Mono"';NX.fillStyle='rgba(180,180,180,0.4)';
+        NX.textAlign='center';NX.textBaseline='middle';NX.fillText('0',n.x,n.y);
+      }else{
+        // Active node — glow proportional to activation
+        if(g>0.08){const gr=NX.createRadialGradient(n.x,n.y,n.r,n.x,n.y,n.r*3);
+          gr.addColorStop(0,`rgba(${rgb},${g*0.4})`);gr.addColorStop(1,`rgba(${rgb},0)`);
+          NX.fillStyle=gr;NX.beginPath();NX.arc(n.x,n.y,n.r*3,0,Math.PI*2);NX.fill();}
+        NX.beginPath();NX.arc(n.x,n.y,n.r,0,Math.PI*2);
+        NX.fillStyle=`rgba(${rgb},${0.1+g*0.5})`;NX.fill();
+        NX.strokeStyle=`rgba(${rgb},${0.35+g*0.5})`;NX.lineWidth=1.5+g*1.5;NX.stroke();
+        if(g>0.15){NX.beginPath();NX.arc(n.x,n.y,n.r*0.3,0,Math.PI*2);NX.fillStyle=`rgba(255,255,255,${0.3+g*0.5})`;NX.fill();}
+      }
+      // Output labels always shown
+      if(n.label!==null){
+        NX.font=`800 ${n.r*0.8}px "Noto Sans KR"`;NX.fillStyle=g>0.25?'#d97706':'#666';
+        NX.textAlign='center';NX.textBaseline='middle';NX.fillText(n.label,n.x,n.y);
+        if(n.prob>0.01){
+          const bw=n.prob*55;NX.fillStyle=`rgba(217,119,6,${0.3+n.prob*0.5})`;
+          NX.beginPath();NX.roundRect(n.x+n.r+5,n.y-4,bw,8,3);NX.fill();
+          NX.font='600 7px "JetBrains Mono"';NX.fillStyle=`rgba(180,90,0,${0.5+n.prob*0.5})`;
+          NX.textAlign='left';NX.fillText((n.prob*100).toFixed(1)+'%',n.x+n.r+bw+8,n.y);
+        }
+      }
+    });
+    const last=layerNodes[li][layerNodes[li].length-1];
+    if(li<7){NX.fillStyle='#b0b8c8';NX.font='14px sans-serif';NX.textAlign='center';NX.fillText('⋮',last.x,last.y+22);}
+    const first=layerNodes[li][0];
+    NX.font='800 10px "Outfit"';NX.fillStyle=ld.color;NX.textAlign='center';NX.fillText(ld.label,ld.x,first.y-28);
+    NX.font='600 8px "JetBrains Mono"';NX.fillStyle='#555';NX.fillText(ld.sub,ld.x,first.y-16);
+    NX.font='600 7px "Outfit"';NX.fillStyle='rgba(0,0,0,0.15)';NX.fillText(`Layer ${li+1}`,ld.x,first.y-40);
+  });
+  NX.restore();
+}
+function hexRgb(h){return`${parseInt(h.slice(1,3),16)},${parseInt(h.slice(3,5),16)},${parseInt(h.slice(5,7),16)}`;}
+function hexA(h,a){return`rgba(${hexRgb(h)},${a})`;}
+
+// ================================================================
+// PROPAGATION ANIMATION
+// ================================================================
+async function runPropagation(){
+  if(!trained||!hasDrawn)return;
+  const pc=document.getElementById('prevC').getContext('2d');
+  pc.fillStyle='#000';pc.fillRect(0,0,28,28);pc.drawImage(document.getElementById('drawCanvas'),0,0,28,28);
+  const id=pc.getImageData(0,0,28,28);
+  const inp=new Float32Array(784);for(let i=0;i<784;i++)inp[i]=id.data[i*4]/255;
+
+  // Extract activations at every layer
+  const layerOutputs=[];
+  try{
+    const outputTensors=model.layers.map(l=>l.output);
+    const multiModel=tf.model({inputs:model.input,outputs:outputTensors});
+    const inputT=tf.tensor4d(inp,[1,28,28,1]);
+    const results=multiModel.predict(inputT);
+    for(let i=0;i<results.length;i++){
+      const data=results[i].dataSync();
+      layerOutputs.push(Array.from(data));
+      results[i].dispose();
+    }
+    inputT.dispose();
+  }catch(e){console.error('activation extraction error',e);}
+
+  // Compute per-visual-node activation strength (0~1)
+  // layerOutputs: [conv1_out, pool1_out, conv2_out, pool2_out, flatten_out, dense_out, dropout_out, softmax_out]
+  // visual layers: [input, conv1, pool1, conv2, pool2, flatten, dense, output]
+  function summarizeActivations(data, nodeCount){
+    if(!data||data.length===0) return new Array(nodeCount).fill(0.5);
+    // Find max for normalization
+    let mx=0;for(let i=0;i<data.length;i++){const v=Math.abs(data[i]);if(v>mx)mx=v;}
+    if(mx<1e-6) return new Array(nodeCount).fill(0);
+    // Divide data into nodeCount buckets
+    const bucketSize=Math.floor(data.length/nodeCount);
+    const result=[];
+    for(let n=0;n<nodeCount;n++){
+      let sum=0,cnt=0;
+      const start=n*bucketSize;
+      const end=Math.min(start+bucketSize,data.length);
+      for(let i=start;i<end;i++){sum+=Math.max(0,data[i])/mx;cnt++;}
+      result.push(cnt>0?sum/cnt:0);
+    }
+    return result;
+  }
+
+  // Input layer: pixel density per region
+  const inputAct=[];
+  {
+    const cnt=layerNodes[0].length;
+    const regionH=Math.floor(28/cnt);
+    for(let n=0;n<cnt;n++){
+      let sum=0,c=0;
+      for(let r=n*regionH;r<Math.min((n+1)*regionH,28);r++)
+        for(let col=0;col<28;col++){sum+=inp[r*28+col];c++;}
+      inputAct.push(c>0?sum/c:0);
+    }
+  }
+
+  // Map layerOutputs to visual layers
+  // model layers: 0=conv, 1=pool, 2=conv, 3=pool, 4=flatten, 5=dense, 6=dropout, 7=softmax
+  const visualActivations=[
+    inputAct,
+    summarizeActivations(layerOutputs[0],layerNodes[1].length), // conv1
+    summarizeActivations(layerOutputs[1],layerNodes[2].length), // pool1
+    summarizeActivations(layerOutputs[2],layerNodes[3].length), // conv2
+    summarizeActivations(layerOutputs[3],layerNodes[4].length), // pool2
+    summarizeActivations(layerOutputs[4],layerNodes[5].length), // flatten
+    summarizeActivations(layerOutputs[5],layerNodes[6].length), // dense (before dropout)
+    summarizeActivations(layerOutputs[7]||layerOutputs[6],layerNodes[7].length) // output
+  ];
+
+  // Determine which nodes are "dead" (activation ≈ 0 after ReLU)
+  const deadNodes=visualActivations.map(layer=>layer.map(v=>v<0.02));
+
+  // Simulate dropout: randomly kill 30% of dense layer nodes
+  const dropoutMask=[];
+  for(let i=0;i<layerNodes[6].length;i++) dropoutMask.push(Math.random()<0.3);
+
+  showFeat(inp);
+
+  // Get final probs
+  const probs=visualActivations[7]||[];
+  let finalProbs=probs;
+  if(layerOutputs[7]){
+    finalProbs=Array.from(layerOutputs[7]);
+  }
+
+  // Reset
+  layerNodes.forEach(l=>l.forEach(n=>{n.glow=0;n.tGlow=0;n.prob=0;n.dead=false;n.dropped=false;n.activation=0;}));
+  particles=[];trails=[];animating=true;
+
+  const spd=parseInt(document.getElementById('speedS').value);
+  const phaseMs=(11-spd)*160+200;
+  const names=['입력 읽기','Conv1 필터링','Pool1 축소','Conv2 필터링','Pool2 축소','Flatten 펴기','Dense 계산','Softmax 출력'];
+  const ban=document.getElementById('phaseBan');
+
+  for(let ph=0;ph<8;ph++){
+    propPhase=ph;ban.textContent='⚡ '+names[ph];ban.classList.add('show');
+
+    const act=visualActivations[ph]||[];
+
+    if(ph===0){
+      // Light up input nodes based on actual pixel density
+      layerNodes[0].forEach((n,ni)=>{
+        const a=act[ni]||0;
+        n.activation=a;
+        n.tGlow=a*0.9+0.1;
+        n.dead=a<0.02;
+      });
+    }else{
+      // Spawn particles ONLY from alive (non-dead) nodes in previous layer
+      const prevAlive=[];
+      layerNodes[ph-1].forEach((n,ni)=>{if(!n.dead&&!n.dropped)prevAlive.push(ni);});
+      const curAlive=[];
+      act.forEach((a,ni)=>{
+        if(ph===6&&dropoutMask[ni])return; // dropped out
+        if(a>=0.02)curAlive.push(ni);
+      });
+
+      // Spawn particles from alive→alive, weighted by activation
+      const totalParticles=12+Math.floor(Math.random()*8);
+      for(let i=0;i<totalParticles;i++){
+        if(prevAlive.length===0||curAlive.length===0)break;
+        const si=prevAlive[Math.floor(Math.random()*prevAlive.length)];
+        const di=curAlive[Math.floor(Math.random()*curAlive.length)];
+        const src=layerNodes[ph-1][si],dst=layerNodes[ph][di];
+        const actStrength=act[di]||0.3;
+        const spd2=(11-parseInt(document.getElementById('speedS').value))*0.25+0.4;
+        particles.push({sx:src.x,sy:src.y,dx:dst.x,dy:dst.y,t:0,
+          dur:spd2*(0.5+Math.random()*0.5),delay:Math.random()*spd2*0.3,
+          alive:true,toL:ph,fromL:ph-1,strength:actStrength});
+      }
+
+      // Set node states
+      layerNodes[ph].forEach((n,ni)=>{
+        const a=act[ni]||0;
+        n.activation=a;
+        if(ph===6&&dropoutMask[ni]){
+          n.dropped=true;n.dead=false;n.tGlow=0;
+        }else if(a<0.02){
+          n.dead=true;n.tGlow=0.03;
+        }else{
+          n.dead=false;n.tGlow=a*0.8+0.15;
+        }
+      });
+    }
+
+    await slp(phaseMs);
+
+    // Output layer: show probs
+    if(ph===7){
+      let mI=0,mP=0;for(let i=0;i<finalProbs.length;i++)if(finalProbs[i]>mP){mP=finalProbs[i];mI=i;}
+      layerNodes[ph].forEach((n,ni)=>{if(ni<finalProbs.length){n.prob=finalProbs[ni];n.tGlow=finalProbs[ni]*1.5;}});
+      // Extra particles to winner
+      const prevAlive2=[];layerNodes[6].forEach((n,ni)=>{if(!n.dead&&!n.dropped)prevAlive2.push(ni);});
+      if(mI<layerNodes[7].length){
+        for(let i=0;i<8;i++){
+          if(prevAlive2.length===0)break;
+          const si=prevAlive2[Math.floor(Math.random()*prevAlive2.length)];
+          const src=layerNodes[6][si],dst=layerNodes[7][mI];
+          const spd2=(11-parseInt(document.getElementById('speedS').value))*0.25+0.4;
+          particles.push({sx:src.x,sy:src.y,dx:dst.x,dy:dst.y,t:0,dur:spd2*0.6,delay:i*0.05,alive:true,toL:7,fromL:6,strength:1});
+        }
+      }
+      document.getElementById('resCh').textContent=classLabels[mI];
+      document.getElementById('resCh').className='result-ch';
+      document.getElementById('confV').textContent=(mP*100).toFixed(1)+'%';
+      classLabels.forEach((_,i)=>{
+        const f=document.getElementById(`bf-${i}`),p=document.getElementById(`bp-${i}`),r=document.getElementById(`br-${i}`);
+        if(f)f.style.width=(finalProbs[i]*100)+'%';if(p)p.textContent=(finalProbs[i]*100).toFixed(1)+'%';
+        if(r)r.classList.toggle('top',i===mI);
+      });
+      const s5=classLabels.map((l,i)=>({l,p:finalProbs[i]})).sort((a,b)=>b.p-a.p).slice(0,5);
+      const t5e=document.getElementById('t5list');t5e.innerHTML='';
+      s5.forEach((it,idx)=>{const d=document.createElement('div');d.className='t5-i';
+        d.innerHTML=`<span class="t5-r">${idx+1}</span><span class="t5-c">${it.l}</span><div class="t5-b"><div class="t5-bf" style="width:${it.p*100}%"></div></div><span class="t5-p">${(it.p*100).toFixed(1)}%</span>`;
+        t5e.appendChild(d);});
+    }
+    await slp(phaseMs*0.25);
+  }
+  await slp(500);ban.classList.remove('show');animating=false;propPhase=-1;
+}
+function slp(ms){return new Promise(r=>setTimeout(r,ms));}
+
+function showFeat(inp){
+  try{const lm=tf.model({inputs:model.input,outputs:model.layers[0].output});
+    const t=tf.tensor4d(inp,[1,28,28,1]);const a=lm.predict(t);const d=a.dataSync();const s=a.shape;
+    t.dispose();a.dispose();
+    const fc=document.getElementById('featC');fc.width=s[2];fc.height=s[1];
+    const ctx=fc.getContext('2d');const im=ctx.createImageData(s[2],s[1]);
+    let mx=0;for(let i=0;i<s[1]*s[2];i++){const v=Math.abs(d[i*s[3]]);if(v>mx)mx=v;}
+    for(let i=0;i<s[1]*s[2];i++){const v=Math.max(0,d[i*s[3]])/(mx+1e-6)*255;
+      im.data[i*4]=v*0.4;im.data[i*4+1]=v;im.data[i*4+2]=v*0.8;im.data[i*4+3]=255;}
+    ctx.putImageData(im,0,0);}catch(e){console.error('featmap err',e);}
+}
+
+// ================================================================
+// DATA + MODEL (combined into one step)
+// ================================================================
+function setMode(m){
+  currentMode=m;trained=false;model=null;trainData=null;
+  document.querySelectorAll('.mtab').forEach(t=>t.classList.remove('on'));
+  document.getElementById(m==='digit'?'tD':m==='jamo'?'tJ':'tA').classList.add('on');
+  const dd=document.getElementById('dataDesc');
+  if(m==='digit')dd.textContent='MNIST 손글씨 숫자를 다운로드하고 8층 CNN을 자동 구성합니다.';
+  else if(m==='jamo')dd.innerHTML='한글 자모 24자를 다양한 폰트로 생성하고 8층 CNN을 구성합니다.';
+  else dd.innerHTML='숫자+한글 34클래스 데이터를 준비하고 8층 CNN을 구성합니다.';
+  if(tfReady) document.getElementById('bLoad').disabled=false;
+  document.getElementById('bTrain').disabled=true;
+  document.getElementById('bPred').disabled=true;
+  document.getElementById('stLoad').innerHTML='';
+  document.getElementById('archBox').style.display='none';
+  document.getElementById('pWrap').style.display='none';
+  document.getElementById('eLog').innerHTML='';
+  document.getElementById('dataS').innerHTML='';
+  lossH.length=0;accH.length=0;clearCh('lossC');clearCh('accC');
+  clearCanvas();layoutNet();
+}
+function clearCh(id){const c=document.getElementById(id);c.getContext('2d').clearRect(0,0,c.width,c.height);}
+
+function genJamo(chars,spc){
+  const tc=document.createElement('canvas');tc.width=28;tc.height=28;const ctx=tc.getContext('2d');
+  const xs=[],ys=[],wts=['400','700','900'],szs=[18,19,20,21,22,23,24];
+  chars.forEach((ch,ci)=>{for(let s=0;s<spc;s++){
+    ctx.fillStyle='#000';ctx.fillRect(0,0,28,28);
+    const f=KR_FONTS[Math.floor(Math.random()*KR_FONTS.length)];
+    ctx.save();ctx.translate(14+(Math.random()-.5)*4,15+(Math.random()-.5)*4);
+    ctx.rotate((Math.random()-.5)*.25);ctx.fillStyle='#fff';
+    ctx.font=`${wts[Math.floor(Math.random()*wts.length)]} ${szs[Math.floor(Math.random()*szs.length)]}px "${f}"`;
+    ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(ch,0,0);ctx.restore();
+    const id=ctx.getImageData(0,0,28,28);const px=new Float32Array(784);
+    for(let i=0;i<784;i++){let v=id.data[i*4]/255;v+=(Math.random()-.5)*.08;px[i]=Math.max(0,Math.min(1,v));}
+    xs.push(px);ys.push(ci);
+  }});return{xs,ys};
+}
+
+async function loadMnist(max){
+  const st=document.getElementById('stLoad');
+  st.innerHTML='<span class="warn">⏳ MNIST 이미지 다운로드 중... (~10MB)</span>';
+  const imgP=new Promise(res=>{
+    const img=new Image();const c=document.createElement('canvas');const ctx=c.getContext('2d');
+    img.crossOrigin='';
+    img.onload=()=>{
+      const tot=65000,bytes=new ArrayBuffer(tot*784*4),chunk=5000;c.width=img.naturalWidth;c.height=chunk;
+      for(let i=0;i<tot/chunk;i++){
+        const v=new Float32Array(bytes,i*784*chunk*4,784*chunk);
+        ctx.drawImage(img,0,i*chunk,img.naturalWidth,chunk,0,0,img.naturalWidth,chunk);
+        const d=ctx.getImageData(0,0,c.width,chunk);for(let j=0;j<d.data.length/4;j++)v[j]=d.data[j*4]/255;
+      }
+      res(new Float32Array(bytes));
+    };
+    img.onerror=()=>res(null);
+    img.src='https://storage.googleapis.com/learnjs-data/model-builder/mnist_images.png';
+  });
+  const lblP=fetch('https://storage.googleapis.com/learnjs-data/model-builder/mnist_labels_uint8')
+    .then(r=>r.arrayBuffer()).then(b=>new Uint8Array(b)).catch(()=>null);
+  const[images,labels]=await Promise.all([imgP,lblP]);
+  if(!images||!labels) throw new Error('MNIST 다운로드 실패 — 인터넷 연결을 확인하세요');
+  const n=Math.min(max,55000),xs=[],ys=[];
+  for(let i=0;i<n;i++){
+    xs.push(images.slice(i*784,(i+1)*784));
+    let ml=0,mv=0;for(let j=0;j<10;j++)if(labels[i*10+j]>mv){mv=labels[i*10+j];ml=j;}
+    ys.push(ml);
+  }
+  return{xs,ys};
+}
+
+// Combined: Load data + Build model in one click
+async function prepareAll(){
+  if(!tfReady){document.getElementById('stLoad').innerHTML='<span class="err">✗ TensorFlow.js가 아직 로드되지 않았습니다</span>';return;}
+  document.getElementById('bLoad').disabled=true;
+  const st=document.getElementById('stLoad');
+
+  try{
+    // 1. Load data
+    if(currentMode==='digit'){
+      classLabels=[...DIGITS_L];trainData=await loadMnist(20000);
+      st.innerHTML=`<span class="ok">✓ MNIST ${trainData.xs.length.toLocaleString()}장 로드</span>`;
+    }else if(currentMode==='jamo'){
+      classLabels=[...JAMO];st.innerHTML='<span class="warn">⏳ 한글 자모 생성중...</span>';await slp(50);
+      trainData=genJamo(JAMO,800);
+      st.innerHTML=`<span class="ok">✓ 한글 ${trainData.xs.length.toLocaleString()}장 생성</span>`;
+    }else{
+      classLabels=[...ALL_LABELS];const dd=await loadMnist(10000);
+      st.innerHTML='<span class="warn">⏳ 한글 생성중...</span>';await slp(50);
+      const jd=genJamo(JAMO,500);
+      trainData={xs:[...dd.xs,...jd.xs],ys:[...dd.ys,...jd.ys.map(y=>y+10)]};
+      st.innerHTML=`<span class="ok">✓ 통합 ${trainData.xs.length.toLocaleString()}장</span>`;
+    }
+    showSamples();
+
+    // 2. Auto-build model
+    st.innerHTML+=' → 모델 구성 중...';
+    const nc=classLabels.length;
+    if(model){try{model.dispose();}catch(e){}}
+
+    model=tf.sequential();
+    model.add(tf.layers.conv2d({inputShape:[28,28,1],filters:16,kernelSize:3,padding:'same',activation:'relu'}));
+    model.add(tf.layers.maxPooling2d({poolSize:2,strides:2}));
+    model.add(tf.layers.conv2d({filters:32,kernelSize:3,padding:'same',activation:'relu'}));
+    model.add(tf.layers.maxPooling2d({poolSize:2,strides:2}));
+    model.add(tf.layers.flatten());
+    model.add(tf.layers.dense({units:128,activation:'relu'}));
+    model.add(tf.layers.dropout({rate:0.3}));
+    model.add(tf.layers.dense({units:nc,activation:'softmax'}));
+    model.compile({optimizer:tf.train.adam(0.001),loss:'categoricalCrossentropy',metrics:['accuracy']});
+
+    const tp=model.countParams();
+    st.innerHTML=`<span class="ok">✓ 데이터 준비 완료 + 8층 CNN 생성! (${tp.toLocaleString()} params, ${nc}클래스)</span>`;
+
+    // Show arch
+    const ab=document.getElementById('archBox');ab.style.display='block';
+    document.getElementById('archL').innerHTML=[
+      {c:'var(--c1)',t:`① Conv2D 3×3, 16필터 → 28×28×16`},
+      {c:'var(--dim)',t:`② MaxPool 2×2 → 14×14×16`},
+      {c:'var(--c2)',t:`③ Conv2D 3×3, 32필터 → 14×14×32`},
+      {c:'var(--dim)',t:`④ MaxPool 2×2 → 7×7×32`},
+      {c:'var(--c3)',t:`⑤ Flatten → 1568`},
+      {c:'var(--c4)',t:`⑥ Dense 128 (ReLU)`},
+      {c:'var(--c5)',t:`⑦ Dropout 30%`},
+      {c:'var(--red)',t:`⑧ Dense ${nc} (Softmax)`}
+    ].map(l=>`<div class="arch-l"><div class="arch-i" style="background:${l.c}"></div>${l.t}</div>`).join('');
+
+    document.getElementById('statsT').innerHTML=`<b>${tp.toLocaleString()}개 파라미터</b>, 8층, ${nc}클래스<br><br>역전파: 틀린 만큼 반대 방향으로 수정!`;
+
+    document.getElementById('bTrain').disabled=false;
+    layoutNet();buildBars();
+  }catch(e){
+    st.innerHTML=`<span class="err">✗ 오류: ${e.message}</span>`;
+    document.getElementById('bLoad').disabled=false;
+    console.error(e);
+  }
+}
+
+function showSamples(){
+  const c=document.getElementById('dataS');c.innerHTML='';
+  for(let i=0;i<16;i++){
+    const idx=Math.floor(Math.random()*trainData.xs.length);
+    const cv=document.createElement('canvas');cv.width=28;cv.height=28;cv.style.width='20px';cv.style.height='20px';
+    const ctx=cv.getContext('2d');const im=ctx.createImageData(28,28);const px=trainData.xs[idx];
+    for(let j=0;j<784;j++){const v=px[j]*255;im.data[j*4]=v;im.data[j*4+1]=v;im.data[j*4+2]=v;im.data[j*4+3]=255;}
+    ctx.putImageData(im,0,0);cv.title=classLabels[trainData.ys[idx]];c.appendChild(cv);
+  }
+}
+
+// ================================================================
+// TRAIN
+// ================================================================
+async function trainModel(){
+  if(!model||!trainData){document.getElementById('stLoad').innerHTML='<span class="err">먼저 데이터+모델 준비를 해주세요</span>';return;}
+  document.getElementById('bTrain').disabled=true;
+  document.getElementById('pWrap').style.display='block';
+  const log=document.getElementById('eLog');log.innerHTML='';
+  lossH.length=0;accH.length=0;
+
+  const n=trainData.xs.length,BS=256,EP=currentMode==='digit'?3:5;
+  const BPE=Math.floor(n/BS);
+  if(BPE===0){log.innerHTML='<span class="err">데이터가 부족합니다</span>';return;}
+  const tot=EP*BPE,idx=Array.from({length:n},(_,i)=>i);
+  let step=0;
+
+  try{
+    for(let ep=0;ep<EP;ep++){
+      for(let i=idx.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[idx[i],idx[j]]=[idx[j],idx[i]];}
+      for(let b=0;b<BPE;b++){
+        const bx=new Float32Array(BS*784),by=new Int32Array(BS);
+        for(let i=0;i<BS;i++){const ii=idx[b*BS+i];bx.set(trainData.xs[ii],i*784);by[i]=trainData.ys[ii];}
+        const xt=tf.tensor4d(bx,[BS,28,28,1]);
+        const ytSparse=tf.tensor1d(by,'int32');
+        const yt=tf.oneHot(ytSparse,classLabels.length).cast('float32');
+        ytSparse.dispose();
+        const h=await model.fit(xt,yt,{batchSize:BS,epochs:1,shuffle:false});
+        xt.dispose();yt.dispose();
+        step++;
+        const pct=step/tot*100;
+        document.getElementById('pFill').style.width=pct+'%';
+        document.getElementById('pLbl').textContent=pct.toFixed(0)+'%';
+        document.getElementById('eLbl').textContent=`E${ep+1}/${EP} B${b+1}/${BPE}`;
+        if(b%4===0){
+          const acc=h.history.accuracy?h.history.accuracy[0]:(h.history.acc?h.history.acc[0]:0);
+          const loss=h.history.loss[0];
+          lossH.push(loss);accH.push(acc);drawCh('lossC',lossH,'#ef4444');drawCh('accC',accH,'#10b981');
+          const ln=document.createElement('div');
+          ln.innerHTML=`E${ep+1} B${b+1}: loss=${loss.toFixed(3)} <span class="g">acc=${(acc*100).toFixed(1)}%</span>`;
+          log.appendChild(ln);log.scrollTop=log.scrollHeight;
+        }
+        await tf.nextFrame();
+      }
+    }
+    trained=true;
+    document.getElementById('bPred').disabled=false;
+    document.getElementById('dhint').innerHTML='글자를 그리고<br>⚡전파 시작!';
+    document.getElementById('pLbl').textContent='✓ 완료';
+    const fn=document.createElement('div');fn.innerHTML='<span class="g">━━ 학습 완료! 이제 글자를 그려보세요 ━━</span>';log.appendChild(fn);
+  }catch(e){
+    const ln=document.createElement('div');ln.innerHTML=`<span style="color:var(--red)">학습 오류: ${e.message}</span>`;
+    log.appendChild(ln);
+    console.error('Train error:',e);
+    document.getElementById('bTrain').disabled=false;
+  }
+}
+
+function drawCh(cid,data,color){
+  const c=document.getElementById(cid);const dp=window.devicePixelRatio||1;
+  const r=c.getBoundingClientRect();c.width=r.width*dp;c.height=r.height*dp;
+  const ctx=c.getContext('2d');ctx.scale(dp,dp);const W=r.width,H=r.height;
+  ctx.clearRect(0,0,W,H);if(data.length<2)return;
+  const p={l:28,r:4,t:4,b:8},gW=W-p.l-p.r,gH=H-p.t-p.b;
+  let mn=Math.min(...data),mx=Math.max(...data);if(mx-mn<.01){mn-=.01;mx+=.01;}
+  ctx.beginPath();data.forEach((v,i)=>{
+    const x=p.l+(i/(data.length-1))*gW,y=p.t+(1-(v-mn)/(mx-mn))*gH;
+    i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);});
+  ctx.strokeStyle=color;ctx.lineWidth=1.5;ctx.stroke();
+}
+
+function buildBars(){
+  const el=document.getElementById('barsBox');el.innerHTML='';
+  classLabels.forEach((l,i)=>{
+    const r=document.createElement('div');r.className='br';r.id=`br-${i}`;
+    r.innerHTML=`<span class="br-l">${l}</span><div class="br-t"><div class="br-f" id="bf-${i}"></div></div><span class="br-p" id="bp-${i}"></span>`;
+    el.appendChild(r);
+  });
+}
+
+// ================================================================
+// DRAWING
+// ================================================================
+const DC=document.getElementById('drawCanvas'),DX=DC.getContext('2d');
+let isD=false,hasDrawn=false;DX.fillStyle='#000';DX.fillRect(0,0,180,180);
+function gP(e){const r=DC.getBoundingClientRect(),sx=180/r.width,sy=180/r.height;
+  if(e.touches)return{x:(e.touches[0].clientX-r.left)*sx,y:(e.touches[0].clientY-r.top)*sy};
+  return{x:(e.clientX-r.left)*sx,y:(e.clientY-r.top)*sy};}
+function sD(e){e.preventDefault();isD=true;if(!hasDrawn){hasDrawn=true;document.getElementById('dhint').classList.add('hidden');}const p=gP(e);DX.beginPath();DX.moveTo(p.x,p.y);}
+function dD(e){if(!isD)return;e.preventDefault();const p=gP(e);DX.lineTo(p.x,p.y);DX.strokeStyle='#fff';DX.lineWidth=12;DX.lineCap='round';DX.lineJoin='round';DX.stroke();}
+function eD(e){if(e)e.preventDefault();isD=false;}
+DC.addEventListener('mousedown',sD);DC.addEventListener('mousemove',dD);DC.addEventListener('mouseup',eD);DC.addEventListener('mouseleave',eD);
+DC.addEventListener('touchstart',sD,{passive:false});DC.addEventListener('touchmove',dD,{passive:false});DC.addEventListener('touchend',eD);
+
+function clearCanvas(){
+  DX.fillStyle='#000';DX.fillRect(0,0,180,180);hasDrawn=false;
+  document.getElementById('dhint').classList.remove('hidden');
+  document.getElementById('resCh').textContent='?';document.getElementById('resCh').className='result-ch idle';
+  document.getElementById('confV').textContent='—';
+  document.getElementById('prevC').getContext('2d').fillStyle='#000';
+  document.getElementById('prevC').getContext('2d').fillRect(0,0,28,28);
+  document.getElementById('featC').getContext('2d').fillStyle='#000';
+  document.getElementById('featC').getContext('2d').fillRect(0,0,28,28);
+  document.querySelectorAll('.br-f').forEach(b=>b.style.width='0%');
+  document.querySelectorAll('.br-p').forEach(b=>b.textContent='');
+  document.querySelectorAll('.br').forEach(b=>b.classList.remove('top'));
+  document.getElementById('t5list').innerHTML='';
+  layerNodes.forEach(l=>l.forEach(n=>{n.glow=0;n.tGlow=0;n.prob=0;n.dead=false;n.dropped=false;n.activation=0;}));
+  particles=[];trails=[];animating=false;propPhase=-1;
+  document.getElementById('phaseBan').classList.remove('show');
+}
+
+// ================================================================
+// INIT
+// ================================================================
+document.getElementById('prevC').getContext('2d').fillStyle='#000';
+document.getElementById('prevC').getContext('2d').fillRect(0,0,28,28);
+document.getElementById('featC').getContext('2d').fillStyle='#000';
+document.getElementById('featC').getContext('2d').fillRect(0,0,28,28);
+buildBars();layoutNet();
+requestAnimationFrame(render);
+window.addEventListener('resize',layoutNet);
+</script>
+
+<!-- TF.js primary load -->
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.17.0/dist/tf.min.js" onload="checkTF()" onerror="loadTFJS()"></script>
+
+<!-- ===== BIO NEURON POPUP MODAL ===== -->
+<div class="modal-overlay" id="bioModal" onclick="if(event.target===this)closeBioModal()">
+  <div class="modal">
+    <button class="modal-close" onclick="closeBioModal()">✕</button>
+    <div class="modal-title">🧬 뇌의 신경망 구조 — 생물학적 뉴런</div>
+    <div class="modal-sub">우리 뇌에는 약 860억 개의 뉴런(신경세포)이 있고, 각 뉴런은 수천 개의 시냅스로 다른 뉴런과 연결되어 있습니다.<br>인공 신경망은 이 구조를 수학적으로 모방한 것입니다.</div>
+
+    <div class="modal-section-title">🔬 뉴런 한 개의 구조 (연쇄 연결)</div>
+
+    <!-- Single neuron SVG -->
+    <svg width="100%" viewBox="0 0 680 240" style="margin-bottom:4px">
+      <defs>
+        <marker id="arrowB" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </marker>
+      </defs>
+
+      <!-- PREVIOUS NEURON — axon terminal -->
+      <path d="M0 58 Q12 60 28 66" fill="none" stroke="#BA7517" stroke-width="1.8" stroke-linecap="round" opacity="0.6"/>
+      <path d="M0 90 Q12 88 28 82" fill="none" stroke="#BA7517" stroke-width="1.8" stroke-linecap="round" opacity="0.6"/>
+      <path d="M0 44 Q14 50 28 58" fill="none" stroke="#BA7517" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
+      <path d="M0 108 Q14 104 28 96" fill="none" stroke="#BA7517" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
+      <circle cx="30" cy="66" r="5.5" fill="#FAEEDA" stroke="#BA7517" stroke-width="0.5"/>
+      <circle cx="30" cy="82" r="5.5" fill="#FAEEDA" stroke="#BA7517" stroke-width="0.5"/>
+      <circle cx="30" cy="58" r="4.5" fill="#FAEEDA" stroke="#BA7517" stroke-width="0.5"/>
+      <circle cx="30" cy="96" r="4.5" fill="#FAEEDA" stroke="#BA7517" stroke-width="0.5"/>
+      <!-- Synapse gap left -->
+      <line x1="36" y1="66" x2="50" y2="66" stroke="#ccc" stroke-width="0.5" stroke-dasharray="2 2"/>
+      <line x1="36" y1="82" x2="50" y2="82" stroke="#ccc" stroke-width="0.5" stroke-dasharray="2 2"/>
+      <line x1="35" y1="58" x2="50" y2="58" stroke="#ccc" stroke-width="0.5" stroke-dasharray="2 2"/>
+      <line x1="35" y1="96" x2="50" y2="96" stroke="#ccc" stroke-width="0.5" stroke-dasharray="2 2"/>
+      <circle cx="43" cy="66" r="3" fill="#EF9F27" opacity="0.5"/>
+      <circle cx="43" cy="82" r="3" fill="#EF9F27" opacity="0.5"/>
+
+      <!-- MAIN NEURON -->
+      <circle cx="130" cy="76" r="36" fill="#EEEDFE" stroke="#7F77DD" stroke-width="1.2"/>
+      <circle cx="130" cy="76" r="13" fill="#CECBF6" stroke="#7F77DD" stroke-width="0.5"/>
+      <!-- Dendrites connected to cell body -->
+      <path d="M52 66 C70 68 82 72 94 74" fill="none" stroke="#7F77DD" stroke-width="2" stroke-linecap="round"/>
+      <path d="M52 58 C68 60 80 64 94 70" fill="none" stroke="#7F77DD" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M52 82 C70 82 82 80 94 78" fill="none" stroke="#7F77DD" stroke-width="2" stroke-linecap="round"/>
+      <path d="M52 96 C68 94 80 88 94 82" fill="none" stroke="#7F77DD" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M58 66 Q54 52 48 42" fill="none" stroke="#AFA9EC" stroke-width="0.8" stroke-linecap="round"/>
+      <path d="M58 96 Q54 108 48 118" fill="none" stroke="#AFA9EC" stroke-width="0.8" stroke-linecap="round"/>
+
+      <!-- Axon + myelin (shortened) -->
+      <line x1="166" y1="76" x2="410" y2="76" stroke="#7F77DD" stroke-width="2.5" stroke-linecap="round"/>
+      <rect x="180" y="68" width="28" height="16" rx="8" fill="#E1F5EE" stroke="#5DCAA5" stroke-width="0.5"/>
+      <rect x="218" y="68" width="28" height="16" rx="8" fill="#E1F5EE" stroke="#5DCAA5" stroke-width="0.5"/>
+      <rect x="256" y="68" width="28" height="16" rx="8" fill="#E1F5EE" stroke="#5DCAA5" stroke-width="0.5"/>
+      <rect x="294" y="68" width="28" height="16" rx="8" fill="#E1F5EE" stroke="#5DCAA5" stroke-width="0.5"/>
+      <rect x="332" y="68" width="28" height="16" rx="8" fill="#E1F5EE" stroke="#5DCAA5" stroke-width="0.5"/>
+      <rect x="370" y="68" width="28" height="16" rx="8" fill="#E1F5EE" stroke="#5DCAA5" stroke-width="0.5"/>
+
+      <!-- Axon terminal -->
+      <path d="M410 76 Q432 60 448 52" fill="none" stroke="#7F77DD" stroke-width="1.8" stroke-linecap="round"/>
+      <path d="M410 76 Q434 70 452 66" fill="none" stroke="#7F77DD" stroke-width="1.8" stroke-linecap="round"/>
+      <path d="M410 76 Q434 82 452 86" fill="none" stroke="#7F77DD" stroke-width="1.8" stroke-linecap="round"/>
+      <path d="M410 76 Q432 92 448 100" fill="none" stroke="#7F77DD" stroke-width="1.8" stroke-linecap="round"/>
+      <circle cx="448" cy="52" r="5.5" fill="#FAEEDA" stroke="#BA7517" stroke-width="0.5"/>
+      <circle cx="452" cy="66" r="5.5" fill="#FAEEDA" stroke="#BA7517" stroke-width="0.5"/>
+      <circle cx="452" cy="86" r="5.5" fill="#FAEEDA" stroke="#BA7517" stroke-width="0.5"/>
+      <circle cx="448" cy="100" r="5.5" fill="#FAEEDA" stroke="#BA7517" stroke-width="0.5"/>
+
+      <!-- Synapse gap right -->
+      <line x1="454" y1="52" x2="472" y2="52" stroke="#ccc" stroke-width="0.5" stroke-dasharray="2 2"/>
+      <line x1="458" y1="66" x2="472" y2="66" stroke="#ccc" stroke-width="0.5" stroke-dasharray="2 2"/>
+      <line x1="458" y1="86" x2="472" y2="86" stroke="#ccc" stroke-width="0.5" stroke-dasharray="2 2"/>
+      <line x1="454" y1="100" x2="472" y2="100" stroke="#ccc" stroke-width="0.5" stroke-dasharray="2 2"/>
+      <circle cx="463" cy="66" r="3" fill="#EF9F27" opacity="0.5"/>
+      <circle cx="463" cy="86" r="3" fill="#EF9F27" opacity="0.5"/>
+
+      <!-- NEXT NEURON — dendrites + partial cell body -->
+      <circle cx="570" cy="76" r="36" fill="#EEEDFE" stroke="#7F77DD" stroke-width="1" opacity="0.5"/>
+      <circle cx="570" cy="76" r="13" fill="#CECBF6" stroke="#7F77DD" stroke-width="0.5" opacity="0.4"/>
+      <path d="M474 52 C492 54 510 60 534 68" fill="none" stroke="#7F77DD" stroke-width="1.8" stroke-linecap="round"/>
+      <path d="M474 66 C492 68 510 70 534 73" fill="none" stroke="#7F77DD" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M474 86 C492 84 510 82 534 79" fill="none" stroke="#7F77DD" stroke-width="1.8" stroke-linecap="round"/>
+      <path d="M474 100 C492 98 510 92 534 84" fill="none" stroke="#7F77DD" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="606" y1="76" x2="680" y2="76" stroke="#7F77DD" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
+      <rect x="618" y="69" width="20" height="14" rx="7" fill="#E1F5EE" stroke="#5DCAA5" stroke-width="0.5" opacity="0.4"/>
+      <rect x="648" y="69" width="20" height="14" rx="7" fill="#E1F5EE" stroke="#5DCAA5" stroke-width="0.5" opacity="0.4"/>
+
+      <!-- Labels -->
+      <text style="font-size:11px;fill:#555;font-weight:500;font-family:'Noto Sans KR'" x="25" y="148" text-anchor="middle">이전 뉴런</text>
+      <text style="font-size:10px;fill:#888;font-family:'Noto Sans KR'" x="25" y="160" text-anchor="middle">축삭말단</text>
+      <text style="font-size:10px;fill:#888;font-family:'Noto Sans KR'" x="43" y="138" text-anchor="middle">시냅스</text>
+      <text style="font-size:11px;fill:#555;font-weight:500;font-family:'Noto Sans KR'" x="76" y="148" text-anchor="middle">수상돌기</text>
+      <text style="font-size:11px;fill:#555;font-weight:500;font-family:'Noto Sans KR'" x="130" y="148" text-anchor="middle">세포체</text>
+      <text style="font-size:11px;fill:#555;font-weight:500;font-family:'Noto Sans KR'" x="290" y="148" text-anchor="middle">축삭 + 수초</text>
+      <text style="font-size:11px;fill:#555;font-weight:500;font-family:'Noto Sans KR'" x="430" y="148" text-anchor="middle">축삭말단</text>
+      <text style="font-size:10px;fill:#888;font-family:'Noto Sans KR'" x="463" y="138" text-anchor="middle">시냅스</text>
+      <text style="font-size:11px;fill:#555;font-weight:500;font-family:'Noto Sans KR'" x="520" y="148" text-anchor="middle">수상돌기</text>
+      <text style="font-size:11px;fill:#555;font-weight:500;font-family:'Noto Sans KR'" x="590" y="148" text-anchor="middle">다음 뉴런</text>
+      <text style="font-size:10px;fill:#888;font-family:'Noto Sans KR'" x="590" y="160" text-anchor="middle">세포체</text>
+
+      <line x1="20" y1="178" x2="660" y2="178" stroke="#aaa" stroke-width="0.5" marker-end="url(#arrowB)"/>
+      <text style="font-size:10px;fill:#888;font-family:'Noto Sans KR'" x="340" y="193" text-anchor="middle">축삭말단 → 시냅스(화학) → 수상돌기 → 세포체(판단) → 축삭(전기) → 시냅스(화학) → 다음 뉴런</text>
+
+      <!-- Legend -->
+      <circle cx="50" cy="215" r="4" fill="#FAEEDA" stroke="#BA7517" stroke-width="0.5"/>
+      <text style="font-size:10px;fill:#888;font-family:'Noto Sans KR'" x="60" y="219">화학 신호 (시냅스)</text>
+      <rect x="220" y="211" width="14" height="10" rx="5" fill="#E1F5EE" stroke="#5DCAA5" stroke-width="0.5"/>
+      <text style="font-size:10px;fill:#888;font-family:'Noto Sans KR'" x="240" y="219">전기 신호 (축삭)</text>
+      <circle cx="400" cy="215" r="4" fill="#EF9F27" opacity="0.6"/>
+      <text style="font-size:10px;fill:#888;font-family:'Noto Sans KR'" x="410" y="219">신호 전파</text>
+    </svg>
+
+    <div class="modal-note">위의 뉴런 한 개가 아래 네트워크의 동그라미 하나입니다. 이런 뉴런들이 층을 이루며 연결됩니다.</div>
+
+    <hr class="modal-divider">
+
+    <div class="modal-section-title">🧠 뉴런 네트워크 (5층 × 8개 뉴런)</div>
+    <div class="net-ctrl">
+      <button onclick="bioFireSignal()">⚡ 신호 보내기</button>
+      <button onclick="bioFireSignal();bioFireSignal();bioFireSignal()">⚡⚡ 연속 발화</button>
+      <label>속도 <input type="range" min="1" max="10" value="4" id="bioSpd" style="width:80px"></label>
+      <span style="font-size:0.6rem;color:#999" id="bioInfo">버튼을 눌러 신호를 전파하세요</span>
+    </div>
+
+    <canvas id="bioNetC" width="1400" height="700" style="width:100%;height:350px;border-radius:10px;border:1px solid var(--border);background:var(--panel)"></canvas>
+
+    <hr class="modal-divider">
+
+    <div class="modal-section-title">🔄 뇌 vs 인공 신경망 비교</div>
+    <div class="bio-compare">
+      <div class="bio-card">
+        <h5>🧠 뇌의 뉴런</h5>
+        <p>약 860억 개 뉴런<br>각 뉴런이 평균 7,000개 시냅스 연결<br>총 연결: 약 600조 개<br>전기 + 화학 신호로 통신<br>신호 속도: 초속 120m</p>
+      </div>
+      <div class="bio-card">
+        <h5>🤖 인공 신경망</h5>
+        <p>우리 모델: 뉴런 ~200개, 연결 ~3만 개<br>GPT-4급: 뉴런 수십억, 연결 1조+<br>숫자(가중치)의 곱셈과 덧셈<br>GPU로 전기 신호만 사용<br>빛의 속도로 통신</p>
+      </div>
+      <div class="bio-card">
+        <h5>수상돌기 = 입력층</h5>
+        <p>여러 곳에서 신호를 받아들이는 가지<br>→ 입력 노드가 픽셀 값을 받는 것과 같음</p>
+      </div>
+      <div class="bio-card">
+        <h5>시냅스 = 가중치</h5>
+        <p>시냅스가 강하면 신호가 잘 전달됨<br>→ 가중치 값이 큰 연결과 동일한 원리</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Bio neural network canvas
+const BC=document.getElementById('bioNetC'),BX=BC.getContext('2d');
+const BDPR=window.devicePixelRatio||1;
+let bW,bH;
+const BLAYERS=5,BNPC=8;
+const bNodes=[],bSynapses=[],bParticles=[];
+const bLayerColors=[
+  {fill:'#EEEDFE',stroke:'#7F77DD',glow:'rgba(127,119,221,'},
+  {fill:'#E6F1FB',stroke:'#378ADD',glow:'rgba(55,138,221,'},
+  {fill:'#E1F5EE',stroke:'#1D9E75',glow:'rgba(29,158,117,'},
+  {fill:'#FAEEDA',stroke:'#BA7517',glow:'rgba(186,117,23,'},
+  {fill:'#FAECE7',stroke:'#D85A30',glow:'rgba(216,90,48,'}
+];
+const bLayerNames=['감각 입력층','첫 번째 처리층','연합 처리층','판단 통합층','출력 반응층'];
+
+function bioResize(){
+  const r=BC.getBoundingClientRect();bW=r.width;bH=r.height;
+  BC.width=bW*BDPR;BC.height=bH*BDPR;
+}
+
+function bioInitNodes(){
+  bNodes.length=0;bSynapses.length=0;
+  const px=55,py=40,uW=bW-px*2,uH=bH-py*2;
+  const lg=uW/(BLAYERS-1);
+  for(let li=0;li<BLAYERS;li++){
+    const x=px+li*lg,gap=uH/(BNPC+1);
+    for(let ni=0;ni<BNPC;ni++){
+      bNodes.push({x,y:py+gap*(ni+1),li,r:10+Math.random()*3,glow:0,tGlow:0,active:false,deadTh:Math.random()*0.3});
+    }
+  }
+  for(let li=0;li<BLAYERS-1;li++){
+    const src=bNodes.filter(n=>n.li===li),dst=bNodes.filter(n=>n.li===li+1);
+    src.forEach(s=>{
+      const nc=3+Math.floor(Math.random()*3);
+      const sh=[...dst].sort(()=>Math.random()-0.5);
+      for(let i=0;i<Math.min(nc,sh.length);i++){
+        bSynapses.push({sx:s.x,sy:s.y,dx:sh[i].x,dy:sh[i].y,
+          srcI:bNodes.indexOf(s),dstI:bNodes.indexOf(sh[i]),
+          str:0.15+Math.random()*0.85,trailA:0,trailB:0});
+      }
+    });
+  }
+}
+
+function bioFireSignal(){
+  document.getElementById('bioInfo').textContent='신호 전파 중...';
+  const inp=bNodes.filter(n=>n.li===0);
+  const sh=[...inp].sort(()=>Math.random()-0.5);
+  const nf=3+Math.floor(Math.random()*3);
+  for(let i=0;i<nf;i++){sh[i].tGlow=0.9;sh[i].active=true;}
+  bioPropLayer(0);
+}
+
+function bioPropLayer(li){
+  if(li>=BLAYERS-1){setTimeout(()=>{document.getElementById('bioInfo').textContent='전파 완료!';},400);return;}
+  const spd=parseInt(document.getElementById('bioSpd').value);
+  const delay=(11-spd)*70+80;
+  setTimeout(()=>{
+    const actSyn=bSynapses.filter(s=>bNodes[s.srcI].li===li&&bNodes[s.srcI].active);
+    actSyn.forEach(syn=>{
+      if(syn.str<bNodes[syn.dstI].deadTh)return;
+      const sp2=(11-parseInt(document.getElementById('bioSpd').value))*0.12+0.25;
+      bParticles.push({sx:syn.sx,sy:syn.sy,dx:syn.dx,dy:syn.dy,t:0,dur:sp2*(0.4+Math.random()*0.4),
+        delay:Math.random()*0.12,alive:true,dstI:syn.dstI,synI:bSynapses.indexOf(syn),str:syn.str});
+    });
+    setTimeout(()=>{
+      actSyn.forEach(syn=>{
+        const d=bNodes[syn.dstI];
+        if(syn.str>=d.deadTh){d.tGlow=Math.min(1,d.tGlow+syn.str*0.4);d.active=true;}
+      });
+      bioPropLayer(li+1);
+    },delay*0.7);
+  },delay);
+}
+
+let bLastT=0;
+function bioRender(ts){
+  requestAnimationFrame(bioRender);
+  if(!BC.offsetParent)return; // skip when hidden
+  const dt=Math.min((ts-bLastT)/1000,0.05);bLastT=ts;
+
+  bParticles.forEach(p=>{
+    if(!p.alive)return;if(p.delay>0){p.delay-=dt;return;}
+    p.t+=dt;if(p.t>=p.dur){p.alive=false;const syn=bSynapses[p.synI];if(syn){syn.trailA=p.str*0.6;syn.trailB=Date.now();}}
+  });
+
+  bNodes.forEach(n=>{n.glow+=(n.tGlow-n.glow)*0.07;n.tGlow*=0.998;if(n.tGlow<0.01){n.active=false;n.tGlow=0;}});
+
+  BX.save();BX.scale(BDPR,BDPR);BX.clearRect(0,0,bW,bH);
+
+  // Layer labels
+  BX.textAlign='center';
+  for(let li=0;li<BLAYERS;li++){
+    const x=bNodes.filter(n=>n.li===li)[0].x;
+    BX.font='500 10px "Noto Sans KR",sans-serif';BX.fillStyle='#777';BX.fillText(bLayerNames[li],x,16);
+    BX.font='400 9px "Noto Sans KR",sans-serif';BX.fillStyle='#aaa';BX.fillText(`(${BNPC}개 뉴런)`,x,28);
+  }
+
+  // Synapses
+  bSynapses.forEach(syn=>{
+    const age=(Date.now()-syn.trailB)/1000;
+    const pulse=syn.trailA>0?0.5+0.5*Math.sin(age*2):0;
+    const tA=syn.trailA*pulse;
+    if(syn.trailA>0)syn.trailA*=0.997;
+    BX.beginPath();BX.moveTo(syn.sx,syn.sy);BX.lineTo(syn.dx,syn.dy);
+    BX.strokeStyle=`rgba(127,119,221,${0.04+syn.str*0.02})`;BX.lineWidth=0.3+syn.str*0.6;BX.stroke();
+    if(tA>0.01){
+      BX.beginPath();BX.moveTo(syn.sx,syn.sy);BX.lineTo(syn.dx,syn.dy);
+      const li=bNodes[syn.srcI].li;
+      BX.strokeStyle=bLayerColors[li].glow+(tA*0.5)+')';BX.lineWidth=0.5+tA*2;BX.stroke();
+    }
+  });
+
+  // Particles
+  bParticles.forEach(p=>{
+    if(!p.alive||p.delay>0)return;
+    const pr=p.t/p.dur,e=pr<0.5?2*pr*pr:1-Math.pow(-2*pr+2,2)/2;
+    const x=p.sx+(p.dx-p.sx)*e,y=p.sy+(p.dy-p.sy)*e,sz=2+Math.sin(pr*Math.PI)*3;
+    const g=BX.createRadialGradient(x,y,0,x,y,sz*3);
+    g.addColorStop(0,'rgba(239,159,39,0.8)');g.addColorStop(0.5,'rgba(239,159,39,0.2)');g.addColorStop(1,'rgba(239,159,39,0)');
+    BX.fillStyle=g;BX.beginPath();BX.arc(x,y,sz*3,0,Math.PI*2);BX.fill();
+    BX.fillStyle='rgba(255,255,255,0.9)';BX.beginPath();BX.arc(x,y,sz*0.4,0,Math.PI*2);BX.fill();
+  });
+
+  // Nodes
+  bNodes.forEach(n=>{
+    const col=bLayerColors[n.li],g=n.glow;
+    if(g>0.1){const gr=BX.createRadialGradient(n.x,n.y,n.r,n.x,n.y,n.r*2.5);
+      gr.addColorStop(0,col.glow+(g*0.4)+')');gr.addColorStop(1,col.glow+'0)');
+      BX.fillStyle=gr;BX.beginPath();BX.arc(n.x,n.y,n.r*2.5,0,Math.PI*2);BX.fill();}
+    BX.beginPath();BX.arc(n.x,n.y,n.r,0,Math.PI*2);
+    BX.fillStyle=g>0.15?col.glow+(0.2+g*0.5)+')':col.fill;BX.fill();
+    BX.strokeStyle=col.glow+(0.25+g*0.5)+')';BX.lineWidth=0.8+g*1.5;BX.stroke();
+    if(g>0.2){BX.beginPath();BX.arc(n.x,n.y,n.r*0.25,0,Math.PI*2);BX.fillStyle=`rgba(255,255,255,${g*0.6})`;BX.fill();}
+  });
+
+  for(let i=bParticles.length-1;i>=0;i--){if(!bParticles[i].alive)bParticles.splice(i,1);}
+  BX.restore();
+}
+
+function openBioModal(){
+  document.getElementById('bioModal').classList.add('open');
+  bioResize();bioInitNodes();
+}
+function closeBioModal(){
+  document.getElementById('bioModal').classList.remove('open');
+  bNodes.length=0;bSynapses.length=0;bParticles.length=0;
+}
+
+requestAnimationFrame(bioRender);
+window.addEventListener('resize',()=>{if(document.getElementById('bioModal').classList.contains('open')){bioResize();bioInitNodes();}});
+</script>
+</body>
+</html>
