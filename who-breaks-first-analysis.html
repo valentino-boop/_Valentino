@@ -6,1747 +6,370 @@
 <title>Who Breaks First — 통섭적 전황 분석</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700;900&family=Noto+Sans+KR:wght@300;400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg: #F7F5F0;
-  --bg-card: #FFFFFF;
-  --bg-accent: #FFF8E7;
-  --text-primary: #1A1A1A;
-  --text-secondary: #4A4A4A;
-  --text-muted: #8A8A8A;
-  --border: #E0DCD4;
-  --border-light: #EDE9E1;
-  --red-danger: #C0392B;
-  --red-light: #FDEDEC;
-  --orange-warn: #D35400;
-  --orange-light: #FEF5E7;
-  --blue-info: #2471A3;
-  --blue-light: #EBF5FB;
-  --green-safe: #1E8449;
-  --green-light: #EAFAF1;
-  --gold: #B7950B;
-  --gold-light: #FEF9E7;
-  --navy: #1B2631;
-  --china-red: #922B21;
-  --us-blue: #1A5276;
-  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
-  --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
-  --shadow-lg: 0 8px 30px rgba(0,0,0,0.10);
-  --radius: 8px;
-  --radius-lg: 14px;
-}
-* { margin:0; padding:0; box-sizing:border-box; }
-html { scroll-behavior: smooth; }
-body {
-  font-family: 'Noto Sans KR', sans-serif;
-  background: var(--bg);
-  color: var(--text-primary);
-  line-height: 1.7;
-  font-size: 15px;
-}
-.mono { font-family: 'JetBrains Mono', monospace; }
-.serif { font-family: 'Noto Serif KR', serif; }
-
-/* ===== HERO ===== */
-.hero {
-  background: linear-gradient(135deg, #1B2631 0%, #2C3E50 40%, #1A5276 100%);
-  color: #fff;
-  padding: 80px 24px 60px;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-}
-.hero::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: repeating-linear-gradient(
-    0deg,
-    transparent,
-    transparent 40px,
-    rgba(255,255,255,0.015) 40px,
-    rgba(255,255,255,0.015) 41px
-  );
-}
-.hero-label {
-  font-size: 11px;
-  letter-spacing: 4px;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.5);
-  margin-bottom: 16px;
-}
-.hero h1 {
-  font-family: 'Noto Serif KR', serif;
-  font-size: clamp(28px, 5vw, 48px);
-  font-weight: 900;
-  line-height: 1.3;
-  margin-bottom: 12px;
-}
-.hero h1 em {
-  font-style: normal;
-  color: #E8B931;
-}
-.hero-sub {
-  font-size: 15px;
-  color: rgba(255,255,255,0.7);
-  max-width: 640px;
-  margin: 0 auto 24px;
-  line-height: 1.8;
-}
-.hero-meta {
-  display: flex;
-  gap: 24px;
-  justify-content: center;
-  font-size: 12px;
-  color: rgba(255,255,255,0.45);
-  flex-wrap: wrap;
-}
-.hero-meta span {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-/* ===== NAV ===== */
-.sticky-nav {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background: rgba(247,245,240,0.95);
-  backdrop-filter: blur(8px);
-  border-bottom: 1px solid var(--border);
-  padding: 0 24px;
-  overflow-x: auto;
-}
-.sticky-nav-inner {
-  max-width: 1200px;
-  margin: 0 auto;
-  display: flex;
-  gap: 0;
-  white-space: nowrap;
-}
-.sticky-nav a {
-  display: block;
-  padding: 14px 16px;
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--text-muted);
-  text-decoration: none;
-  border-bottom: 2px solid transparent;
-  transition: all 0.2s;
-  letter-spacing: 0.3px;
-}
-.sticky-nav a:hover, .sticky-nav a.active {
-  color: var(--text-primary);
-  border-bottom-color: var(--navy);
-}
-
-/* ===== LAYOUT ===== */
-.container {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 0 24px;
-}
-section {
-  padding: 60px 0 40px;
-  border-bottom: 1px solid var(--border-light);
-}
-section:last-of-type { border-bottom: none; }
-.section-label {
-  font-size: 10px;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--text-muted);
-  margin-bottom: 8px;
-}
-.section-title {
-  font-family: 'Noto Serif KR', serif;
-  font-size: clamp(22px, 3.5vw, 30px);
-  font-weight: 900;
-  margin-bottom: 6px;
-  line-height: 1.4;
-}
-.section-desc {
-  font-size: 14px;
-  color: var(--text-secondary);
-  margin-bottom: 32px;
-  max-width: 700px;
-  line-height: 1.8;
-}
-
-/* ===== TIMELINE ===== */
-.timeline {
-  position: relative;
-  padding-left: 32px;
-}
-.timeline::before {
-  content: '';
-  position: absolute;
-  left: 6px;
-  top: 0;
-  bottom: 0;
-  width: 2px;
-  background: linear-gradient(to bottom, var(--blue-info), var(--orange-warn), var(--red-danger));
-}
-.tl-item {
-  position: relative;
-  margin-bottom: 28px;
-  padding: 20px 24px;
-  background: var(--bg-card);
-  border-radius: var(--radius);
-  border: 1px solid var(--border-light);
-  box-shadow: var(--shadow-sm);
-  transition: box-shadow 0.3s;
-}
-.tl-item:hover {
-  box-shadow: var(--shadow-md);
-}
-.tl-item::before {
-  content: '';
-  position: absolute;
-  left: -30px;
-  top: 24px;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  border: 2px solid var(--bg);
-}
-.tl-item[data-severity="low"]::before { background: var(--blue-info); }
-.tl-item[data-severity="mid"]::before { background: var(--orange-warn); }
-.tl-item[data-severity="high"]::before { background: var(--red-danger); }
-.tl-item[data-severity="critical"]::before { background: var(--red-danger); box-shadow: 0 0 0 4px rgba(192,57,43,0.2); }
-.tl-day {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--text-muted);
-  margin-bottom: 4px;
-  letter-spacing: 0.5px;
-}
-.tl-headline {
-  font-weight: 700;
-  font-size: 15px;
-  margin-bottom: 6px;
-}
-.tl-body {
-  font-size: 13px;
-  color: var(--text-secondary);
-  line-height: 1.75;
-}
-.tl-price {
-  display: inline-block;
-  font-family: 'JetBrains Mono', monospace;
-  font-weight: 600;
-  font-size: 13px;
-  padding: 2px 8px;
-  border-radius: 4px;
-  margin-top: 6px;
-}
-.tl-price.up { background: var(--red-light); color: var(--red-danger); }
-.tl-price.down { background: var(--green-light); color: var(--green-safe); }
-
-/* ===== CLOCK RACE ===== */
-.clock-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 16px;
-}
-.clock-card {
-  background: var(--bg-card);
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--border-light);
-  padding: 24px;
-  box-shadow: var(--shadow-sm);
-  transition: transform 0.2s, box-shadow 0.2s;
-  position: relative;
-  overflow: hidden;
-}
-.clock-card:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
-}
-.clock-card::after {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 4px;
-}
-.clock-card[data-urgency="critical"]::after { background: var(--red-danger); }
-.clock-card[data-urgency="high"]::after { background: var(--orange-warn); }
-.clock-card[data-urgency="moderate"]::after { background: var(--gold); }
-.clock-card[data-urgency="low"]::after { background: var(--green-safe); }
-.clock-card[data-urgency="beneficiary"]::after { background: var(--navy); }
-.clock-flag {
-  font-size: 24px;
-  margin-bottom: 8px;
-}
-.clock-country {
-  font-weight: 700;
-  font-size: 16px;
-  margin-bottom: 4px;
-}
-.clock-deadline {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 20px;
-  font-weight: 600;
-  margin: 8px 0;
-}
-.clock-deadline.critical { color: var(--red-danger); }
-.clock-deadline.high { color: var(--orange-warn); }
-.clock-deadline.moderate { color: var(--gold); }
-.clock-deadline.low { color: var(--green-safe); }
-.clock-deadline.beneficiary { color: var(--navy); }
-.clock-detail {
-  font-size: 12px;
-  color: var(--text-secondary);
-  line-height: 1.7;
-}
-.clock-bar {
-  margin-top: 12px;
-  height: 6px;
-  background: var(--border-light);
-  border-radius: 3px;
-  overflow: hidden;
-}
-.clock-bar-fill {
-  height: 100%;
-  border-radius: 3px;
-  transition: width 1s ease;
-}
-
-/* ===== GAP ANALYSIS ===== */
-.gap-visual {
-  background: var(--bg-card);
-  border: 1px solid var(--border-light);
-  border-radius: var(--radius-lg);
-  padding: 32px;
-  box-shadow: var(--shadow-sm);
-  margin-bottom: 24px;
-}
-.gap-title {
-  font-weight: 700;
-  font-size: 14px;
-  margin-bottom: 16px;
-}
-.gap-row {
-  display: flex;
-  align-items: center;
-  margin-bottom: 12px;
-  gap: 12px;
-}
-.gap-label {
-  width: 160px;
-  font-size: 13px;
-  font-weight: 500;
-  flex-shrink: 0;
-}
-.gap-bar-track {
-  flex: 1;
-  height: 28px;
-  background: #F0EDE6;
-  border-radius: 4px;
-  position: relative;
-  overflow: hidden;
-}
-.gap-bar-fill {
-  height: 100%;
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  padding-left: 10px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  font-weight: 600;
-  color: #fff;
-}
-.gap-number {
-  width: 80px;
-  text-align: right;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text-secondary);
-  flex-shrink: 0;
-}
-
-/* ===== THREE THEATERS ===== */
-.theater-map {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 20px;
-  margin-bottom: 24px;
-}
-@media (min-width: 768px) {
-  .theater-map { grid-template-columns: 1fr 1fr 1fr; }
-}
-.theater-card {
-  background: var(--bg-card);
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--border-light);
-  padding: 28px;
-  box-shadow: var(--shadow-sm);
-  position: relative;
-}
-.theater-num {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 48px;
-  font-weight: 600;
-  color: var(--border);
-  position: absolute;
-  top: 12px;
-  right: 16px;
-  line-height: 1;
-}
-.theater-icon { font-size: 28px; margin-bottom: 12px; }
-.theater-name {
-  font-family: 'Noto Serif KR', serif;
-  font-weight: 900;
-  font-size: 18px;
-  margin-bottom: 8px;
-}
-.theater-desc {
-  font-size: 13px;
-  color: var(--text-secondary);
-  line-height: 1.75;
-  margin-bottom: 16px;
-}
-.theater-chain {
-  background: var(--bg-accent);
-  border-radius: var(--radius);
-  padding: 14px;
-  font-size: 12px;
-  line-height: 1.7;
-}
-.theater-chain-title {
-  font-weight: 700;
-  margin-bottom: 4px;
-  font-size: 11px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  color: var(--gold);
-}
-
-/* ===== CASCADE DIAGRAM ===== */
-.cascade {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  align-items: center;
-  margin: 32px 0;
-}
-.cascade-node {
-  background: var(--bg-card);
-  border: 2px solid var(--border);
-  border-radius: var(--radius);
-  padding: 16px 28px;
-  text-align: center;
-  max-width: 500px;
-  width: 100%;
-  position: relative;
-}
-.cascade-node strong { font-size: 14px; }
-.cascade-node span { font-size: 12px; color: var(--text-secondary); display: block; margin-top: 4px; }
-.cascade-arrow {
-  width: 2px;
-  height: 28px;
-  background: var(--border);
-  position: relative;
-}
-.cascade-arrow::after {
-  content: '▼';
-  position: absolute;
-  bottom: -4px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 10px;
-  color: var(--text-muted);
-}
-
-/* ===== NEGOTIATION MATRIX ===== */
-.matrix-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 16px;
-}
-@media (min-width: 700px) {
-  .matrix-grid { grid-template-columns: 1fr 1fr; }
-}
-.scenario-card {
-  background: var(--bg-card);
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--border-light);
-  padding: 24px;
-  box-shadow: var(--shadow-sm);
-}
-.scenario-num {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 2px;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  margin-bottom: 6px;
-}
-.scenario-title {
-  font-weight: 700;
-  font-size: 16px;
-  margin-bottom: 10px;
-}
-.scenario-prob {
-  display: inline-block;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  padding: 3px 8px;
-  border-radius: 4px;
-  margin-bottom: 12px;
-}
-.scenario-body {
-  font-size: 13px;
-  color: var(--text-secondary);
-  line-height: 1.7;
-  margin-bottom: 14px;
-}
-.scenario-stakes {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-}
-.stake-box {
-  padding: 10px 12px;
-  border-radius: var(--radius);
-  font-size: 11px;
-  line-height: 1.6;
-}
-.stake-box.us { background: #EBF5FB; }
-.stake-box.cn { background: #FDEDEC; }
-.stake-label {
-  font-weight: 700;
-  font-size: 10px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  margin-bottom: 4px;
-}
-.stake-label.us { color: var(--us-blue); }
-.stake-label.cn { color: var(--china-red); }
-
-/* ===== WATCHLIST ===== */
-.watch-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 14px;
-}
-.watch-item {
-  background: var(--bg-card);
-  border-radius: var(--radius);
-  border: 1px solid var(--border-light);
-  padding: 18px 20px;
-  display: flex;
-  gap: 14px;
-  align-items: flex-start;
-  box-shadow: var(--shadow-sm);
-}
-.watch-icon {
-  width: 36px;
-  height: 36px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  flex-shrink: 0;
-}
-.watch-icon.oil { background: var(--orange-light); }
-.watch-icon.military { background: var(--red-light); }
-.watch-icon.diplo { background: var(--blue-light); }
-.watch-icon.econ { background: var(--green-light); }
-.watch-icon.currency { background: var(--gold-light); }
-.watch-title {
-  font-weight: 700;
-  font-size: 13px;
-  margin-bottom: 4px;
-}
-.watch-desc {
-  font-size: 12px;
-  color: var(--text-secondary);
-  line-height: 1.6;
-}
-
-/* ===== VULNERABILITY TABLE ===== */
-.vuln-table-wrap {
-  overflow-x: auto;
-  margin: 20px 0;
-}
-.vuln-table {
-  width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
-  font-size: 12px;
-  background: var(--bg-card);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  border: 1px solid var(--border-light);
-  box-shadow: var(--shadow-sm);
-}
-.vuln-table thead th {
-  background: var(--navy);
-  color: #fff;
-  padding: 12px 14px;
-  text-align: left;
-  font-weight: 600;
-  font-size: 11px;
-  letter-spacing: 0.5px;
-  white-space: nowrap;
-}
-.vuln-table tbody td {
-  padding: 12px 14px;
-  border-bottom: 1px solid var(--border-light);
-  vertical-align: top;
-}
-.vuln-table tbody tr:last-child td { border-bottom: none; }
-.vuln-table tbody tr:hover { background: rgba(0,0,0,0.015); }
-.vuln-badge {
-  display: inline-block;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
-  font-weight: 600;
-  padding: 2px 8px;
-  border-radius: 3px;
-}
-.vuln-badge.extreme { background: #FADBD8; color: var(--red-danger); }
-.vuln-badge.high { background: #FDEBD0; color: var(--orange-warn); }
-.vuln-badge.moderate { background: #FEF9E7; color: var(--gold); }
-.vuln-badge.low { background: #EAFAF1; color: var(--green-safe); }
-.vuln-badge.beneficiary { background: #D5F5E3; color: #0B5345; }
-
-/* ===== KEY INSIGHT CALLOUT ===== */
-.callout {
-  background: var(--bg-accent);
-  border-left: 4px solid var(--gold);
-  border-radius: 0 var(--radius) var(--radius) 0;
-  padding: 20px 24px;
-  margin: 24px 0;
-}
-.callout-title {
-  font-family: 'Noto Serif KR', serif;
-  font-weight: 700;
-  font-size: 14px;
-  margin-bottom: 6px;
-}
-.callout-body {
-  font-size: 13px;
-  color: var(--text-secondary);
-  line-height: 1.75;
-}
-
-/* ===== FOOTER ===== */
-.page-footer {
-  background: var(--navy);
-  color: rgba(255,255,255,0.5);
-  padding: 32px 24px;
-  text-align: center;
-  font-size: 12px;
-  line-height: 1.8;
-}
-.page-footer a {
-  color: rgba(255,255,255,0.7);
-  text-decoration: underline;
-}
-
-/* ===== ANIMATION ===== */
-.fade-in {
-  opacity: 0;
-  transform: translateY(16px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
-}
-.fade-in.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* ===== DEMAND DESTRUCTION ===== */
-.demand-chart {
-  background: var(--bg-card);
-  border: 1px solid var(--border-light);
-  border-radius: var(--radius-lg);
-  padding: 28px;
-  box-shadow: var(--shadow-sm);
-}
-.price-spectrum {
-  position: relative;
-  height: 60px;
-  background: linear-gradient(to right, var(--green-safe), var(--gold), var(--orange-warn), var(--red-danger));
-  border-radius: var(--radius);
-  margin: 16px 0 8px;
-}
-.price-marker {
-  position: absolute;
-  top: -8px;
-  transform: translateX(-50%);
-  text-align: center;
-}
-.price-marker-line {
-  width: 2px;
-  height: 76px;
-  background: var(--text-primary);
-  margin: 0 auto;
-}
-.price-marker-label {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
-  font-weight: 600;
-  margin-top: 4px;
-  white-space: nowrap;
-}
-.price-axis {
-  display: flex;
-  justify-content: space-between;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
-  color: var(--text-muted);
-  margin-top: 4px;
-}
-
-@media (max-width: 600px) {
-  .gap-label { width: 100px; font-size: 11px; }
-  .gap-number { width: 60px; font-size: 11px; }
-  .theater-num { font-size: 32px; }
-  .scenario-stakes { grid-template-columns: 1fr; }
-}
+:root{--bg:#F7F5F0;--card:#FFF;--accent:#FFF8E7;--t1:#1A1A1A;--t2:#4A4A4A;--tm:#8A8A8A;--brd:#E0DCD4;--brl:#EDE9E1;--red:#C0392B;--rl:#FDEDEC;--org:#D35400;--ol:#FEF5E7;--blu:#2471A3;--bl:#EBF5FB;--grn:#1E8449;--gl:#EAFAF1;--gld:#B7950B;--gdl:#FEF9E7;--nav:#1B2631;--cr:#922B21;--ub:#1A5276;--sh:0 1px 3px rgba(0,0,0,.06);--r:8px;--rl2:14px}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--t1);line-height:1.7;font-size:14px}
+.mono{font-family:'JetBrains Mono',monospace}
+.hero{background:linear-gradient(135deg,#1B2631,#2C3E50 40%,#1A5276);color:#fff;padding:56px 16px 36px;text-align:center}
+.hero-label{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:10px}
+.hero h1{font-family:'Noto Serif KR',serif;font-size:clamp(22px,6vw,40px);font-weight:900;line-height:1.35;margin-bottom:8px}
+.hero h1 em{font-style:normal;color:#E8B931}
+.hero-sub{font-size:12px;color:rgba(255,255,255,.6);max-width:560px;margin:0 auto 14px;line-height:1.75}
+.hero-meta{display:flex;gap:10px;justify-content:center;font-size:10px;color:rgba(255,255,255,.35);flex-wrap:wrap}
+.snav{position:sticky;top:0;z-index:100;background:rgba(247,245,240,.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--brd);overflow-x:auto;-webkit-overflow-scrolling:touch}
+.snav-in{display:flex;white-space:nowrap;padding:0 4px}
+.snav a{display:block;padding:10px 10px;font-size:10px;font-weight:500;color:var(--tm);text-decoration:none;border-bottom:2px solid transparent;flex-shrink:0}
+.snav a.active{color:var(--t1);border-bottom-color:var(--nav)}
+.ct{max-width:1100px;margin:0 auto;padding:0 12px}
+section{padding:40px 0 28px;border-bottom:1px solid var(--brl)}
+section:last-of-type{border-bottom:none}
+.sl{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--tm);margin-bottom:4px}
+.st{font-family:'Noto Serif KR',serif;font-size:clamp(18px,4.5vw,28px);font-weight:900;margin-bottom:4px;line-height:1.4}
+.sd{font-size:12px;color:var(--t2);margin-bottom:20px;line-height:1.8}
+/* Timeline */
+.tl{position:relative;padding-left:24px}
+.tl::before{content:'';position:absolute;left:4px;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,var(--blu),var(--org),var(--red))}
+.ti{position:relative;margin-bottom:14px;padding:14px;background:var(--card);border-radius:var(--r);border:1px solid var(--brl);box-shadow:var(--sh)}
+.ti::before{content:'';position:absolute;left:-22px;top:18px;width:9px;height:9px;border-radius:50%;border:2px solid var(--bg)}
+.ti[data-s="m"]::before{background:var(--org)}.ti[data-s="h"]::before{background:var(--red)}.ti[data-s="c"]::before{background:var(--red);box-shadow:0 0 0 3px rgba(192,57,43,.15)}
+.td{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:600;color:var(--tm);margin-bottom:3px}
+.th{font-weight:700;font-size:13px;margin-bottom:3px;line-height:1.45}
+.tb{font-size:11px;color:var(--t2);line-height:1.7}
+.tp{display:inline-block;font-family:'JetBrains Mono',monospace;font-weight:600;font-size:11px;padding:2px 6px;border-radius:3px;margin-top:4px}
+.tp.u{background:var(--rl);color:var(--red)}.tp.d{background:var(--gl);color:var(--grn)}
+/* Cards grid */
+.cg{display:grid;grid-template-columns:1fr;gap:10px}
+@media(min-width:540px){.cg{grid-template-columns:1fr 1fr}}
+@media(min-width:860px){.cg{grid-template-columns:repeat(3,1fr)}}
+.cc{background:var(--card);border-radius:var(--rl2);border:1px solid var(--brl);padding:16px;box-shadow:var(--sh);position:relative;overflow:hidden}
+.cc::after{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.cc[data-u="c"]::after{background:var(--red)}.cc[data-u="h"]::after{background:var(--org)}.cc[data-u="m"]::after{background:var(--gld)}.cc[data-u="l"]::after{background:var(--grn)}.cc[data-u="b"]::after{background:var(--nav)}
+.cf{font-size:18px;margin-bottom:2px}.cn{font-weight:700;font-size:14px}.cdl{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:600;margin:2px 0}
+.cdt{font-size:11px;color:var(--t2);line-height:1.65}
+.cb{margin-top:8px;height:4px;background:var(--brl);border-radius:2px;overflow:hidden}
+.cbf{height:100%;border-radius:2px}
+/* Gap */
+.gv{background:var(--card);border:1px solid var(--brl);border-radius:var(--rl2);padding:16px;box-shadow:var(--sh);margin-bottom:12px}
+.gt{font-weight:700;font-size:12px;margin-bottom:10px}
+.gr{margin-bottom:8px}
+.gl{font-size:11px;font-weight:500;margin-bottom:3px;display:flex;justify-content:space-between}
+.gbt{height:22px;background:#F0EDE6;border-radius:3px;overflow:hidden}
+.gbf{height:100%;border-radius:3px;display:flex;align-items:center;padding-left:6px;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:600;color:#fff}
+/* Theater */
+.tm{display:grid;grid-template-columns:1fr;gap:12px}
+@media(min-width:700px){.tm{grid-template-columns:1fr 1fr 1fr}}
+.tc{background:var(--card);border-radius:var(--rl2);border:1px solid var(--brl);padding:16px;box-shadow:var(--sh)}
+.tn{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--tm);letter-spacing:1px;margin-bottom:2px}
+.ticon{font-size:20px;margin-bottom:6px}.tname{font-family:'Noto Serif KR',serif;font-weight:900;font-size:15px;margin-bottom:4px}
+.tdesc{font-size:11px;color:var(--t2);line-height:1.7;margin-bottom:10px}
+.tch{background:var(--accent);border-radius:var(--r);padding:10px;font-size:10px;line-height:1.7}
+.tcht{font-weight:700;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--gld);margin-bottom:2px}
+/* Cascade */
+.cas{display:flex;flex-direction:column;align-items:center;gap:0}
+.casn{background:var(--card);border:2px solid var(--brd);border-radius:var(--r);padding:12px 14px;text-align:center;width:100%;max-width:480px}
+.casn strong{font-size:12px;display:block;margin-bottom:1px}.casn span{font-size:10px;color:var(--t2)}
+.casa{width:2px;height:16px;background:var(--brd);position:relative}.casa::after{content:'▼';position:absolute;bottom:-5px;left:50%;transform:translateX(-50%);font-size:7px;color:var(--tm)}
+/* Scenario */
+.mg{display:grid;grid-template-columns:1fr;gap:12px}
+@media(min-width:540px){.mg{grid-template-columns:1fr 1fr}}
+.sc{background:var(--card);border-radius:var(--rl2);border:1px solid var(--brl);padding:16px;box-shadow:var(--sh)}
+.scn{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:1.5px;color:var(--tm);text-transform:uppercase;margin-bottom:3px}
+.sct{font-weight:700;font-size:14px;margin-bottom:6px}
+.scp{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:9px;padding:2px 6px;border-radius:3px;margin-bottom:8px}
+.scb{font-size:11px;color:var(--t2);line-height:1.7;margin-bottom:10px}
+.sb{padding:8px;border-radius:var(--r);font-size:10px;line-height:1.55;margin-bottom:6px}
+.sb.us{background:#EBF5FB}.sb.cn{background:#FDEDEC}
+.sbl{font-weight:700;font-size:9px;letter-spacing:.5px;text-transform:uppercase;margin-bottom:1px}
+.sbl.us{color:var(--ub)}.sbl.cn{color:var(--cr)}
+/* Watch */
+.wl{display:grid;grid-template-columns:1fr;gap:8px}
+@media(min-width:540px){.wl{grid-template-columns:1fr 1fr}}
+.wi{background:var(--card);border-radius:var(--r);border:1px solid var(--brl);padding:12px;display:flex;gap:8px;align-items:flex-start;box-shadow:var(--sh)}
+.wic{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.wic.o{background:var(--ol)}.wic.m{background:var(--rl)}.wic.d{background:var(--bl)}.wic.e{background:var(--gl)}.wic.c{background:var(--gdl)}
+.wit{font-weight:700;font-size:11px;margin-bottom:1px}.wid{font-size:10px;color:var(--t2);line-height:1.55}
+/* Vuln cards */
+.vc{display:grid;grid-template-columns:1fr;gap:8px}
+@media(min-width:540px){.vc{grid-template-columns:1fr 1fr}}
+.vi{background:var(--card);border:1px solid var(--brl);border-radius:var(--r);padding:12px;box-shadow:var(--sh);display:flex;gap:10px;align-items:flex-start}
+.vif{font-size:22px;flex-shrink:0}
+.vit{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:2px}
+.vin{font-weight:700;font-size:13px}
+.vb{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:8px;font-weight:600;padding:1px 5px;border-radius:2px}
+.vb.ex{background:#FADBD8;color:var(--red)}.vb.hi{background:#FDEBD0;color:var(--org)}.vb.mo{background:#FEF9E7;color:var(--gld)}.vb.lo{background:#EAFAF1;color:var(--grn)}.vb.be{background:#D5F5E3;color:#0B5345}
+.vid{font-size:10px;color:var(--t2);line-height:1.55}
+/* Callout */
+.co{background:var(--accent);border-left:3px solid var(--gld);border-radius:0 var(--r) var(--r) 0;padding:14px;margin:16px 0}
+.cot{font-family:'Noto Serif KR',serif;font-weight:700;font-size:12px;margin-bottom:3px}
+.cob{font-size:11px;color:var(--t2);line-height:1.75}
+/* Chart */
+.ocw{background:var(--card);border:1px solid var(--brl);border-radius:var(--rl2);overflow:hidden;box-shadow:var(--sh)}
+.oci{overflow-x:auto;-webkit-overflow-scrolling:touch}
+/* Timeline summary */
+.tls{font-family:'JetBrains Mono',monospace;font-size:10px;line-height:1.85;overflow-x:auto}
+.tls .p{font-weight:700;display:block;margin-top:6px;margin-bottom:1px}
+.tls .p.a{color:var(--blu)}.tls .p.b{color:var(--red)}.tls .p.c{color:var(--cr)}.tls .p.d{color:var(--tm)}
+.tls .r{display:block}
+/* Footer */
+.ft{background:var(--nav);color:rgba(255,255,255,.45);padding:20px 12px;text-align:center;font-size:10px;line-height:1.8}
+.ft a{color:rgba(255,255,255,.65);text-decoration:underline}
+/* Fade */
+.fi{opacity:0;transform:translateY(10px);transition:opacity .5s,transform .5s}.fi.v{opacity:1;transform:none}
+/* Asym */
+.ag{display:grid;grid-template-columns:1fr;gap:10px;font-size:11px;line-height:1.7}
+@media(min-width:540px){.ag{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
-
-<!-- HERO -->
 <header class="hero">
-  <div class="hero-label">STRATEGIC INTELLIGENCE BRIEF — DAY 14</div>
-  <h1 class="serif"><em>누가 먼저</em> 무너지는가?</h1>
-  <p class="hero-sub">
-    전쟁은 이란에서 벌어지고 있다. 그러나 균열은 그 밖의 모든 곳에서 확산 중이다.<br>
-    호르무즈 해협 봉쇄 14일차 — 에너지 위기에서 글로벌 안보 아키텍처 붕괴로 전이 중
-  </p>
-  <div class="hero-meta">
-    <span>📡 원문: Garrett's Signal · 2026.03.14</span>
-    <span>📊 분석 기준: D+14 (호르무즈 봉쇄 14일차)</span>
-    <span>🛢️ Brent $101 · WTI $99.30</span>
-  </div>
+<div class="hero-label">STRATEGIC INTELLIGENCE BRIEF — DAY 14</div>
+<h1><em>누가 먼저</em> 무너지는가?</h1>
+<p class="hero-sub">전쟁은 이란에서, 균열은 그 밖 모든 곳에서.<br>호르무즈 봉쇄 14일차 — 에너지 위기에서 안보 구조 붕괴로 전이</p>
+<div class="hero-meta"><span>📡 Garrett's Signal 2026.03.14</span><span>🛢️ Brent $101 · WTI $99</span></div>
 </header>
+<nav class="snav"><div class="snav-in">
+<a href="#tl">타임라인</a><a href="#ck">위기시계</a><a href="#gp">공급갭</a><a href="#th">3전구</a><a href="#cs">연쇄</a><a href="#pr">파리</a><a href="#dm">유가</a><a href="#wt">주목</a>
+</div></nav>
+<main class="ct">
 
-<!-- NAV -->
-<nav class="sticky-nav">
-  <div class="sticky-nav-inner">
-    <a href="#timeline">14일 타임라인</a>
-    <a href="#clocks">비동시적 위기 시계</a>
-    <a href="#gap">공급 갭 해부</a>
-    <a href="#theaters">3개 전구</a>
-    <a href="#cascade">연쇄 불균형</a>
-    <a href="#paris">파리 협상 매트릭스</a>
-    <a href="#demand">수요 파괴 임계점</a>
-    <a href="#watch">주목 사항</a>
-  </div>
-</nav>
-
-<main class="container">
-
-<!-- SECTION 1: TIMELINE -->
-<section id="timeline" class="fade-in">
-  <div class="section-label">SECTION 01 — CHRONOLOGY</div>
-  <h2 class="section-title">14일간의 유가 궤적: $72 → $101</h2>
-  <p class="section-desc">
-    매 정책 대응은 24~48시간의 시간을 벌어주었을 뿐이다. 물리적 현실은 매번 수시간 내에 재확인되었다.
-    14일차, 위기는 에너지 시장을 넘어 글로벌 안보 구조 자체를 시험하기 시작했다.
-  </p>
-
-  <div class="timeline">
-    <div class="tl-item" data-severity="mid">
-      <div class="tl-day">D+1~4 (2/28~3/3)</div>
-      <div class="tl-headline">미·이스라엘 이란 공습 개시 → 이란 즉각 보복</div>
-      <div class="tl-body">
-        사우디 라스 타누라 정유소(55만 b/d), 카타르 LNG 시설 피격. 유럽 천연가스 2거래일 만에 48% 급등.<br>
-        호르무즈 해협 사실상 폐쇄 — 전 세계 원유·LNG 일일 통과량의 약 20% 차단.
-      </div>
-      <span class="tl-price up">Brent $72 → $85 (+18%)</span>
-    </div>
-
-    <div class="tl-item" data-severity="mid">
-      <div class="tl-day">D+5~7 (3/4~3/6)</div>
-      <div class="tl-headline">트럼프 해군 호송·보험 보증 발표 → 시장 일시 안도 → 기뢰 확인</div>
-      <div class="tl-body">
-        CENTCOM, 이란 기뢰 부설선 16척 격침 확인 — 이미 기뢰가 살포된 상태.<br>
-        호르무즈 인근 200척 이상 GPS 이상 보고. "안전 선언"은 안전 선언이 아니었다.
-      </div>
-      <span class="tl-price up">유가 상승 지속</span>
-    </div>
-
-    <div class="tl-item" data-severity="high">
-      <div class="tl-day">D+8~10 (3/7~3/9)</div>
-      <div class="tl-headline">걸프 아랍 4국 감산 불가피 — 총 약 670만 b/d 차단</div>
-      <div class="tl-body">
-        사우디·UAE·쿠웨이트·이라크, 유일한 수출 경로인 해협 봉쇄로 저장 용량 한계 도달.<br>
-        해협이 유일한 출구인 상태에서 생산 자체를 줄일 수밖에 없는 구조.
-      </div>
-      <span class="tl-price up">Brent 장중 $119.50 (전쟁 전 대비 +66%)</span>
-    </div>
-
-    <div class="tl-item" data-severity="mid">
-      <div class="tl-day">D+10~11 (3/10)</div>
-      <div class="tl-headline">정책 신호 vs 물리적 현실 — 정반대 방향</div>
-      <div class="tl-body">
-        트럼프, 폭스뉴스 인터뷰에서 "매우 곧 종결" 시사 + 제재 면제 검토 신호.<br>
-        동일한 날 펜타곤: "개전 이래 가장 강도 높은 공습일." 두 메시지는 양립 불가.
-      </div>
-      <span class="tl-price down">WTI 10% 이상 급락, $80 이하 일시 터치</span>
-    </div>
-
-    <div class="tl-item" data-severity="high">
-      <div class="tl-day">D+12~14 (3/11~3/13)</div>
-      <div class="tl-headline">IEA 역대 최대 전략비축유 방출 (4억 배럴) → 실패</div>
-      <div class="tl-body">
-        52년 역사상 최대 규모 조정 방출. WTI 급락 후 수시간 내 재상승.<br>
-        이라크 해역 유조선 2척 피격. 오만 긴급 수출 터미널 대피. 정치적 신호, 물리적 부족은 그대로.
-      </div>
-      <span class="tl-price up">Brent $101 · WTI $99.30 결산</span>
-    </div>
-
-    <div class="tl-item" data-severity="critical">
-      <div class="tl-day">D+14 (3/13~3/14) ★ 질적 전환점</div>
-      <div class="tl-headline">카르그 섬 타격 · MEU 태평양→중동 전개 · 북한 미사일 · 중국 어선단</div>
-      <div class="tl-body">
-        ① 트럼프, 이란 석유 수출 90% 처리하는 카르그 섬 군사 시설 "궤멸" 발표<br>
-        ② 태평양 유일 전진배치 해병원정대(31st MEU, ~2,500명) + 강습상륙함 트리폴리, 중동으로 이동<br>
-        ③ 북한, 2026년 최대 규모 탄도미사일(~10발) 동해 발사<br>
-        ④ 중국 어선 1,200척, 동중국해 3차 조직적 진형 — 12월·1월보다 더 동쪽, 일본 근해 접근<br><br>
-        <strong>13일간 공중전 전용 → MEU 투입으로 해협 물리적 탈환 준비 전환.<br>
-        그러나 MEU가 빠진 태평양은 수시간 내에 시험대에 올랐다.</strong>
-      </div>
-      <span class="tl-price up">에너지 위기 → 글로벌 안보 구조 위기로 전이</span>
-    </div>
-  </div>
-
-  <div class="callout">
-    <div class="callout-title">🔑 핵심 패턴</div>
-    <div class="callout-body">
-      14일간 반복된 구조: <strong>정책 대응 → 24~48시간 안도 → 물리적 현실 재확인</strong>.<br>
-      D+14부터 위기의 성격이 변화: 단일 에너지 위기 → 호르무즈·서태평양·한반도를 관통하는 다전구(多戰區) 동시 시험.
-    </div>
-  </div>
+<!-- S1: TIMELINE -->
+<section id="tl" class="fi">
+<div class="sl">SECTION 01</div>
+<h2 class="st">14일간의 유가: $72→$101</h2>
+<p class="sd">매 정책 대응은 24~48시간만 벌어줬다. 물리적 현실은 수시간 내 재확인.</p>
+<div class="tl">
+<div class="ti" data-s="m"><div class="td">D+1~4 (2/28~3/3)</div><div class="th">미·이스라엘 공습 → 이란 보복</div><div class="tb">라스타누라(55만b/d)·카타르 LNG 피격. 유럽 가스 48%↑. 호르무즈 사실상 폐쇄.</div><span class="tp u">Brent $72→$85 (+18%)</span></div>
+<div class="ti" data-s="m"><div class="td">D+5~7 (3/4~3/6)</div><div class="th">호송 발표 → 안도 → 기뢰 확인</div><div class="tb">기뢰부설선 16척 격침 — 이미 기뢰 살포 완료. 200척+ GPS 이상.</div><span class="tp u">유가 상승 지속</span></div>
+<div class="ti" data-s="h"><div class="td">D+8~10 (3/7~3/9)</div><div class="th">걸프 4국 ~670만 b/d 감산</div><div class="tb">사우디·UAE·쿠웨이트·이라크 — 해협이 유일 수출로, 저장 한계 도달.</div><span class="tp u">장중 $119.50 (+66%)</span></div>
+<div class="ti" data-s="m"><div class="td">D+10~11 (3/10)</div><div class="th">정책 vs 현실 — 정반대</div><div class="tb">트럼프 "곧 종결" + 제재 면제. 같은 날 "역대급 공습일". 양립 불가.</div><span class="tp d">WTI 10%↓</span></div>
+<div class="ti" data-s="h"><div class="td">D+12~14 (3/11~3/13)</div><div class="th">IEA SPR 4억 배럴 → 실패</div><div class="tb">52년 최대 규모. 급락 후 수시간 재상승. 유조선 2척 피격.</div><span class="tp u">Brent $101 결산</span></div>
+<div class="ti" data-s="c"><div class="td">D+14 (3/13~14) ★ 전환점</div><div class="th">카르그 섬 · MEU · 북한 · 중국 어선</div><div class="tb">① 카르그 섬(수출 90%) 타격 ② 31st MEU 태평양→중동 ③ 북한 ~10발(2026 최대) ④ 중국 어선 1,200척 3차 진형<br><strong>공중전→해협 탈환 전환. MEU 빠진 태평양은 수시간 내 시험.</strong></div><span class="tp u">에너지→안보 구조 위기 전이</span></div>
+</div>
+<div class="co"><div class="cot">🔑 핵심 패턴</div><div class="cob"><strong>정책→24~48h 안도→현실 재확인</strong> 반복. D+14부터 단일 에너지 위기 → 다전구 동시 시험.</div></div>
 </section>
 
-<!-- SECTION 2: CLOCKS -->
-<section id="clocks" class="fade-in">
-  <div class="section-label">SECTION 02 — ASYNCHRONOUS BREAKING POINTS</div>
-  <h2 class="section-title">비동시적 위기 시계: 누가 언제 무너지는가</h2>
-  <p class="section-desc">
-    이것은 단일한 동시 충격이 아니다. 국가마다 수입 의존도, 비축량, 전력망 구성, 사회적 내성에 따라 
-    붕괴 시점이 모두 다르다. 이 비동시성(asynchrony)은 이란의 전략적 자산이다.
-  </p>
-
-  <div class="clock-grid">
-    <div class="clock-card" data-urgency="critical">
-      <div class="clock-flag">🇯🇵</div>
-      <div class="clock-country">일본</div>
-      <div class="clock-deadline critical">D+30~40 <span style="font-size:14px;font-weight:400;color:var(--text-muted)">(3/30~4/9)</span></div>
-      <div class="clock-detail">
-        원유 95% 중동 의존, 70%가 호르무즈 직접 통과. LNG 재고 3주분에 불과 — 전력의 40%가 LNG.<br>
-        후쿠시마 이후 원전 폐쇄로 카타르 LNG가 생명선이었으나, 카타르 시설이 D+1 피격.<br>
-        3/11 독자 비축유 8,000만 배럴 방출 (소비 15일분). 닛케이 7% 하락, 엔화 약세.
-      </div>
-      <div class="clock-bar"><div class="clock-bar-fill" style="width:85%;background:var(--red-danger)"></div></div>
-    </div>
-
-    <div class="clock-card" data-urgency="critical">
-      <div class="clock-flag">🇰🇷</div>
-      <div class="clock-country">한국</div>
-      <div class="clock-deadline critical">D+30~40 <span style="font-size:14px;font-weight:400;color:var(--text-muted)">(3/30~4/9)</span></div>
-      <div class="clock-detail">
-        원유 70.7%, LNG 20.4% 중동 의존. 석유·가스가 발전량의 약 35%.<br>
-        KOSPI 12% 이상 하락, 서킷브레이커 발동. 1997년 이후 최초 유류 가격 상한제 검토 (1,900원/L).<br>
-        <strong>핵심 하류 리스크:</strong> 삼성·SK하이닉스 반도체 팹의 전압 불안정 → 수율 저하 → 글로벌 AI 인프라 문제.
-      </div>
-      <div class="clock-bar"><div class="clock-bar-fill" style="width:83%;background:var(--red-danger)"></div></div>
-    </div>
-
-    <div class="clock-card" data-urgency="high">
-      <div class="clock-flag">🇮🇳</div>
-      <div class="clock-country">인도</div>
-      <div class="clock-deadline high">D+20~30 <span style="font-size:14px;font-weight:400;color:var(--text-muted)">(3/20~3/30)</span></div>
-      <div class="clock-detail">
-        일 소비 약 550만 b/d 중 45~50%가 호르무즈 통과. 러시아 원유 구매 30일 면제 확보.<br>
-        그러나 LPG의 62% 수입, 그 90%가 호르무즈 경유. <strong>전략 LPG 비축 없음.</strong><br>
-        LPG는 수억 가구의 조리 연료. 푸네에서 화장장이 가스→장작 전환. 일상 수준 충격.
-      </div>
-      <div class="clock-bar"><div class="clock-bar-fill" style="width:70%;background:var(--orange-warn)"></div></div>
-    </div>
-
-    <div class="clock-card" data-urgency="high">
-      <div class="clock-flag">🌏</div>
-      <div class="clock-country">동남아시아</div>
-      <div class="clock-deadline high">활성화 · 가속 중</div>
-      <div class="clock-detail">
-        파키스탄: LNG 99%를 카타르 의존, 휘발유 2주 만에 20% 상승.<br>
-        필리핀: 주 4일 근무제 시행. 인도네시아: 이동 제한. 방글라데시: 라마단 조명 축소.<br>
-        재정 여력 최소 국가들이 이미 배급 체제 진입.
-      </div>
-      <div class="clock-bar"><div class="clock-bar-fill" style="width:60%;background:var(--orange-warn)"></div></div>
-    </div>
-
-    <div class="clock-card" data-urgency="moderate">
-      <div class="clock-flag">🇪🇺</div>
-      <div class="clock-country">유럽</div>
-      <div class="clock-deadline moderate">가스 저장 ~15% 도달 시</div>
-      <div class="clock-detail">
-        디젤 30%, 제트연료 50% 걸프 의존. 가스 저장률 30%에서 시작, 네덜란드는 10.7%.<br>
-        가스 가격 2/28 대비 75% 상승, 가스 발전 전월비 33% 하락.<br>
-        <strong>전략적 역설:</strong> 트럼프의 러시아 제재 완화 → 유럽 가스 공급 회복 가능하나, 4년간 쌓은 유럽 안보 구조 해체 대가.
-      </div>
-      <div class="clock-bar"><div class="clock-bar-fill" style="width:50%;background:var(--gold)"></div></div>
-    </div>
-
-    <div class="clock-card" data-urgency="moderate">
-      <div class="clock-flag">🇺🇸</div>
-      <div class="clock-country">미국</div>
-      <div class="clock-deadline moderate">D+60~90 <span style="font-size:14px;font-weight:400;color:var(--text-muted)">(4/29~5/29)</span></div>
-      <div class="clock-detail">
-        호르무즈 통과량 중 미국행 2.5%. SPR ~4.15억 배럴 보유. 셰일 증산은 3~6개월 시차.<br>
-        캘리포니아 예외: 정유소 원유 61% 수입, 30%가 호르무즈 경유. 주유소 가격 이미 전국 이탈치.<br>
-        <strong>진짜 취약점은 정치적:</strong> 이란전 수행 + 유가 인하 약속 = 호르무즈 폐쇄 중 물리적 양립 불가.
-      </div>
-      <div class="clock-bar"><div class="clock-bar-fill" style="width:35%;background:var(--gold)"></div></div>
-    </div>
-
-    <div class="clock-card" data-urgency="low">
-      <div class="clock-flag">🇨🇳</div>
-      <div class="clock-country">중국</div>
-      <div class="clock-deadline low">구조적 이례치 — 위기의 축(Fulcrum)</div>
-      <div class="clock-detail">
-        호르무즈 통과 원유 = 1차 에너지 소비의 6.6%. 전략비축 12~14억 배럴 (3~6개월분).<br>
-        신에너지차 신차 판매 50%+, 전력망 석유·가스 의존도 ~4%. CSI 300 개전 후 -0.1%.<br>
-        정제유 수출 중단 (국내 공급 보호). 이란 원유는 계속 중국행 — 이란의 자국 봉쇄는 선별적.<br>
-        <strong>방관자가 아니라 지렛대(fulcrum).</strong>
-      </div>
-      <div class="clock-bar"><div class="clock-bar-fill" style="width:15%;background:var(--green-safe)"></div></div>
-    </div>
-
-    <div class="clock-card" data-urgency="beneficiary">
-      <div class="clock-flag">🇷🇺</div>
-      <div class="clock-country">러시아</div>
-      <div class="clock-deadline beneficiary">유일한 순 수혜자</div>
-      <div class="clock-detail">
-        2주간 화석연료 수출 추가 수익 약 €60억. 러시아산 원유·가스가 갑자기 "지정학적으로 가장 단순한 옵션".<br>
-        인도 러시아 원유 구매 면제 → 제재 체제가 부분 재개방.<br>
-        유럽·아시아 구매자들이 탈러시아에서 급히 대안 모색 중 → 러시아 파이프라인과 북극 LNG 노선으로 복귀.
-      </div>
-      <div class="clock-bar"><div class="clock-bar-fill" style="width:95%;background:var(--navy)"></div></div>
-    </div>
-  </div>
-
-  <div class="callout">
-    <div class="callout-title">🔑 비동시성의 전략적 함의</div>
-    <div class="callout-body">
-      일본·한국이 D+35(4/4)에 비명을 지를 때, 미국은 아직 정치적으로 위기를 흡수 중이고, 인도는 이미 거리 수준 LPG 소요를 겪고 있을 수 있다.
-      <strong>휴전 협상은 모든 당사자가 동시에 해결을 원해야 성립</strong>하지만, 그 조건은 충족되지 않는다.
-      이 비동시성은 이란의 전략적 자산이며, 베이징의 협상 레버리지를 매일 키운다.
-    </div>
-  </div>
-
-  <!-- Vulnerability Table -->
-  <div class="vuln-table-wrap">
-    <table class="vuln-table">
-      <thead>
-        <tr>
-          <th>국가</th>
-          <th>호르무즈 의존도</th>
-          <th>핵심 취약 에너지원</th>
-          <th>비축 여력</th>
-          <th>위험 등급</th>
-          <th>붕괴 임계</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>🇯🇵 일본</td>
-          <td class="mono">~70% 원유</td>
-          <td>LNG (전력 40%)</td>
-          <td class="mono">LNG 3주</td>
-          <td><span class="vuln-badge extreme">EXTREME</span></td>
-          <td class="mono">D+30~40<br><span style="font-size:10px;color:var(--text-muted)">3/30~4/9</span></td>
-        </tr>
-        <tr>
-          <td>🇰🇷 한국</td>
-          <td class="mono">70.7% 원유</td>
-          <td>LNG (발전 35%)</td>
-          <td class="mono">LNG 3~4주</td>
-          <td><span class="vuln-badge extreme">EXTREME</span></td>
-          <td class="mono">D+30~40<br><span style="font-size:10px;color:var(--text-muted)">3/30~4/9</span></td>
-        </tr>
-        <tr>
-          <td>🇮🇳 인도</td>
-          <td class="mono">45~50% 원유</td>
-          <td>LPG (조리 연료)</td>
-          <td class="mono">전략 LPG 비축 無</td>
-          <td><span class="vuln-badge high">HIGH</span></td>
-          <td class="mono">D+20~30<br><span style="font-size:10px;color:var(--text-muted)">3/20~3/30</span></td>
-        </tr>
-        <tr>
-          <td>🌏 동남아</td>
-          <td class="mono">다양</td>
-          <td>LNG·휘발유</td>
-          <td class="mono">극히 제한</td>
-          <td><span class="vuln-badge high">HIGH</span></td>
-          <td class="mono">활성화 중</td>
-        </tr>
-        <tr>
-          <td>🇪🇺 유럽</td>
-          <td class="mono">디젤 30%</td>
-          <td>천연가스</td>
-          <td class="mono">저장률 ~30%</td>
-          <td><span class="vuln-badge moderate">MODERATE</span></td>
-          <td class="mono">저장률 15% 시</td>
-        </tr>
-        <tr>
-          <td>🇺🇸 미국</td>
-          <td class="mono">2.5%</td>
-          <td>정치적 유가</td>
-          <td class="mono">SPR 4.15억 bbl</td>
-          <td><span class="vuln-badge moderate">MODERATE</span></td>
-          <td class="mono">D+60~90<br><span style="font-size:10px;color:var(--text-muted)">4/29~5/29</span></td>
-        </tr>
-        <tr>
-          <td>🇨🇳 중국</td>
-          <td class="mono">6.6% 1차E</td>
-          <td>—</td>
-          <td class="mono">12~14억 bbl</td>
-          <td><span class="vuln-badge low">LOW</span></td>
-          <td class="mono">해당 없음</td>
-        </tr>
-        <tr>
-          <td>🇷🇺 러시아</td>
-          <td class="mono">—</td>
-          <td>—</td>
-          <td class="mono">—</td>
-          <td><span class="vuln-badge beneficiary">BENEFICIARY</span></td>
-          <td class="mono">+€60억/2주</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+<!-- S2: CLOCKS -->
+<section id="ck" class="fi">
+<div class="sl">SECTION 02</div>
+<h2 class="st">비동시적 위기 시계</h2>
+<p class="sd">국가마다 붕괴 시점이 다르며, 이 비동시성 자체가 이란의 전략적 자산.</p>
+<div class="cg">
+<div class="cc" data-u="c"><div class="cf">🇯🇵</div><div class="cn">일본</div><div class="cdl" style="color:var(--red)">D+30~40 (3/30~4/9)</div><div class="cdt">원유 95% 중동, 70% 호르무즈. <strong>LNG 3주분 — 전력 40%.</strong> 후쿠시마 후 카타르 LNG 생명선이었으나 D+1 피격. 닛케이 -7%.</div><div class="cb"><div class="cbf" style="width:85%;background:var(--red)"></div></div></div>
+<div class="cc" data-u="c"><div class="cf">🇰🇷</div><div class="cn">한국</div><div class="cdl" style="color:var(--red)">D+30~40 (3/30~4/9)</div><div class="cdt">원유 70.7%, LNG 20.4%. KOSPI -12%, 서킷브레이커. <strong>삼성·SK하이닉스 팹 전압 불안정 → 글로벌 AI 리스크.</strong></div><div class="cb"><div class="cbf" style="width:83%;background:var(--red)"></div></div></div>
+<div class="cc" data-u="h"><div class="cf">🇮🇳</div><div class="cn">인도</div><div class="cdl" style="color:var(--org)">D+20~30 (3/20~30)</div><div class="cdt">LPG 62% 수입, 90% 호르무즈. <strong>전략 LPG 비축 없음.</strong> 수억 가구 조리연료. 화장장 장작 전환.</div><div class="cb"><div class="cbf" style="width:70%;background:var(--org)"></div></div></div>
+<div class="cc" data-u="h"><div class="cf">🌏</div><div class="cn">동남아</div><div class="cdl" style="color:var(--org)">활성화 · 가속</div><div class="cdt">파키스탄 LNG 99% 카타르, 휘발유 +20%/2주. 필리핀 주4일제. 인도네시아 이동제한.</div><div class="cb"><div class="cbf" style="width:60%;background:var(--org)"></div></div></div>
+<div class="cc" data-u="m"><div class="cf">🇪🇺</div><div class="cn">유럽</div><div class="cdl" style="color:var(--gld)">가스저장 ~15% 시</div><div class="cdt">가스 저장 30%(NL 10.7%). 가스 +75%. <strong>역설:</strong> 러시아 제재 완화→가스 회복 가능, 그러나 안보 구조 해체 대가.</div><div class="cb"><div class="cbf" style="width:50%;background:var(--gld)"></div></div></div>
+<div class="cc" data-u="m"><div class="cf">🇺🇸</div><div class="cn">미국</div><div class="cdl" style="color:var(--gld)">D+60~90 (4/29~5/29)</div><div class="cdt">호르무즈 2.5%. SPR 4.15억bbl. 셰일 3~6개월 시차. <strong>진짜 취약점은 정치:</strong> 이란전 + 유가 인하 = 양립불가.</div><div class="cb"><div class="cbf" style="width:35%;background:var(--gld)"></div></div></div>
+<div class="cc" data-u="l"><div class="cf">🇨🇳</div><div class="cn">중국 — 축(Fulcrum)</div><div class="cdl" style="color:var(--grn)">구조적 이례치</div><div class="cdt">1차에너지 6.6%. 비축 12~14억bbl. 신에너지차 50%+, 전력 석유의존 4%. CSI300 -0.1%. 이란유 계속 중국행.</div><div class="cb"><div class="cbf" style="width:15%;background:var(--grn)"></div></div></div>
+<div class="cc" data-u="b"><div class="cf">🇷🇺</div><div class="cn">러시아 — 순 수혜자</div><div class="cdl" style="color:var(--nav)">+€60억/2주</div><div class="cdt">러시아산이 "가장 단순한 옵션"으로 급부상. 인도 면제로 제재 부분 재개방.</div><div class="cb"><div class="cbf" style="width:95%;background:var(--nav)"></div></div></div>
+</div>
+<div class="co"><div class="cot">🔑 비동시성의 함의</div><div class="cob">일본·한국 D+35(4/4) 비명 시, 미국은 정치적 흡수 중, 인도는 이미 거리 소요. <strong>휴전은 모든 당사자 동시 합의 필요</strong>하나 그 조건 미충족. 베이징 레버리지 매일 복리.</div></div>
+<div style="margin-top:16px"><div class="gt">국가별 취약성</div>
+<div class="vc">
+<div class="vi"><div class="vif">🇯🇵</div><div><div class="vit"><span class="vin">일본</span><span class="vb ex">EXTREME</span></div><div class="vid">~70% 원유 | LNG(전력40%) 3주 | D+30~40</div></div></div>
+<div class="vi"><div class="vif">🇰🇷</div><div><div class="vit"><span class="vin">한국</span><span class="vb ex">EXTREME</span></div><div class="vid">70.7% 원유 | LNG(발전35%) 3~4주 | D+30~40</div></div></div>
+<div class="vi"><div class="vif">🇮🇳</div><div><div class="vit"><span class="vin">인도</span><span class="vb hi">HIGH</span></div><div class="vid">45~50% 원유 | LPG 비축 없음 | D+20~30</div></div></div>
+<div class="vi"><div class="vif">🌏</div><div><div class="vit"><span class="vin">동남아</span><span class="vb hi">HIGH</span></div><div class="vid">다양 | LNG·휘발유 | 극히 제한 | 활성화</div></div></div>
+<div class="vi"><div class="vif">🇪🇺</div><div><div class="vit"><span class="vin">유럽</span><span class="vb mo">MODERATE</span></div><div class="vid">디젤30% | 천연가스 | 저장률~30% | 15%시</div></div></div>
+<div class="vi"><div class="vif">🇺🇸</div><div><div class="vit"><span class="vin">미국</span><span class="vb mo">MODERATE</span></div><div class="vid">2.5% | 정치적유가 | SPR4.15억 | D+60~90</div></div></div>
+<div class="vi"><div class="vif">🇨🇳</div><div><div class="vit"><span class="vin">중국</span><span class="vb lo">LOW</span></div><div class="vid">6.6% 1차E | 12~14억bbl | 위기의 축</div></div></div>
+<div class="vi"><div class="vif">🇷🇺</div><div><div class="vit"><span class="vin">러시아</span><span class="vb be">BENEFICIARY</span></div><div class="vid">순 수혜 | +€60억/2주</div></div></div>
+</div></div>
 </section>
 
-<!-- SECTION 3: GAP -->
-<section id="gap" class="fade-in">
-  <div class="section-label">SECTION 03 — SUPPLY GAP ANATOMY</div>
-  <h2 class="section-title">공급 갭 해부: 환상과 현실</h2>
-  <p class="section-desc">
-    IEA 역대 최대 전략비축유 방출과 사우디 동서 파이프라인 — 둘 다 결정적으로 들리지만, 
-    실제 수치는 차단된 물량의 극히 일부만 충당한다. 해협 재개통 없이는 아무것도 해결되지 않는다.
-  </p>
-
-  <div class="gap-visual">
-    <div class="gap-title">일일 공급 차단 vs 대응 메커니즘 (mb/d 기준)</div>
-    
-    <div class="gap-row">
-      <div class="gap-label" style="color:var(--red-danger);font-weight:700;">총 차단량</div>
-      <div class="gap-bar-track">
-        <div class="gap-bar-fill" style="width:100%;background:var(--red-danger);">~20 mb/d</div>
-      </div>
-      <div class="gap-number" style="color:var(--red-danger);">~20.0</div>
-    </div>
-    
-    <div class="gap-row">
-      <div class="gap-label">IEA SPR 방출</div>
-      <div class="gap-bar-track">
-        <div class="gap-bar-fill" style="width:14%;background:var(--blue-info);">12~15%</div>
-      </div>
-      <div class="gap-number">~2.5~3.0</div>
-    </div>
-    
-    <div class="gap-row">
-      <div class="gap-label">사우디 야부 파이프라인</div>
-      <div class="gap-bar-track">
-        <div class="gap-bar-fill" style="width:14%;background:var(--gold);">~15%</div>
-      </div>
-      <div class="gap-number">~2.5~3.0</div>
-    </div>
-
-    <div class="gap-row">
-      <div class="gap-label">UAE 아부다비 파이프라인</div>
-      <div class="gap-bar-track">
-        <div class="gap-bar-fill" style="width:8%;background:#7DCEA0;">제한적</div>
-      </div>
-      <div class="gap-number">~1.5</div>
-    </div>
-    
-    <div class="gap-row">
-      <div class="gap-label" style="color:var(--red-danger);font-weight:700;">미충당 잔여 갭</div>
-      <div class="gap-bar-track">
-        <div class="gap-bar-fill" style="width:65%;background:linear-gradient(90deg, var(--orange-warn), var(--red-danger));">약 65% 미해소</div>
-      </div>
-      <div class="gap-number" style="color:var(--red-danger);">~13.0+</div>
-    </div>
-  </div>
-
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
-    <div class="callout" style="margin:0;">
-      <div class="callout-title">💧 SPR의 환상</div>
-      <div class="callout-body">
-        IEA 4억 배럴 방출은 52년 역사상 최대 — 2022년 우크라 전쟁 시(1.82억 배럴)의 2배 이상.<br>
-        그러나 실제 일일 방출 속도로 계산하면 차단량의 12~15%만 충당.<br>
-        더 중요한 것: <strong>SPR은 원유만 해소하며, 일본·한국의 가장 급박한 취약점인 LNG에는 아무 효과 없음.</strong>
-      </div>
-    </div>
-    <div class="callout" style="margin:0;">
-      <div class="callout-title">🔧 사우디 파이프라인의 신화</div>
-      <div class="callout-body">
-        명판 용량 7 mb/d, 실제 적재량 2.72 mb/d (역대 최고치).<br>
-        야부 터미널의 선석·펌프 인프라가 물리적 상한. 파이프라인은 수출과 서부 정유소 원료를 동시에 공급.<br>
-        홍해 보험료 후티 위협으로 2배 이상 상승 — 실효 우회 용량 추가 압축.
-      </div>
-    </div>
-  </div>
+<!-- S3: GAP -->
+<section id="gp" class="fi">
+<div class="sl">SECTION 03</div>
+<h2 class="st">공급 갭: 환상과 현실</h2>
+<p class="sd">SPR + 사우디 파이프라인 합쳐도 ~35%. 해협 재개통 없이는 해결 불가.</p>
+<div class="gv"><div class="gt">일일 차단 vs 대응 (mb/d)</div>
+<div class="gr"><div class="gl"><span style="color:var(--red);font-weight:700">총 차단량</span><span class="mono" style="color:var(--red)">~20.0</span></div><div class="gbt"><div class="gbf" style="width:100%;background:var(--red)">~20 mb/d</div></div></div>
+<div class="gr"><div class="gl"><span>IEA SPR</span><span class="mono">~2.5~3.0</span></div><div class="gbt"><div class="gbf" style="width:14%;background:var(--blu)">12~15%</div></div></div>
+<div class="gr"><div class="gl"><span>사우디 야부</span><span class="mono">~2.5~3.0</span></div><div class="gbt"><div class="gbf" style="width:14%;background:var(--gld)">~15%</div></div></div>
+<div class="gr"><div class="gl"><span>UAE 파이프라인</span><span class="mono">~1.5</span></div><div class="gbt"><div class="gbf" style="width:8%;background:#7DCEA0">제한</div></div></div>
+<div class="gr"><div class="gl"><span style="color:var(--red);font-weight:700">미충당 갭</span><span class="mono" style="color:var(--red)">~13.0+</span></div><div class="gbt"><div class="gbf" style="width:65%;background:linear-gradient(90deg,var(--org),var(--red))">~65% 미해소</div></div></div>
+</div>
+<div class="co" style="margin:0 0 8px"><div class="cot">💧 SPR의 한계</div><div class="cob">4억bbl(52년 최대)이나 일일 12~15%만. <strong>원유만 해소, LNG에는 무효.</strong></div></div>
+<div class="co" style="margin:0"><div class="cot">🔧 파이프라인 신화</div><div class="cob">명판 7mb/d, 실제 2.72mb/d. 터미널 물리적 상한 + 수출/정유소 경쟁 + 홍해 보험 2배↑.</div></div>
 </section>
 
-<!-- SECTION 4: THREE THEATERS -->
-<section id="theaters" class="fade-in">
-  <div class="section-label">SECTION 04 — THREE THEATERS</div>
-  <h2 class="section-title">3개 전구(戰區): 하나의 전쟁, 세 개의 전선</h2>
-  <p class="section-desc">
-    D+14부터 위기는 더 이상 에너지만의 문제가 아니다. 미국이 태평양의 유일한 전진배치 해병대를 
-    중동으로 빼는 순간, 베이징과 평양은 수시간 내에 공백을 시험했다.
-  </p>
-
-  <div class="theater-map">
-    <div class="theater-card">
-      <div class="theater-num">01</div>
-      <div class="theater-icon">🔥</div>
-      <div class="theater-name">페르시아만 · 호르무즈</div>
-      <div class="theater-desc">
-        13일간 공중전으로 15,000개 표적 파괴, 이란 해군 "전투 무력화".<br>
-        그러나 공중 타격으로 해협이 열리지 않았다. 기뢰는 물속에, 해안 대함 미사일은 건재.<br>
-        MEU 도착 예상: D+22~25. 해상 호송 시작 가능 시점: 월말~1개월 후.
-      </div>
-      <div class="theater-chain">
-        <div class="theater-chain-title">작전 시나리오</div>
-        ① 호송 우선: 해안 방어 제압 → 소해 → 유조선 호송 (월말 개시)<br>
-        ② 카르그 섬 점령: 이란 석유 수출 90% 차단점 장악<br>
-        ③ 해안선 확보: 150km 이란 해안 — "갈리폴리의 10배" 평가
-      </div>
-    </div>
-
-    <div class="theater-card">
-      <div class="theater-num">02</div>
-      <div class="theater-icon">🌊</div>
-      <div class="theater-name">서태평양 · 동중국해</div>
-      <div class="theater-desc">
-        중국 해상민병대: 12월 2,000척 → 1월 1,400척 → 3월 1,200척. 매회 더 동쪽, 일본 근해 접근.<br>
-        저장성 민병대 항구 출항, AIS 추적 확인. CSIS: "어업이 아닌 것은 확실하며, 국가 지시 외의 설명이 없다."<br>
-        MEU 부재 = 태평양 유일의 신속대응군 공백. 센카쿠·대만 해협 시나리오 리허설 관측.
-      </div>
-      <div class="theater-chain">
-        <div class="theater-chain-title">연쇄 메커니즘</div>
-        MEU 중동 이동 → 태평양 억제력 공백 → 중국 민병대 진형 심화 → 일본 안보 보증 신뢰도 하락 → 일본의 독자적 양자 협정 압박 증가
-      </div>
-    </div>
-
-    <div class="theater-card">
-      <div class="theater-num">03</div>
-      <div class="theater-icon">🚀</div>
-      <div class="theater-name">한반도</div>
-      <div class="theater-desc">
-        D+14 북한 10발 탄도미사일 — 2026년 최대 단일 살보.<br>
-        미한 자유의 방패 훈련 축소 템포 기간에 발사. 북한 외무성: "강자만이 살아남고 발전한다."<br>
-        호르무즈 위기가 만든 미군 과신장(overextension)의 3번째 시험장.
-      </div>
-      <div class="theater-chain">
-        <div class="theater-chain-title">전략적 함의</div>
-        미국의 두 대양 동시 운용 능력 한계 노출. 80년간 동맹 구조가 회피해온 선택 — "어떤 전구를 포기할 것인가" — 에 직면 가능성.
-      </div>
-    </div>
-  </div>
+<!-- S4: THEATERS -->
+<section id="th" class="fi">
+<div class="sl">SECTION 04</div>
+<h2 class="st">3개 전구: 하나의 전쟁, 세 전선</h2>
+<p class="sd">MEU가 태평양을 떠나는 순간, 베이징과 평양은 수시간 내 공백을 시험.</p>
+<div class="tm">
+<div class="tc"><div class="tn">THEATER 01</div><div class="ticon">🔥</div><div class="tname">호르무즈</div><div class="tdesc">15,000표적 파괴, 이란 해군 무력화. 그러나 기뢰+해안 대함미사일 건재. MEU D+22~25(3/22~25) 도착.</div><div class="tch"><div class="tcht">작전 시나리오</div>① 호송(월말) ② 카르그 점령 ③ 해안 확보("갈리폴리×10")</div></div>
+<div class="tc"><div class="tn">THEATER 02</div><div class="ticon">🌊</div><div class="tname">서태평양</div><div class="tdesc">민병대: 12월 2,000→1월 1,400→3월 1,200척. 매회 동쪽, 일본 근해. CSIS: "국가 지시 외 설명 없음."</div><div class="tch"><div class="tcht">연쇄</div>MEU 중동→태평양 공백→민병대 심화→일본 안보보증↓→독자 양자협정 압박</div></div>
+<div class="tc"><div class="tn">THEATER 03</div><div class="ticon">🚀</div><div class="tname">한반도</div><div class="tdesc">D+14 ~10발 탄도미사일(2026최대). 자유의방패 축소 기간. "강자만이 살아남는다."</div><div class="tch"><div class="tcht">함의</div>미국 두 대양 동시 운용 한계. "어떤 전구를 포기할 것인가"에 직면.</div></div>
+</div>
 </section>
 
-<!-- SECTION 5: CASCADE -->
-<section id="cascade" class="fade-in">
-  <div class="section-label">SECTION 05 — CASCADING IMBALANCE</div>
-  <h2 class="section-title">연쇄 불균형: 중동에서 서태평양으로</h2>
-  <p class="section-desc">
-    호르무즈 봉쇄는 에너지 병목이 어떻게 글로벌 안보 구조의 균열로 전이되는지를 보여준다.
-    각 단계는 다음 단계를 불가피하게 만든다.
-  </p>
-
-  <div class="cascade">
-    <div class="cascade-node" style="border-color:var(--red-danger);">
-      <strong>호르무즈 해협 봉쇄 (D+0 · 2/28)</strong>
-      <span>전 세계 원유·LNG 일일 통과량 20% 차단. 약 20 mb/d 공급 중단</span>
-    </div>
-    <div class="cascade-arrow"></div>
-    <div class="cascade-node" style="border-color:var(--orange-warn);">
-      <strong>에너지 비축 소진 경쟁 (D+1~14 · 3/1~3/13)</strong>
-      <span>SPR 방출·파이프라인 우회로 65% 이상 갭 미해소. 국가별 위기 시계 작동 개시</span>
-    </div>
-    <div class="cascade-arrow"></div>
-    <div class="cascade-node" style="border-color:var(--orange-warn);">
-      <strong>미군 전력 재배치 (D+14 · 3/14)</strong>
-      <span>태평양 유일 전진배치 해병원정대(31st MEU) → 중동 전개. 해협 물리적 탈환 준비</span>
-    </div>
-    <div class="cascade-arrow"></div>
-    <div class="cascade-node" style="border-color:var(--gold);">
-      <strong>서태평양 억제력 공백 (D+14~ · 3/14~)</strong>
-      <span>중국 해상민병대 3차 진형(동중국해), 북한 최대 규모 미사일. 수시간 내 공백 시험</span>
-    </div>
-    <div class="cascade-arrow"></div>
-    <div class="cascade-node" style="border-color:var(--blue-info);">
-      <strong>동맹 신뢰도 균열</strong>
-      <span>일본: LNG 소진 + 민병대 + 미사일 삼중 압박. 대만: 봉쇄 리허설 관측. 한국: 반도체 팹 전력 불안정</span>
-    </div>
-    <div class="cascade-arrow"></div>
-    <div class="cascade-node" style="border-color:var(--navy);">
-      <strong>중국 협상 레버리지 일일 복리 증가</strong>
-      <span>일본·한국 LNG 임계 접근 → 미국 양보 공간 확대. 태평양 공백 확대 → 중국 자제의 가격 상승</span>
-    </div>
-    <div class="cascade-arrow"></div>
-    <div class="cascade-node" style="border-color:var(--china-red);">
-      <strong>파리 → 베이징 (D+16~17 · 3/15~16 → D+31 · 3/31)</strong>
-      <span>Bessent·He Lifeng 파리 회담 → 트럼프 방중(3/31). 무역 협상으로 시작, 3개 전구 동시 조율로 전환</span>
-    </div>
-  </div>
+<!-- S5: CASCADE -->
+<section id="cs" class="fi">
+<div class="sl">SECTION 05</div>
+<h2 class="st">연쇄 불균형</h2>
+<p class="sd">각 단계는 다음을 불가피하게 만든다.</p>
+<div class="cas">
+<div class="casn" style="border-color:var(--red)"><strong>호르무즈 봉쇄 (D+0 · 2/28)</strong><span>~20mb/d 차단</span></div><div class="casa"></div>
+<div class="casn" style="border-color:var(--org)"><strong>비축 소진 경쟁 (D+1~14 · 3/1~13)</strong><span>65%+ 갭 미해소</span></div><div class="casa"></div>
+<div class="casn" style="border-color:var(--org)"><strong>MEU 재배치 (D+14 · 3/14)</strong><span>태평양→중동</span></div><div class="casa"></div>
+<div class="casn" style="border-color:var(--gld)"><strong>태평양 억제 공백 (3/14~)</strong><span>민병대 3차 + 북한 최대 미사일</span></div><div class="casa"></div>
+<div class="casn" style="border-color:var(--blu)"><strong>동맹 신뢰 균열</strong><span>일본 삼중압박 / 대만 리허설 / 한국 팹 불안</span></div><div class="casa"></div>
+<div class="casn" style="border-color:var(--nav)"><strong>중국 레버리지 일일 복리</strong><span>LNG 임계→미국 양보공간↑</span></div><div class="casa"></div>
+<div class="casn" style="border-color:var(--cr)"><strong>파리→베이징 (3/15~16→3/31)</strong><span>무역→3전구 동시조율</span></div>
+</div>
 </section>
 
-<!-- SECTION 6: PARIS MATRIX -->
-<section id="paris" class="fade-in">
-  <div class="section-label">SECTION 06 — PARIS NEGOTIATION MATRIX</div>
-  <h2 class="section-title">파리 협상 매트릭스: 미중 시나리오별 이해득실</h2>
-  <p class="section-desc">
-    3월 15~16일 파리에서 Bessent와 He Lifeng이 마주 앉는다. 무역 협상으로 시작되었지만, 
-    이미 3개 전구 — 걸프, 동중국해, 한반도 — 의 동시 레버리지 게임으로 변질되었다.
-    이란의 위안화 결제 제안은 테이블 위의 새로운 변수다.
-  </p>
-
-  <div style="background:var(--bg-card);border:1px solid var(--border-light);border-radius:var(--radius-lg);padding:24px;margin-bottom:24px;box-shadow:var(--shadow-sm);">
-    <div style="font-weight:700;font-size:14px;margin-bottom:12px;">⚖️ 테이블 위의 비대칭 구조</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;font-size:13px;line-height:1.75;">
-      <div>
-        <div style="font-weight:700;color:var(--us-blue);margin-bottom:6px;">🇺🇸 미국이 들고 온 것</div>
-        · 무역 양보: 대두·보잉·에너지 구매 확대 요구<br>
-        · 암묵적 위협: MEU가 걸프로 향하고 있다. 협상 실패 시 군사적 강행<br>
-        · 요청: 이란 압박, 러시아산 원유 축소, 태평양 민병대 자제
-      </div>
-      <div>
-        <div style="font-weight:700;color:var(--china-red);margin-bottom:6px;">🇨🇳 중국이 들고 온 것</div>
-        · 3개 전구 동시 레버리지 (걸프 중재, 동중국해 자제, 한반도 관리)<br>
-        · 이란의 위안화 결제 제안 — 전시 중 달러 체제 대안 프로토타입<br>
-        · 시간이 지날수록 자동 복리되는 협상력 (동맹국 LNG 소진 + 태평양 공백)
-      </div>
-    </div>
-    <div style="margin-top:16px;padding:12px;background:var(--gold-light);border-radius:var(--radius);font-size:12px;line-height:1.7;">
-      <strong>🔑 이란의 위안화 결제 제안:</strong> 호르무즈 통과 허가 조건으로 원유 화물의 위안화 결제 요구. 
-      확인되면 1973년 석유 금수 이래 글로벌 통화 질서의 가장 중대한 구조 변화. 
-      아직 공식 확인은 없으나(중국 외교부 미확인), CNN·EADaily 등이 이란 고위 관계자 인용 보도.
-    </div>
-  </div>
-
-  <div class="matrix-grid">
-    <div class="scenario-card">
-      <div class="scenario-num">SCENARIO 01</div>
-      <div class="scenario-title">중국 중재 · 체면 유지 해법</div>
-      <span class="scenario-prob" style="background:var(--green-light);color:var(--green-safe);">EIA 기본 시나리오</span>
-      <div class="scenario-body">
-        중국이 호르무즈 재개통을 중재하고, 민병대 활동을 자제하며, 위안화 결제는 주변부에 머무름.
-        Brent 연말 $70~80 범위 복귀. 트럼프 방중(3/31)에서 외교적 성과 연출 가능.
-      </div>
-      <div class="scenario-stakes">
-        <div class="stake-box us">
-          <div class="stake-label us">미국</div>
-          단기 에너지 위기 해소, 선거 리스크 경감. 다만 중국의 중재자 지위 공인.
-        </div>
-        <div class="stake-box cn">
-          <div class="stake-label cn">중국</div>
-          글로벌 중재자 위상 확보. 위안화 결제는 유보하되 협상 카드로 보유 지속.
-        </div>
-      </div>
-    </div>
-
-    <div class="scenario-card">
-      <div class="scenario-num">SCENARIO 02</div>
-      <div class="scenario-title">중국 구조적 양보 획득</div>
-      <span class="scenario-prob" style="background:var(--orange-light);color:var(--orange-warn);">고가 거래 시나리오</span>
-      <div class="scenario-body">
-        중국이 대만·반도체 수출 규제·통화 구조 전반에 걸쳐 전략적 양보를 추출.
-        호르무즈는 중국 조건으로 재개통. 태평양 탐색 활동은 레버리지가 양보된 만큼 불필요해져 축소.
-      </div>
-      <div class="scenario-stakes">
-        <div class="stake-box us">
-          <div class="stake-label us">미국</div>
-          에너지 위기 해소 but CHIPS Act 후퇴, 대만 안보 보증 약화. 30년 인태 전략 훼손.
-        </div>
-        <div class="stake-box cn">
-          <div class="stake-label cn">중국</div>
-          반도체·대만 양쪽에서 전략적 돌파. 위안화 결제 정착 시 달러 패권 구조 변동.
-        </div>
-      </div>
-    </div>
-
-    <div class="scenario-card">
-      <div class="scenario-num">SCENARIO 03</div>
-      <div class="scenario-title">외교 교착 · 군사적 강행</div>
-      <span class="scenario-prob" style="background:var(--red-light);color:var(--red-danger);">고위험 시나리오</span>
-      <div class="scenario-body">
-        외교 실패 → 미군 D+25~30(3/25~30) 해협 강행 개통 시도. 성공 시에도 "무장 호송 하의 해협"은 
-        전쟁 전 일일 ~100회 통과의 극히 일부(10~15회)만 가능. 태평양 노출 지속.
-      </div>
-      <div class="scenario-stakes">
-        <div class="stake-box us">
-          <div class="stake-label us">미국</div>
-          걸프 "승리"의 대가로 태평양 억제력 훼손. 향후 30년 핵심 전구 약화.
-        </div>
-        <div class="stake-box cn">
-          <div class="stake-label cn">중국</div>
-          양보 없이 태평양 공백 지속 향유. 민병대 훈련 실전 데이터 축적. 동맹 신뢰 침식.
-        </div>
-      </div>
-    </div>
-
-    <div class="scenario-card">
-      <div class="scenario-num">SCENARIO 04</div>
-      <div class="scenario-title">양 트랙 실패 · 다전구 위기 병합</div>
-      <span class="scenario-prob" style="background:var(--red-light);color:var(--red-danger);">최악 시나리오</span>
-      <div class="scenario-body">
-        외교도 군사도 실패 — 일본·한국·인도 물리적 배급 진입. 태평양 탐색이 리허설에서 실행으로 전환.
-        3개 전구가 병렬 위기에서 하나의 연쇄 위기로 합류. 테이블의 누구도 이를 멈출 권한이 없는 시점.
-      </div>
-      <div class="scenario-stakes">
-        <div class="stake-box us">
-          <div class="stake-label us">미국</div>
-          80년 동맹 구조의 근본 선택 강요: "어떤 전구를 포기할 것인가."
-        </div>
-        <div class="stake-box cn">
-          <div class="stake-label cn">중국</div>
-          레버리지 극대화 but 통제 불능 에스컬레이션 리스크. 자국 에너지 흐름도 교란 가능성.
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="callout">
-    <div class="callout-title">🔑 파리 회담의 본질</div>
-    <div class="callout-body">
-      이 회담은 위기를 해결하지 않는다. 그러나 3개 전구가 아직 분리된 위기인 <strong>마지막 순간</strong>일 수 있다 — 
-      하나의 연쇄 대결로 합류하기 전의 마지막 창. Bessent가 측정하는 것은 중국의 가격이고, 
-      그 가격은 다음 주에 더 비싸진다.
-    </div>
-  </div>
+<!-- S6: PARIS -->
+<section id="pr" class="fi">
+<div class="sl">SECTION 06</div>
+<h2 class="st">파리 협상 매트릭스</h2>
+<p class="sd">3/15~16 Bessent·He Lifeng. 무역으로 시작, 3전구 레버리지로 변질.</p>
+<div style="background:var(--card);border:1px solid var(--brl);border-radius:var(--rl2);padding:14px;margin-bottom:14px;box-shadow:var(--sh)">
+<div style="font-weight:700;font-size:12px;margin-bottom:8px">⚖️ 비대칭 구조</div>
+<div class="ag">
+<div><div style="font-weight:700;color:var(--ub);margin-bottom:3px">🇺🇸 미국</div>대두·보잉 구매 요구<br>MEU 걸프行 = 암묵적 위협<br>요청: 이란압박, 러시아유↓, 태평양 자제</div>
+<div><div style="font-weight:700;color:var(--cr);margin-bottom:3px">🇨🇳 중국</div>3전구 동시 레버리지<br>이란 위안화 결제 = 달러 대안<br>시간→자동 복리 협상력</div>
+</div>
+<div style="margin-top:10px;padding:8px;background:var(--gdl);border-radius:var(--r);font-size:10px;line-height:1.65">
+<strong>🔑 위안화 결제:</strong> 호르무즈 통과 조건으로 위안화 요구. 확인 시 1973년 이래 최대 통화 변동. CNN 보도, 중국 외교부 미확인.
+</div>
+</div>
+<div class="mg">
+<div class="sc"><div class="scn">SCENARIO 01</div><div class="sct">중국 중재 · 체면 유지</div><span class="scp" style="background:var(--gl);color:var(--grn)">EIA 기본</span><div class="scb">호르무즈 중재, 민병대 자제, 위안화 유보. Brent 연말 $70~80.</div><div class="sb us"><div class="sbl us">미국</div>에너지 해소, 선거↓. 중국 중재자 지위 공인.</div><div class="sb cn"><div class="sbl cn">중국</div>글로벌 중재자 위상. 위안화 카드 보유.</div></div>
+<div class="sc"><div class="scn">SCENARIO 02</div><div class="sct">중국 구조적 양보 획득</div><span class="scp" style="background:var(--ol);color:var(--org)">고가 거래</span><div class="scb">대만·반도체·통화 양보 추출. 중국 조건 재개통.</div><div class="sb us"><div class="sbl us">미국</div>CHIPS Act↓, 대만 보증↓. 30년 인태 전략 훼손.</div><div class="sb cn"><div class="sbl cn">중국</div>반도체·대만 돌파. 위안화 정착 시 달러 변동.</div></div>
+<div class="sc"><div class="scn">SCENARIO 03</div><div class="sct">외교 교착 · 군사 강행</div><span class="scp" style="background:var(--rl);color:var(--red)">고위험</span><div class="scb">D+25~30(3/25~30) 강행. 성공해도 일 10~15회(전쟁 전 ~100). 태평양 노출.</div><div class="sb us"><div class="sbl us">미국</div>걸프 승리 ↔ 태평양 억제력 훼손.</div><div class="sb cn"><div class="sbl cn">중국</div>양보 없이 공백 향유. 실전 데이터.</div></div>
+<div class="sc"><div class="scn">SCENARIO 04</div><div class="sct">양 트랙 실패 · 위기 병합</div><span class="scp" style="background:var(--rl);color:var(--red)">최악</span><div class="scb">일한인 배급. 태평양 리허설→실행. 3전구 합류.</div><div class="sb us"><div class="sbl us">미국</div>80년 동맹: "어떤 전구를 포기?"</div><div class="sb cn"><div class="sbl cn">중국</div>레버리지 극대 but 통제불능 리스크.</div></div>
+</div>
+<div class="co"><div class="cot">🔑 파리의 본질</div><div class="cob">3전구가 아직 분리된 <strong>마지막 순간</strong>. 중국의 가격은 다음 주에 더 비싸다.</div></div>
 </section>
 
-<!-- SECTION 7: DEMAND DESTRUCTION -->
-<section id="demand" class="fade-in">
-  <div class="section-label">SECTION 07 — OIL PRICE TRAJECTORY & DEMAND DESTRUCTION</div>
-  <h2 class="section-title">유가 궤적과 수요 파괴 임계점</h2>
-  <p class="section-desc">
-    2월 초부터 현재까지의 Brent 유가 흐름을 아래로 읽으면 시간 경과이고, 오른쪽으로 읽으면 가격 상승이다.
-    하단의 스펙트럼과 수직으로 연결되어, 현재 유가가 수요 파괴 임계점 대비 어디에 있는지 직관적으로 확인할 수 있다.
-  </p>
-
-  <div class="demand-chart" style="padding:0;overflow:hidden;">
-    <!-- Vertical Oil Price Chart -->
-    <div style="padding:24px 24px 0;">
-      <div class="gap-title">Brent 원유 가격 추이 (2/3 ~ 3/14) — 세로: 시간 ↓ · 가로: 유가 →</div>
-    </div>
-    <div id="verticalChartWrap" style="padding:8px 24px 0;overflow-x:auto;">
-      <canvas id="verticalOilChart"></canvas>
-    </div>
-
-    <!-- Spectrum directly below, aligned -->
-    <div style="padding:8px 24px 0;">
-      <div style="margin-left:52px;margin-right:30px;position:relative;">
-        <div style="height:14px;background:linear-gradient(to right, var(--green-safe), #B7950B, var(--orange-warn), var(--red-danger));border-radius:4px;"></div>
-        <div style="display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text-muted);margin-top:2px;">
-          <span>$55</span><span>$70</span><span>$85</span><span>$100</span><span>$115</span><span>$130</span><span>$145</span><span>$160</span>
-        </div>
-      </div>
-    </div>
-
-    <div style="padding:12px 24px 4px;">
-      <div class="gap-title">유가 스펙트럼과 주요 임계점</div>
-    </div>
-    <div style="padding:0 24px;">
-      <div style="margin-left:52px;margin-right:30px;position:relative;height:70px;">
-        <div class="price-spectrum" style="margin:0;height:48px;border-radius:6px;">
-          <div class="price-marker" style="left:8%;">
-            <div class="price-marker-line" style="background:var(--green-safe);height:60px;"></div>
-            <div class="price-marker-label">$72<br><span style="font-size:9px;color:var(--text-muted);">전쟁 전</span></div>
-          </div>
-          <div class="price-marker" style="left:28%;">
-            <div class="price-marker-line" style="background:var(--blue-info);height:60px;"></div>
-            <div class="price-marker-label">$95<br><span style="font-size:9px;color:var(--text-muted);">EIA 해소 시</span></div>
-          </div>
-          <div class="price-marker" style="left:38%;">
-            <div class="price-marker-line" style="background:var(--text-primary);height:68px;"></div>
-            <div class="price-marker-label" style="font-weight:700;">$101<br><span style="font-size:9px;color:var(--red-danger);">현재 D+14</span></div>
-          </div>
-          <div class="price-marker" style="left:58%;">
-            <div class="price-marker-line" style="background:var(--orange-warn);height:60px;"></div>
-            <div class="price-marker-label">$120<br><span style="font-size:9px;color:var(--text-muted);">Barclays 2주↑</span></div>
-          </div>
-          <div class="price-marker" style="left:82%;">
-            <div class="price-marker-line" style="background:var(--red-danger);height:60px;"></div>
-            <div class="price-marker-label">$155<br><span style="font-size:9px;color:var(--text-muted);">수요파괴 임계</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div style="padding:48px 24px 24px;">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:12px;">
-        <div style="padding:12px;background:var(--bg-accent);border-radius:var(--radius);line-height:1.7;">
-          <strong>탄력적 수요 (감소 가능)</strong><br>
-          · 휘발유 (전체의 ~25%): 재량 주행 축소<br>
-          · 항공유 (8%): 비즈니스 여행 일부 감소
-        </div>
-        <div style="padding:12px;background:var(--red-light);border-radius:var(--radius);line-height:1.7;">
-          <strong>비탄력적 수요 (감소 곤란)</strong><br>
-          · 디젤 (17%): 물류·화물은 공급망이 요구<br>
-          · 석유화학 (15~17%): 순수 투입 비용 인플레이션<br>
-          · <strong>LPG·난방유:</strong> 개도국은 연료 전환·영양 감소·활동 축소. 수요를 파괴하지 않고 사회를 파괴
-        </div>
-      </div>
-      <div style="margin-top:12px;font-size:11px;color:var(--text-muted);">
-        ● 데이터 출처: Trading Economics, EIA STEO (3/10), CNBC, Barchart, 기고문 내 인용 수치 · 주말/공휴일은 직전 거래일 종가 기준
-      </div>
-    </div>
-  </div>
+<!-- S7: DEMAND -->
+<section id="dm" class="fi">
+<div class="sl">SECTION 07</div>
+<h2 class="st">유가 궤적 · 수요 파괴</h2>
+<p class="sd">위→아래 = 시간, 왼→오른 = 가격. 하단 태그와 가격축 연결.</p>
+<div class="ocw">
+<div style="padding:12px 12px 0"><div class="gt">Brent 캔들 차트 (2/3~3/14)</div><div style="font-size:9px;color:var(--tm)">↓시간 →유가($)</div></div>
+<div class="oci" id="vw"><canvas id="vc"></canvas></div>
+<div style="padding:4px 12px 0"><div style="height:10px;background:linear-gradient(to right,var(--grn),#B7950B,var(--org),var(--red));border-radius:3px;margin:0 32px 0 36px"></div></div>
+<div style="padding:8px 12px"><div class="gt" style="margin-bottom:6px">주요 임계점</div>
+<div style="display:flex;flex-wrap:wrap;gap:4px;font-size:9px">
+<span style="padding:2px 6px;background:var(--gl);border-radius:3px"><b>$72</b> 전쟁 전</span>
+<span style="padding:2px 6px;background:var(--bl);border-radius:3px"><b>$95</b> EIA 해소</span>
+<span style="padding:2px 6px;background:var(--rl);border-radius:3px;font-weight:700"><b>$101</b> 현재</span>
+<span style="padding:2px 6px;background:var(--ol);border-radius:3px"><b>$120</b> Barclays</span>
+<span style="padding:2px 6px;background:var(--rl);border-radius:3px"><b>$155</b> 수요파괴</span>
+</div></div>
+<div style="padding:0 12px 12px;display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:10px">
+<div style="padding:8px;background:var(--accent);border-radius:var(--r);line-height:1.55"><strong>탄력적</strong><br>휘발유(25%): 주행↓<br>항공유(8%): 출장↓</div>
+<div style="padding:8px;background:var(--rl);border-radius:var(--r);line-height:1.55"><strong>비탄력적</strong><br>디젤(17%): 물류 필수<br>LPG: 개도국 사회 파괴</div>
+</div>
+</div>
 </section>
 
-<!-- SECTION 8: WATCHLIST -->
-<section id="watch" class="fade-in">
-  <div class="section-label">SECTION 08 — INVALIDATION SIGNALS & WATCHLIST</div>
-  <h2 class="section-title">지속 주목 사항: 무효화 신호와 모니터링 포인트</h2>
-  <p class="section-desc">
-    현재의 고유가·구조적 취약성 심화 기본전제(bearish thesis)가 무효화되는 조건들과, 
-    앞으로 상황이 어떤 방향으로 전개되는지를 판별하는 핵심 신호들.
-  </p>
-
-  <div class="watch-list">
-    <div class="watch-item">
-      <div class="watch-icon oil">🛢️</div>
-      <div>
-        <div class="watch-title">호르무즈 조기 재개통</div>
-        <div class="watch-desc">10~14일 내 이란의 재개통 결정 또는 휴전. 독립적 해상 확인 필수. 성사 시 Brent $70~80대 복귀 (EIA/Goldman 기본선).</div>
-      </div>
-    </div>
-    <div class="watch-item">
-      <div class="watch-icon military">⚓</div>
-      <div>
-        <div class="watch-title">미 해군 호송 작전 개시</div>
-        <div class="watch-desc">D+30(3/30) 이전 사고 없는 호송 시작 시 군사적 해결 경로 작동. CENTCOM 호송 회랑 선언, 보험시장 재가입 여부 확인. 부분 성공(일 10~15회 통과)도 공급 수학 변경.</div>
-      </div>
-    </div>
-    <div class="watch-item">
-      <div class="watch-icon oil">📊</div>
-      <div>
-        <div class="watch-title">사우디 야부 3.5 mb/d 돌파</div>
-        <div class="watch-desc">야부 적재량이 1주 이상 3.5 mb/d 유지 시, 명판 7 mb/d 접근 징후. 실질적 공급 완화 신호.</div>
-      </div>
-    </div>
-    <div class="watch-item">
-      <div class="watch-icon econ">📉</div>
-      <div>
-        <div class="watch-title">조기 수요 파괴 징후</div>
-        <div class="watch-desc">IATA 주간 항공 데이터 + EIA 주간 디젤 소비 동시 급감 시, $120~$155 수요파괴 메커니즘 조기 작동 가능. 유가 해소 but 경기침체 가격책정 전환.</div>
-      </div>
-    </div>
-    <div class="watch-item">
-      <div class="watch-icon currency">💴</div>
-      <div>
-        <div class="watch-title">위안화 결제의 해협 통과 조건화</div>
-        <div class="watch-desc">이란 정부 공식 발표 + 위안화 중개 선박 통과 확인 시, 1973년 이래 최대 통화 질서 변동. 단기 유가 신호가 아닌 장기 구조 전환 — 초기에는 "해결책"처럼 보일 것.</div>
-      </div>
-    </div>
-    <div class="watch-item">
-      <div class="watch-icon military">🎯</div>
-      <div>
-        <div class="watch-title">태평양 리허설 → 실전 전환</div>
-        <div class="watch-desc">센카쿠 인근 중국 민병대·일본 해경 물리적 충돌, 일본 EEZ 근접 북한 미사일 낙하, MEU 부재 시 대만 해협 중국 해군 통과. 어느 하나라도 발생 시 다전구 압박이 실제 제2전선 위기로 전환.</div>
-      </div>
-    </div>
-    <div class="watch-item">
-      <div class="watch-icon diplo">🏛️</div>
-      <div>
-        <div class="watch-title">IEA SPR 방출 속도 초과</div>
-        <div class="watch-desc">일일 방출이 4+ mb/d 지속 시, 실효 갭 충당률 20% 이상으로 상향. 여전히 불충분하나 기본선보다 유의미한 개선.</div>
-      </div>
-    </div>
-    <div class="watch-item">
-      <div class="watch-icon diplo">🤝</div>
-      <div>
-        <div class="watch-title">파리 회담 → 베이징 정상회담 (3/31)</div>
-        <div class="watch-desc">3/15~16 Bessent·He Lifeng 파리 회담 결과 → 3/31 트럼프 방중 의제 확정. 무역 양보 수준, 대만·반도체 언급 여부, 이란 중재 프레임 여부가 향후 전개의 분기점.</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="callout" style="margin-top:24px;">
-    <div class="callout-title">📌 핵심 타임라인 종합 (2월 초 ~ 향후 전망)</div>
-    <div class="callout-body" style="font-family:'JetBrains Mono',monospace;font-size:12px;line-height:2;">
-      <span style="color:var(--blue-info);font-weight:700;">── 전쟁 전: 이란 핵 협상기 ──</span><br>
-      2/3~7 ········ Brent $73~75. OPEC+ 증산 전망 속 이란 제재 리스크 프리미엄 형성<br>
-      2/9~10 ······· 이란 핵 협상 "긍정적" 보도 → Brent $67~68 급락. 오만 회담 진전<br>
-      2/11~14 ····· $64~66 밴드. J.P.Morgan "Brent 연평균 $60" 전망. 과잉공급 내러티브<br>
-      2/18~21 ····· 재긴장. 미, 호르무즈 미국 선적 이란수역 회피 경고. $68→$74 회복<br>
-      2/24~27 ····· $71~74 등락. 제네바 핵 협상 결렬 임박 시그널. 전운 고조<br>
-      <span style="color:var(--red-danger);font-weight:700;">── 전쟁 발발: 호르무즈 위기 ──</span><br>
-      D+0 · 2/28 ··· ⚔️ 미·이스라엘 이란 공습 개시. Brent $72→$77 (+8% 당일)<br>
-      D+3 · 3/3 ···· 이란 보복 (라스타누라·카타르 피격). Brent $85. 해협 사실상 폐쇄<br>
-      D+4 · 3/4 ···· IRGC 공식 해협 폐쇄 선언. 서방 선박 "적법 표적" 경고<br>
-      D+7 · 3/7 ···· 걸프 4국 670만 b/d 감산. Brent 장중 $119.50 (52주 최고)<br>
-      D+10 · 3/10 ·· 트럼프 "곧 종결" + 제재 면제 시사 → WTI 10%↓. 동일 날 역대급 공습<br>
-      D+12 · 3/12 ·· IEA 4억 배럴 방출 발표. 유조선 2척 피격. Brent $100 돌파<br>
-      D+13 · 3/13 ·· 카르그 섬 군사시설 타격. Brent $103.14 결산<br>
-      <span style="color:var(--china-red);font-weight:700;">── 질적 전환: 에너지 → 안보 구조 위기 ──</span><br>
-      D+14 · 3/14 ·· (오늘) MEU 태평양→중동. 북한 10발 미사일. 중국 어선 1,200척<br>
-      D+16~17 · 3/15~16 · Bessent · He Lifeng 파리 회담<br>
-      <span style="color:var(--text-muted);">── 향후 전망 ──</span><br>
-      D+20~25 · 3/20~25 · MEU 아라비아해 도착. 인도 LPG 임계 구간 (3/20~30)<br>
-      D+25~30 · 3/25~30 · 해협 군사적 강행 개통 가능 창. 일본·한국 LNG 임계 접근<br>
-      D+30~40 · 3/30~4/9 · 일본·한국 LNG 물리적 소진. 배급 또는 그리드 불안정<br>
-      D+31 · 3/31 ····· 트럼프 방중 — 시진핑과 정상회담<br>
-      D+60~90 · 4/29~5/29 · 미국 SPR 가시적 압축. 주유소 가격 선거 이슈화<br>
-    </div>
-  </div>
+<!-- S8: WATCH -->
+<section id="wt" class="fi">
+<div class="sl">SECTION 08</div>
+<h2 class="st">주목 사항</h2>
+<p class="sd">기본전제 무효화 조건과 모니터링 포인트.</p>
+<div class="wl">
+<div class="wi"><div class="wic o">🛢️</div><div><div class="wit">호르무즈 조기 재개통</div><div class="wid">10~14일 내 휴전 → Brent $70~80 복귀.</div></div></div>
+<div class="wi"><div class="wic m">⚓</div><div><div class="wit">미 해군 호송</div><div class="wid">D+30(3/30) 전 호송 시작 시 군사 해결 작동.</div></div></div>
+<div class="wi"><div class="wic o">📊</div><div><div class="wit">야부 3.5mb/d 돌파</div><div class="wid">1주+ 유지 시 공급 완화 신호.</div></div></div>
+<div class="wi"><div class="wic e">📉</div><div><div class="wit">조기 수요 파괴</div><div class="wid">항공+디젤 동시 급감 → $120~155 조기 작동.</div></div></div>
+<div class="wi"><div class="wic c">💴</div><div><div class="wit">위안화 결제 조건화</div><div class="wid">공식발표+선박 확인 시 1973년 이래 최대 통화 변동.</div></div></div>
+<div class="wi"><div class="wic m">🎯</div><div><div class="wit">태평양 실전 전환</div><div class="wid">센카쿠 충돌/EEZ 근접 낙하/대만 해협 통과 → 제2전선.</div></div></div>
+<div class="wi"><div class="wic d">📊</div><div><div class="wit">SPR 방출 초과</div><div class="wid">일일 4+mb/d 시 갭 충당 20%↑.</div></div></div>
+<div class="wi"><div class="wic d">🤝</div><div><div class="wit">파리→베이징 3/31</div><div class="wid">무역 양보·대만·반도체 언급 여부가 분기점.</div></div></div>
+</div>
+<div class="co" style="margin-top:16px"><div class="cot">📌 핵심 타임라인 (2월 초~향후)</div>
+<div class="tls">
+<span class="p a">── 전쟁 전: 핵 협상기 ──</span>
+<span class="r">2/3~7 · $73~75 OPEC+ 증산전망 속 제재 프리미엄</span>
+<span class="r">2/9~10 · 협상 "긍정적" → $67~68 급락</span>
+<span class="r">2/11~14 · $64~66 과잉공급론 ("연평균 $60")</span>
+<span class="r">2/18~21 · 재긴장 호르무즈 경고 $68→$74</span>
+<span class="r">2/24~27 · $71~74 핵 협상 결렬 시그널</span>
+<span class="p b">── 전쟁 발발 ──</span>
+<span class="r">D+0 · 2/28 ⚔️ 개전 $72→$77</span>
+<span class="r">D+3 · 3/3 이란보복 $85 해협폐쇄</span>
+<span class="r">D+4 · 3/4 IRGC 공식폐쇄</span>
+<span class="r">D+7 · 3/7 670만b/d감산 장중$119.50</span>
+<span class="r">D+10 · 3/10 "곧 종결"→WTI 10%↓</span>
+<span class="r">D+12 · 3/12 IEA 4억bbl $100돌파</span>
+<span class="r">D+13 · 3/13 카르그섬 $103결산</span>
+<span class="p c">── 안보 구조 전이 ──</span>
+<span class="r">D+14 · 3/14 (오늘) MEU·북한·중국</span>
+<span class="r">D+16~17 · 3/15~16 파리 회담</span>
+<span class="p d">── 향후 ──</span>
+<span class="r">D+20~25 · 3/20~25 MEU도착 인도LPG임계</span>
+<span class="r">D+25~30 · 3/25~30 해협강행창 LNG접근</span>
+<span class="r">D+30~40 · 3/30~4/9 일한LNG소진</span>
+<span class="r">D+31 · 3/31 트럼프 방중</span>
+<span class="r">D+60~90 · 4/29~5/29 SPR압축 선거이슈</span>
+</div></div>
 </section>
-
 </main>
-
-<!-- FOOTER -->
-<footer class="page-footer">
-  원문 분석: <a href="https://www.garrettsignal.com/p/who-breaks-first" target="_blank">Garrett's Signal — "Who Breaks First?" (2026.03.14)</a><br>
-  본 페이지는 원문 기고문의 구조적 분석 및 보완 정보를 통합한 시각화 자료입니다.<br>
-  보완 참조: CRS Report R45281 (Congress.gov), Wikipedia, CNBC, Reuters, AP, CNN, Al Jazeera, The Diplomat
-</footer>
-
+<footer class="ft">원문: <a href="https://www.garrettsignal.com/p/who-breaks-first" target="_blank">Garrett's Signal "Who Breaks First?"</a> (2026.03.14)<br>보완: CRS R45281, Wikipedia, CNBC, Reuters, AP, CNN, Al Jazeera, The Diplomat</footer>
 <script>
-// Scroll-triggered fade-in
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-    }
-  });
-}, { threshold: 0.1 });
-
-document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-
-// Active nav highlighting
-const sections = document.querySelectorAll('section[id]');
-const navLinks = document.querySelectorAll('.sticky-nav a');
-
-window.addEventListener('scroll', () => {
-  let current = '';
-  sections.forEach(section => {
-    const sectionTop = section.offsetTop - 100;
-    if (scrollY >= sectionTop) {
-      current = section.getAttribute('id');
-    }
-  });
-  navLinks.forEach(link => {
-    link.classList.remove('active');
-    if (link.getAttribute('href') === '#' + current) {
-      link.classList.add('active');
-    }
-  });
-});
-</script>
-<script>
-// ===== VERTICAL BRENT CRUDE OIL CHART (Y=time↓, X=price→) =====
+const obs=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('v')})},{threshold:.08});
+document.querySelectorAll('.fi').forEach(el=>obs.observe(el));
+const ss=document.querySelectorAll('section[id]'),ns=document.querySelectorAll('.snav a');
+window.addEventListener('scroll',()=>{let c='';ss.forEach(s=>{if(scrollY>=s.offsetTop-70)c=s.id});ns.forEach(a=>{a.classList.toggle('active',a.getAttribute('href')==='#'+c)})});
+// VERTICAL CANDLE
 (function(){
-  const canvas = document.getElementById('verticalOilChart');
-  if(!canvas) return;
-  const ctx = canvas.getContext('2d');
-  const dpr = window.devicePixelRatio || 1;
-  const wrap = document.getElementById('verticalChartWrap');
-
-  // Data: [label, open, high, low, close, event?]
-  const data = [
-    ['2/3',  73.0, 74.2, 72.5, 73.8, null],
-    ['2/4',  73.8, 75.1, 73.3, 74.5, null],
-    ['2/5',  74.5, 74.8, 72.8, 73.2, null],
-    ['2/6',  73.2, 75.3, 73.0, 74.8, null],
-    ['2/7',  74.8, 76.0, 74.2, 75.2, null],
-    ['2/10', 75.0, 75.5, 67.2, 68.0, '이란 핵 협상 낙관'],
-    ['2/11', 68.0, 69.8, 67.5, 69.3, null],
-    ['2/12', 69.3, 69.5, 63.8, 64.5, null],
-    ['2/13', 64.5, 65.8, 64.0, 65.1, null],
-    ['2/14', 65.1, 66.8, 64.8, 66.2, null],
-    ['2/18', 66.2, 68.0, 65.5, 67.5, '재긴장 시작'],
-    ['2/19', 67.5, 71.0, 67.0, 70.3, null],
-    ['2/20', 70.3, 73.0, 69.8, 72.5, null],
-    ['2/21', 72.5, 74.2, 72.0, 73.8, null],
-    ['2/24', 73.8, 74.8, 73.2, 74.1, null],
-    ['2/25', 74.1, 74.5, 72.8, 73.5, null],
-    ['2/26', 73.5, 73.8, 72.0, 72.8, null],
-    ['2/27', 72.8, 73.0, 70.5, 71.3, '전쟁 전야'],
-    ['2/28', 71.3, 78.5, 71.0, 77.2, '⚔️ 개전 D+0'],
-    ['3/3',  77.2, 86.5, 76.5, 85.0, 'D+3 이란 보복'],
-    ['3/4',  85.0, 90.0, 84.0, 88.5, 'D+4 IRGC 폐쇄'],
-    ['3/5',  88.5, 92.5, 87.5, 91.0, null],
-    ['3/6',  91.0, 95.0, 90.0, 93.5, 'D+6 기뢰 확인'],
-    ['3/7',  93.5,119.5, 93.0,101.0, 'D+7 장중 $119.50'],
-    ['3/9',  101.0,102.0, 91.0, 94.0, 'D+9 EIA $94'],
-    ['3/10', 94.0, 95.0, 78.0, 79.5, 'D+10 "곧 종결"↓'],
-    ['3/11', 79.5, 98.0, 79.0, 96.0, 'D+11 IEA SPR'],
-    ['3/12', 96.0,102.0, 95.0,100.5, 'D+12 유조선 피격'],
-    ['3/13',100.5,104.0, 97.6,103.1, 'D+13 카르그 섬'],
-    ['3/14',101.7,103.9, 97.6,101.2, 'D+14 MEU 전개 ★'],
-  ];
-
-  const warIdx = data.findIndex(d => d[0]==='2/28');
-
-  function resize(){
-    const w = Math.max(wrap.clientWidth, 700);
-    const h = data.length * 24 + 80;
-    canvas.width = w * dpr;
-    canvas.height = h * dpr;
-    canvas.style.width = w + 'px';
-    canvas.style.height = h + 'px';
-    ctx.setTransform(1,0,0,1,0,0);
-    ctx.scale(dpr, dpr);
-    draw(w, h);
-  }
-
-  function draw(W, H){
-    ctx.clearRect(0,0,W,H);
-    const pad = { top: 30, right: 30, bottom: 20, left: 52 };
-    const cw = W - pad.left - pad.right;
-    const ch = H - pad.top - pad.bottom;
-    const rowH = ch / data.length;
-    const minP = 55, maxP = 130, rangeP = maxP - minP;
-
-    function px(price){ return pad.left + ((price - minP)/rangeP)*cw; }
-    function py(i){ return pad.top + i*rowH + rowH/2; }
-
-    // War zone background
-    if(warIdx >= 0){
-      const wy = pad.top + warIdx * rowH;
-      ctx.fillStyle = 'rgba(192,57,43,0.05)';
-      ctx.fillRect(pad.left, wy, cw, ch - warIdx*rowH + pad.bottom);
-      // War line
-      ctx.strokeStyle = 'rgba(192,57,43,0.6)';
-      ctx.lineWidth = 1.5;
-      ctx.setLineDash([8,4]);
-      ctx.beginPath();
-      ctx.moveTo(pad.left, wy);
-      ctx.lineTo(pad.left+cw, wy);
-      ctx.stroke();
-      ctx.setLineDash([]);
-      ctx.fillStyle = '#C0392B';
-      ctx.font = 'bold 10px "Noto Sans KR", sans-serif';
-      ctx.textAlign = 'left';
-      ctx.fillText('⚔️ 전쟁 발발', pad.left + cw - 80, wy - 5);
-    }
-
-    // Price grid lines
-    ctx.textAlign = 'center';
-    for(let p = 60; p <= 130; p += 10){
-      const gx = px(p);
-      ctx.strokeStyle = '#EDEBE6';
-      ctx.lineWidth = 0.5;
-      ctx.beginPath();
-      ctx.moveTo(gx, pad.top);
-      ctx.lineTo(gx, pad.top+ch);
-      ctx.stroke();
-      ctx.fillStyle = '#8A8A8A';
-      ctx.font = '9px "JetBrains Mono", monospace';
-      ctx.fillText('$'+p, gx, pad.top - 8);
-    }
-
-    // $100 emphasis
-    ctx.strokeStyle = 'rgba(192,57,43,0.25)';
-    ctx.lineWidth = 1;
-    ctx.setLineDash([3,3]);
-    ctx.beginPath();
-    ctx.moveTo(px(100), pad.top);
-    ctx.lineTo(px(100), pad.top+ch);
-    ctx.stroke();
-    ctx.setLineDash([]);
-
-    // Candles
-    data.forEach((d, i) => {
-      const [label, open, high, low, close, evt] = d;
-      const cy = py(i);
-      const isUp = close >= open;
-      const isWar = i >= warIdx;
-      const color = isWar ? (isUp ? '#C0392B' : '#2471A3') : (isUp ? '#1E8449' : '#C0392B');
-
-      // High-low wick
-      ctx.strokeStyle = color;
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-      ctx.moveTo(px(low), cy);
-      ctx.lineTo(px(high), cy);
-      ctx.stroke();
-
-      // Body
-      const bodyLeft = px(Math.min(open, close));
-      const bodyRight = px(Math.max(open, close));
-      const bodyW = Math.max(bodyRight - bodyLeft, 2);
-      const bodyH = Math.min(rowH * 0.6, 14);
-      ctx.fillStyle = isUp ? color : color;
-      ctx.globalAlpha = isUp ? 0.85 : 0.4;
-      ctx.fillRect(bodyLeft, cy - bodyH/2, bodyW, bodyH);
-      ctx.globalAlpha = 1;
-      ctx.strokeStyle = color;
-      ctx.lineWidth = 0.8;
-      ctx.strokeRect(bodyLeft, cy - bodyH/2, bodyW, bodyH);
-
-      // Y-axis label (date)
-      ctx.fillStyle = isWar ? '#922B21' : '#4A4A4A';
-      ctx.font = (i === warIdx || i === data.length-1) ? 'bold 10px "JetBrains Mono", monospace' : '9px "JetBrains Mono", monospace';
-      ctx.textAlign = 'right';
-      ctx.fillText(label, pad.left - 6, cy + 3);
-
-      // Event annotation
-      if(evt){
-        const annotX = px(high) + 8;
-        ctx.fillStyle = isWar ? '#922B21' : '#2471A3';
-        ctx.font = '9px "Noto Sans KR", sans-serif';
-        ctx.textAlign = 'left';
-        const maxAnnotW = W - annotX - pad.right;
-        if(maxAnnotW > 40){
-          ctx.fillText(evt, annotX, cy + 3);
-        }
-      }
-    });
-
-    // Close price line connecting closes
-    ctx.strokeStyle = 'rgba(26,26,26,0.15)';
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    data.forEach((d,i) => {
-      const cx = px(d[4]); // close
-      const cy = py(i);
-      if(i===0) ctx.moveTo(cx,cy); else ctx.lineTo(cx,cy);
-    });
-    ctx.stroke();
-
-    // Legend
-    ctx.font = '10px "Noto Sans KR", sans-serif';
-    ctx.textAlign = 'left';
-    const ly = H - 6;
-    ctx.fillStyle = '#1E8449';
-    ctx.fillRect(pad.left, ly-6, 12, 6);
-    ctx.fillStyle = '#4A4A4A';
-    ctx.fillText('전쟁 전 상승', pad.left+16, ly);
-    ctx.fillStyle = '#C0392B';
-    ctx.fillRect(pad.left+90, ly-6, 12, 6);
-    ctx.fillStyle = '#4A4A4A';
-    ctx.fillText('전쟁 후 상승', pad.left+106, ly);
-    ctx.fillStyle = '#2471A3';
-    ctx.fillRect(pad.left+190, ly-6, 12, 6);
-    ctx.fillStyle = '#4A4A4A';
-    ctx.fillText('하락', pad.left+206, ly);
-    ctx.fillStyle = 'rgba(192,57,43,0.12)';
-    ctx.fillRect(pad.left+250, ly-6, 12, 6);
-    ctx.fillStyle = '#4A4A4A';
-    ctx.fillText('전쟁 구간', pad.left+266, ly);
-  }
-
-  resize();
-  window.addEventListener('resize', resize);
+const cv=document.getElementById('vc');if(!cv)return;
+const cx=cv.getContext('2d'),dp=window.devicePixelRatio||1,wp=document.getElementById('vw');
+const D=[
+['2/3',73,74.2,72.5,73.8,0],['2/4',73.8,75.1,73.3,74.5,0],['2/5',74.5,74.8,72.8,73.2,0],['2/6',73.2,75.3,73,74.8,0],['2/7',74.8,76,74.2,75.2,0],
+['2/10',75,75.5,67.2,68,'협상 낙관'],['2/11',68,69.8,67.5,69.3,0],['2/12',69.3,69.5,63.8,64.5,0],['2/13',64.5,65.8,64,65.1,0],['2/14',65.1,66.8,64.8,66.2,0],
+['2/18',66.2,68,65.5,67.5,'재긴장'],['2/19',67.5,71,67,70.3,0],['2/20',70.3,73,69.8,72.5,0],['2/21',72.5,74.2,72,73.8,0],
+['2/24',73.8,74.8,73.2,74.1,0],['2/25',74.1,74.5,72.8,73.5,0],['2/26',73.5,73.8,72,72.8,0],['2/27',72.8,73,70.5,71.3,'전쟁 전야'],
+['2/28',71.3,78.5,71,77.2,'⚔️ 개전'],
+['3/3',77.2,86.5,76.5,85,'이란보복'],['3/4',85,90,84,88.5,'IRGC폐쇄'],['3/5',88.5,92.5,87.5,91,0],['3/6',91,95,90,93.5,'기뢰확인'],
+['3/7',93.5,119.5,93,101,'$119.50'],['3/9',101,102,91,94,0],['3/10',94,95,78,79.5,'"곧종결"↓'],
+['3/11',79.5,98,79,96,'IEA SPR'],['3/12',96,102,95,100.5,'유조선피격'],['3/13',100.5,104,97.6,103.1,'카르그섬'],['3/14',101.7,103.9,97.6,101.2,'D+14★']
+];
+const wi=D.findIndex(d=>d[0]==='2/28');
+function draw(){
+const mob=wp.clientWidth<420;const rH=mob?20:22;const pL=mob?32:42,pR=mob?8:16,pT=20,pB=16;
+const W=Math.max(wp.clientWidth,300),H=D.length*rH+pT+pB;
+cv.width=W*dp;cv.height=H*dp;cv.style.width=W+'px';cv.style.height=H+'px';
+cx.setTransform(1,0,0,1,0,0);cx.scale(dp,dp);cx.clearRect(0,0,W,H);
+const cw=W-pL-pR,mn=55,mx=mob?125:135,rg=mx-mn;
+const px=p=>pL+((p-mn)/rg)*cw,py=i=>pT+i*rH+rH/2;
+// war bg
+if(wi>=0){cx.fillStyle='rgba(192,57,43,.04)';cx.fillRect(pL,pT+wi*rH,cw,(D.length-wi)*rH);
+cx.strokeStyle='rgba(192,57,43,.45)';cx.lineWidth=1.5;cx.setLineDash([5,3]);cx.beginPath();cx.moveTo(pL,pT+wi*rH);cx.lineTo(pL+cw,pT+wi*rH);cx.stroke();cx.setLineDash([]);
+cx.fillStyle='#C0392B';cx.font='bold '+(mob?8:9)+'px "Noto Sans KR"';cx.textAlign='right';cx.fillText('⚔️ 전쟁 발발',pL+cw,pT+wi*rH-3)}
+// grid
+for(let p=60;p<=mx;p+=10){cx.strokeStyle='#EDEBE6';cx.lineWidth=.5;cx.beginPath();cx.moveTo(px(p),pT);cx.lineTo(px(p),pT+D.length*rH);cx.stroke();
+cx.fillStyle='#8A8A8A';cx.font=(mob?7:8)+'px "JetBrains Mono"';cx.textAlign='center';cx.fillText('$'+p,px(p),pT-5)}
+// $100
+cx.strokeStyle='rgba(192,57,43,.18)';cx.lineWidth=1;cx.setLineDash([2,2]);cx.beginPath();cx.moveTo(px(100),pT);cx.lineTo(px(100),pT+D.length*rH);cx.stroke();cx.setLineDash([]);
+// close line
+cx.strokeStyle='rgba(0,0,0,.06)';cx.lineWidth=.8;cx.beginPath();D.forEach((d,i)=>{const x=px(d[4]),y=py(i);i?cx.lineTo(x,y):cx.moveTo(x,y)});cx.stroke();
+// candles
+const bH=Math.min(rH*.5,mob?9:11);
+D.forEach((d,i)=>{const[lb,o,h,l,c,ev]=d;const y=py(i);const up=c>=o;const iw=i>=wi;
+const co=iw?(up?'#C0392B':'#2471A3'):(up?'#1E8449':'#C0392B');
+cx.strokeStyle=co;cx.lineWidth=1;cx.beginPath();cx.moveTo(px(l),y);cx.lineTo(px(h),y);cx.stroke();
+const bL=px(Math.min(o,c)),bR=px(Math.max(o,c)),bW=Math.max(bR-bL,1.5);
+cx.fillStyle=co;cx.globalAlpha=up?.8:.3;cx.fillRect(bL,y-bH/2,bW,bH);cx.globalAlpha=1;
+cx.strokeStyle=co;cx.lineWidth=.6;cx.strokeRect(bL,y-bH/2,bW,bH);
+cx.fillStyle=iw?'#922B21':'#4A4A4A';cx.font=(i===wi||i===D.length-1?'bold ':'')+(mob?7:8)+'px "JetBrains Mono"';cx.textAlign='right';cx.fillText(lb,pL-3,y+3);
+if(ev&&ev!==0&&!mob){cx.fillStyle=iw?'#922B21':'#2471A3';cx.font='8px "Noto Sans KR"';cx.textAlign='left';const ax=px(h)+5;if(ax+50<W)cx.fillText(ev,ax,y+3)}
+});
+// legend
+const ly=H-5;cx.font=(mob?7:8)+'px "Noto Sans KR"';cx.textAlign='left';
+cx.fillStyle='#1E8449';cx.fillRect(pL,ly-4,7,3);cx.fillStyle='#4A4A4A';cx.fillText('전쟁전↑',pL+10,ly);
+cx.fillStyle='#C0392B';cx.fillRect(pL+48,ly-4,7,3);cx.fillText('전쟁후↑',pL+58,ly);
+cx.fillStyle='#2471A3';cx.fillRect(pL+98,ly-4,7,3);cx.fillText('↓',pL+108,ly);
+}
+draw();window.addEventListener('resize',draw);
 })();
 </script>
 </body>
