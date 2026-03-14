@@ -17,428 +17,398 @@
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
 body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--t1);font-size:14px;line-height:1.75}
-
-/* ── HERO ── */
 .hero{background:var(--nvy);color:#fff;padding:48px 16px 32px;text-align:center}
-.hero-kicker{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:8px}
+.hero-k{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:8px}
 .hero h1{font-family:'Noto Serif KR',serif;font-size:clamp(22px,5.5vw,38px);font-weight:900;line-height:1.3;margin-bottom:6px}
 .hero h1 em{font-style:normal;color:#E8B931}
-.hero-sub{font-size:12px;color:rgba(255,255,255,.55);max-width:520px;margin:0 auto 12px;line-height:1.7}
+.hero-sub{font-size:12px;color:rgba(255,255,255,.55);max-width:540px;margin:0 auto 12px;line-height:1.75}
 .hero-tags{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;font-size:10px}
 .hero-tags span{background:rgba(255,255,255,.08);padding:3px 10px;border-radius:20px;color:rgba(255,255,255,.5)}
-
-/* ── NAV ── */
 .nav{position:sticky;top:0;z-index:100;background:rgba(250,250,247,.92);backdrop-filter:blur(6px);border-bottom:1px solid var(--brd);overflow-x:auto;-webkit-overflow-scrolling:touch}
 .nav-in{display:flex;white-space:nowrap;padding:0 4px}
 .nav a{display:block;padding:10px 11px;font-size:10px;font-weight:500;color:var(--tm);text-decoration:none;border-bottom:2px solid transparent;flex-shrink:0}
 .nav a.on{color:var(--t1);border-bottom-color:var(--nvy)}
-
-/* ── LAYOUT ── */
-.wrap{max-width:960px;margin:0 auto;padding:0 14px}
+.w{max-width:960px;margin:0 auto;padding:0 14px}
 section{padding:40px 0 32px;border-bottom:1px solid var(--brl)}
 section:last-of-type{border-bottom:none}
-.label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--tm);margin-bottom:4px}
-.title{font-family:'Noto Serif KR',serif;font-size:clamp(18px,4vw,26px);font-weight:900;line-height:1.35;margin-bottom:4px}
-.desc{font-size:12px;color:var(--t2);margin-bottom:20px;line-height:1.8;max-width:640px}
-.card{background:var(--card);border:1px solid var(--brl);border-radius:var(--rl2);padding:16px;box-shadow:var(--sh)}
-.callout{background:var(--accent);border-left:3px solid var(--gld);border-radius:0 var(--r) var(--r) 0;padding:12px 14px;margin:16px 0}
-.callout b{font-size:12px;display:block;margin-bottom:2px}
-.callout p{font-size:11px;color:var(--t2);line-height:1.7}
+.lb{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--tm);margin-bottom:4px}
+.tt{font-family:'Noto Serif KR',serif;font-size:clamp(18px,4vw,26px);font-weight:900;line-height:1.35;margin-bottom:4px}
+.ds{font-size:12px;color:var(--t2);margin-bottom:20px;line-height:1.8;max-width:640px}
+.cd{background:var(--card);border:1px solid var(--brl);border-radius:var(--rl2);padding:16px;box-shadow:var(--sh)}
+.co{background:var(--accent);border-left:3px solid var(--gld);border-radius:0 var(--r) var(--r) 0;padding:12px 14px;margin:16px 0}
+.co b{font-size:12px;display:block;margin-bottom:2px}.co p{font-size:11px;color:var(--t2);line-height:1.75}
 .mono{font-family:'JetBrains Mono',monospace}
-.grid2{display:grid;grid-template-columns:1fr;gap:10px}
-@media(min-width:540px){.grid2{grid-template-columns:1fr 1fr}}
-.grid3{display:grid;grid-template-columns:1fr;gap:10px}
-@media(min-width:700px){.grid3{grid-template-columns:1fr 1fr 1fr}}
-
-/* ── CHART ── */
+.g2{display:grid;grid-template-columns:1fr;gap:10px}
+@media(min-width:540px){.g2{grid-template-columns:1fr 1fr}}
+.g3{display:grid;grid-template-columns:1fr;gap:10px}
+@media(min-width:700px){.g3{grid-template-columns:1fr 1fr 1fr}}
+/* Transition cue between acts */
+.cue{text-align:center;padding:20px 0 0;font-family:'Noto Serif KR',serif;font-size:13px;color:var(--t2);font-style:italic}
+/* Chart */
 .chart-box{background:var(--card);border:1px solid var(--brl);border-radius:var(--rl2);padding:14px;box-shadow:var(--sh);overflow-x:auto;-webkit-overflow-scrolling:touch}
-.chart-box canvas{display:block}
-
-/* ── PLAYER CARD ── */
-.player{background:var(--card);border:1px solid var(--brl);border-radius:var(--rl2);padding:14px;box-shadow:var(--sh);position:relative;overflow:hidden}
-.player::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
-.player.ext::before{background:var(--red)}.player.hi::before{background:var(--org)}.player.md::before{background:var(--gld)}.player.lo::before{background:var(--grn)}.player.ben::before{background:var(--nvy)}
-.player-head{display:flex;align-items:center;gap:8px;margin-bottom:6px}
-.player-flag{font-size:20px}
-.player-name{font-weight:700;font-size:14px}
-.badge{font-family:'JetBrains Mono',monospace;font-size:8px;font-weight:600;padding:2px 6px;border-radius:3px}
-.badge.ext{background:#FADBD8;color:var(--red)}.badge.hi{background:#FDEBD0;color:var(--org)}
-.badge.md{background:#FEF9E7;color:var(--gld)}.badge.lo{background:#E8F8F0;color:var(--grn)}.badge.ben{background:#D5F5E3;color:#084}
-.player-stat{font-size:10px;color:var(--t2);line-height:1.6;margin-bottom:6px}
-.player-strat{font-size:10px;padding:8px;background:var(--bg);border-radius:var(--r);line-height:1.6}
-.player-strat strong{color:var(--t1)}
-.bar-wrap{height:4px;background:var(--brl);border-radius:2px;margin-top:8px;overflow:hidden}
-.bar-fill{height:100%;border-radius:2px}
-
-/* ── PAYOFF MATRIX ── */
-.matrix-table{width:100%;border-collapse:separate;border-spacing:0;font-size:11px;border-radius:var(--rl2);overflow:hidden;border:1px solid var(--brl);background:var(--card)}
-.matrix-table th{background:var(--nvy);color:#fff;padding:10px 8px;font-size:10px;font-weight:600;text-align:left}
-.matrix-table td{padding:10px 8px;border-bottom:1px solid var(--brl);vertical-align:top;line-height:1.6}
-.matrix-table tr:last-child td{border-bottom:none}
-.matrix-table tr:hover{background:rgba(0,0,0,.01)}
-
-/* ── CASCADE ARROW FLOW ── */
-.flow{display:flex;flex-direction:column;align-items:center;gap:0}
-.flow-node{background:var(--card);border:2px solid var(--brd);border-radius:var(--r);padding:10px 14px;text-align:center;width:100%;max-width:420px}
-.flow-node strong{font-size:12px}.flow-node span{font-size:10px;color:var(--t2);display:block;margin-top:1px}
-.flow-arr{width:2px;height:14px;background:var(--brd);position:relative}
-.flow-arr::after{content:'▼';position:absolute;bottom:-5px;left:50%;transform:translateX(-50%);font-size:7px;color:var(--tm)}
-
-/* ── TIMELINE ── */
-.tl-compact{font-size:10px;line-height:1.8}
-.tl-compact .phase{font-weight:700;display:block;margin-top:6px;margin-bottom:1px;font-family:'JetBrains Mono',monospace}
-.tl-compact .phase.a{color:var(--blu)}.tl-compact .phase.b{color:var(--red)}.tl-compact .phase.c{color:var(--cr)}.tl-compact .phase.d{color:var(--tm)}
-.tl-compact .row{display:block;font-family:'JetBrains Mono',monospace}
-
-/* ── WATCH CHIPS ── */
-.watch-grid{display:grid;grid-template-columns:1fr;gap:8px}
-@media(min-width:540px){.watch-grid{grid-template-columns:1fr 1fr}}
-.watch-item{display:flex;gap:8px;padding:10px 12px;background:var(--card);border:1px solid var(--brl);border-radius:var(--r);box-shadow:var(--sh)}
-.watch-icon{width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
-.watch-item h4{font-size:11px;font-weight:700;margin-bottom:1px}
-.watch-item p{font-size:10px;color:var(--t2);line-height:1.5}
-
-/* ── FOOTER ── */
+/* Player */
+.pl{background:var(--card);border:1px solid var(--brl);border-radius:var(--rl2);padding:14px;box-shadow:var(--sh);position:relative;overflow:hidden}
+.pl::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.pl.ex::before{background:var(--red)}.pl.hi::before{background:var(--org)}.pl.md::before{background:var(--gld)}.pl.lo::before{background:var(--grn)}.pl.bn::before{background:var(--nvy)}.pl.ir::before{background:#555}
+.pl-h{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.pl-f{font-size:20px}.pl-n{font-weight:700;font-size:14px}
+.bg{font-family:'JetBrains Mono',monospace;font-size:8px;font-weight:600;padding:2px 6px;border-radius:3px}
+.bg.ex{background:#FADBD8;color:var(--red)}.bg.hi{background:#FDEBD0;color:var(--org)}.bg.md{background:#FEF9E7;color:var(--gld)}.bg.lo{background:#E8F8F0;color:var(--grn)}.bg.bn{background:#D5F5E3;color:#084}.bg.ir{background:#EEE;color:#444}
+.pl-s{font-size:10px;color:var(--t2);line-height:1.6;margin-bottom:6px}
+.pl-t{font-size:10px;padding:8px;background:var(--bg);border-radius:var(--r);line-height:1.6}
+.pl-t strong{color:var(--t1)}
+.br{height:4px;background:var(--brl);border-radius:2px;margin-top:8px;overflow:hidden}
+.bf{height:100%;border-radius:2px}
+/* Matrix */
+.mx{width:100%;border-collapse:separate;border-spacing:0;font-size:11px;border-radius:var(--rl2);overflow:hidden;border:1px solid var(--brl);background:var(--card)}
+.mx th{background:var(--nvy);color:#fff;padding:10px 8px;font-size:10px;font-weight:600;text-align:left}
+.mx td{padding:10px 8px;border-bottom:1px solid var(--brl);vertical-align:top;line-height:1.6}
+.mx tr:last-child td{border-bottom:none}.mx tr:hover{background:rgba(0,0,0,.01)}
+/* Flow */
+.fl{display:flex;flex-direction:column;align-items:center;gap:0}
+.fn{background:var(--card);border:2px solid var(--brd);border-radius:var(--r);padding:10px 14px;text-align:center;width:100%;max-width:440px}
+.fn strong{font-size:12px}.fn span{font-size:10px;color:var(--t2);display:block;margin-top:1px}
+.fa{width:2px;height:14px;background:var(--brd);position:relative}.fa::after{content:'▼';position:absolute;bottom:-5px;left:50%;transform:translateX(-50%);font-size:7px;color:var(--tm)}
+/* Watch */
+.wg{display:grid;grid-template-columns:1fr;gap:8px}
+@media(min-width:540px){.wg{grid-template-columns:1fr 1fr}}
+.wi{display:flex;gap:8px;padding:10px 12px;background:var(--card);border:1px solid var(--brl);border-radius:var(--r);box-shadow:var(--sh)}
+.wi-i{width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
+.wi h4{font-size:11px;font-weight:700;margin-bottom:1px}.wi p{font-size:10px;color:var(--t2);line-height:1.5}
+/* Timeline compact */
+.tc{font-family:'JetBrains Mono',monospace;font-size:10px;line-height:1.85}
+.tc .ph{font-weight:700;display:block;margin-top:6px;margin-bottom:1px}
+.tc .ph.a{color:var(--blu)}.tc .ph.b{color:var(--red)}.tc .ph.c{color:var(--cr)}.tc .ph.d{color:var(--tm)}
+.tc .rw{display:block}
+/* Gap bar */
+.gb{margin-bottom:8px}
+.gb-l{font-size:11px;display:flex;justify-content:space-between;margin-bottom:3px}
+.gb-t{height:20px;background:#F0EDE6;border-radius:3px;overflow:hidden}
+.gb-f{height:100%;border-radius:3px;display:flex;align-items:center;padding-left:6px;font-size:9px;font-weight:600;color:#fff;font-family:'JetBrains Mono',monospace}
 .ft{background:var(--nvy);color:rgba(255,255,255,.4);padding:20px 14px;text-align:center;font-size:10px;line-height:1.8}
 .ft a{color:rgba(255,255,255,.6);text-decoration:underline}
-
-/* ── ANIMATION ── */
 .fi{opacity:0;transform:translateY(8px);transition:opacity .45s,transform .45s}.fi.v{opacity:1;transform:none}
 </style>
 </head>
 <body>
 
-<!-- ═══════════ HERO ═══════════ -->
 <header class="hero">
-  <div class="hero-kicker">Game-Theoretic Analysis · Day 14</div>
+  <div class="hero-k">Game-Theoretic Analysis · Day 14 of the Hormuz Crisis</div>
   <h1><em>누가 먼저</em> 무너지는가?</h1>
   <p class="hero-sub">호르무즈 해협 봉쇄는 다자간 치킨게임을 촉발했다. 모든 플레이어는 상대가 먼저 양보하길 기다리지만, 각자의 시계는 다른 속도로 돌아간다. 이 비동시성이 게임의 균형을 결정한다.</p>
-  <div class="hero-tags">
-    <span>📡 Garrett's Signal 2026.03.14</span>
-    <span>🛢️ Brent $101</span>
-    <span>📐 Game Theory Framework</span>
-  </div>
+  <div class="hero-tags"><span>📡 Garrett's Signal 2026.03.14</span><span>🛢️ Brent $101</span><span>📐 Game Theory</span></div>
 </header>
 
-<!-- ═══════════ NAV ═══════════ -->
 <nav class="nav"><div class="nav-in">
-  <a href="#board">판세</a>
-  <a href="#players">플레이어</a>
-  <a href="#asym">비대칭</a>
-  <a href="#chain">연쇄</a>
-  <a href="#payoff">시나리오</a>
-  <a href="#clock">시계</a>
-  <a href="#signal">신호</a>
+  <a href="#s1">판세</a><a href="#s2">플레이어</a><a href="#s3">시간의 비대칭</a><a href="#s4">연쇄 반응</a><a href="#s5">시나리오</a><a href="#s6">신호</a>
 </div></nav>
 
-<main class="wrap">
+<main class="w">
 
-<!-- ═══════════ 1. THE BOARD ═══════════ -->
-<section id="board" class="fi">
-  <div class="label">ACT I — THE BOARD</div>
-  <h2 class="title">판세: $72에서 $101까지의 14일</h2>
-  <p class="desc">2월 내내 이란 핵 협상 기대와 제재 우려가 교차하며 $64~$76 밴드를 형성했다. 2월 28일 개전과 동시에 게임의 규칙 자체가 바뀌었다. 매 정책 대응은 24~48시간의 시간을 벌어주었을 뿐, 물리적 현실이 매번 수시간 내에 재확인되었다.</p>
+<!-- ══════════════════════════════════════════
+     ACT 1 — 판세: 유가가 왜 $101이고 왜 안 내려가는가
+     ══════════════════════════════════════════ -->
+<section id="s1" class="fi">
+  <div class="lb">ACT I — THE BOARD</div>
+  <h2 class="tt">판세: $72에서 $101까지, 그리고 왜 내려가지 않는가</h2>
+  <p class="ds">2월의 이란 핵 협상 낙관론이 만든 $64~$76 밴드는 2월 28일 개전과 동시에 파괴되었다. 14일간 매 정책 대응은 24~48시간의 안도만 벌어주었고, 물리적 현실이 매번 수시간 내에 재확인되었다.</p>
 
+  <!-- Chart -->
   <div class="chart-box">
-    <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;flex-wrap:wrap;gap:4px">
       <span style="font-weight:700;font-size:12px">Brent 원유 종가 추이</span>
-      <span style="font-size:9px;color:var(--tm)">2/3~3/14 · Trading Economics, EIA, CNBC, 기고문 인용</span>
+      <span style="font-size:9px;color:var(--tm)">2/3~3/14 · Trading Economics, EIA, CNBC</span>
     </div>
     <canvas id="chart" style="width:100%;height:260px"></canvas>
   </div>
 
-  <div class="callout">
-    <b>🎲 게임 규칙의 변화 — D+14 (3/14)</b>
-    <p>14일간 반복된 구조: <strong>정책 신호 → 24~48h 안도 → 물리적 현실 재확인</strong>. D+14에 질적 전환이 발생한다. 카르그 섬 타격, 31st MEU 태평양→중동 전개, 북한 미사일 10발, 중국 어선 1,200척 동중국해 진형. 단일 에너지 게임이 3개 전구(호르무즈·서태평양·한반도)를 관통하는 다자간 게임으로 변환된 순간.</p>
-  </div>
-
-  <!-- 14일 요약 -->
-  <div style="margin-top:16px;font-size:11px;line-height:1.7;color:var(--t2)">
-    <div style="display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-family:'JetBrains Mono',monospace;font-size:10px">
-      <span style="color:var(--blu);font-weight:600">D+1~4 (2/28~3/3)</span><span>개전 → 이란 보복 → 해협 폐쇄. <strong style="color:var(--red)">$72→$85</strong></span>
-      <span style="color:var(--org);font-weight:600">D+5~7 (3/4~6)</span><span>호송 발표→안도→기뢰 확인. 200척+ GPS 이상</span>
-      <span style="color:var(--red);font-weight:600">D+8~10 (3/7~9)</span><span>걸프 4국 670만b/d 감산. <strong style="color:var(--red)">장중 $119.50</strong></span>
-      <span style="color:var(--grn);font-weight:600">D+10~11 (3/10)</span><span>트럼프 "곧 종결" → WTI 10%↓. 같은 날 역대급 공습</span>
-      <span style="color:var(--red);font-weight:600">D+12~14 (3/11~13)</span><span>IEA 4억bbl SPR 방출 → 실패. 유조선 피격. <strong style="color:var(--red)">$101 결산</strong></span>
-      <span style="color:var(--cr);font-weight:600">D+14 (3/14) ★</span><span>카르그 섬 · MEU 전개 · 북한 10발 · 중국 어선 1,200척. <strong>게임 전환</strong></span>
+  <!-- 14-day summary -->
+  <div style="margin-top:14px;font-size:11px;line-height:1.7;color:var(--t2)">
+    <div style="display:grid;grid-template-columns:auto 1fr;gap:3px 10px;font-family:'JetBrains Mono',monospace;font-size:10px">
+      <span style="color:var(--blu);font-weight:600">D+1~4 (2/28~3/3)</span><span>미·이스라엘 개전 → 이란 보복(라스타누라·카타르 피격) → 해협 폐쇄. <b style="color:var(--red)">$72→$85</b></span>
+      <span style="color:var(--org);font-weight:600">D+5~7 (3/4~6)</span><span>트럼프 호송 발표→일시 안도→CENTCOM 기뢰부설선 16척 격침. 기뢰는 이미 물속</span>
+      <span style="color:var(--red);font-weight:600">D+8~10 (3/7~9)</span><span>걸프 4국 ~670만b/d 감산 불가피. <b style="color:var(--red)">장중 $119.50</b>. 트럼프 "곧 종결"→WTI 10%↓</span>
+      <span style="color:var(--red);font-weight:600">D+12~14 (3/11~13)</span><span>IEA 4억bbl SPR 방출→실패. 유조선 2척 피격. <b style="color:var(--red)">Brent $101 결산</b></span>
+      <span style="color:var(--cr);font-weight:600">D+14 (3/14) ★</span><span>카르그 섬 타격 · 31st MEU 태평양→중동 · 북한 10발 · 중국 어선 1,200척. <b>게임 전환</b></span>
     </div>
   </div>
+
+  <!-- WHY $101 WON'T COME DOWN: Supply Gap -->
+  <div class="cd" style="margin-top:16px">
+    <div style="font-weight:700;font-size:12px;margin-bottom:10px">$101이 내려가지 않는 이유 — 공급 갭의 구조</div>
+    <div class="gb"><div class="gb-l"><span style="color:var(--red);font-weight:700">총 차단량</span><span class="mono" style="color:var(--red)">~20 mb/d</span></div><div class="gb-t"><div class="gb-f" style="width:100%;background:var(--red)">100%</div></div></div>
+    <div class="gb"><div class="gb-l"><span>IEA SPR 4억bbl (52년 역사상 최대)</span><span class="mono">~2.5~3.0</span></div><div class="gb-t"><div class="gb-f" style="width:14%;background:var(--blu)">12~15%</div></div></div>
+    <div class="gb"><div class="gb-l"><span>사우디 야부 파이프라인 (명판 7, 실제 2.72)</span><span class="mono">~2.5~3.0</span></div><div class="gb-t"><div class="gb-f" style="width:14%;background:var(--gld)">~15%</div></div></div>
+    <div class="gb"><div class="gb-l"><span style="color:var(--red);font-weight:700">미충당 잔여 갭</span><span class="mono" style="color:var(--red)">~13+</span></div><div class="gb-t"><div class="gb-f" style="width:65%;background:linear-gradient(90deg,var(--org),var(--red))">~65% 미해소</div></div></div>
+    <div style="margin-top:8px;font-size:10px;color:var(--t2);line-height:1.6">
+      SPR은 원유만 해소하며, <strong>일본·한국의 급소인 LNG에는 무효</strong>. 사우디 파이프라인은 터미널 선석·펌프가 물리적 상한이고, 홍해 보험료가 후티 위협으로 2배↑. 대응 메커니즘을 모두 합쳐도 차단량의 약 35%만 충당한다. 나머지 65%는 해협 재개통 외에 해소 수단이 없다.
+    </div>
+  </div>
+
+  <p class="cue">유가는 왜 내려가지 않는지 확인했다. 그렇다면 — 이 위기 안에서 누가 어떤 패를 들고 있는가?</p>
 </section>
 
-<!-- ═══════════ 2. THE PLAYERS ═══════════ -->
-<section id="players" class="fi">
-  <div class="label">ACT II — THE PLAYERS</div>
-  <h2 class="title">플레이어: 자원, 시간, 전략</h2>
-  <p class="desc">각 플레이어는 서로 다른 자원(비축량), 서로 다른 시계(붕괴 임계), 서로 다른 전략적 옵션을 가진다. 게임이론에서 핵심은 <strong>누가 가장 적은 대안을 가졌는가</strong>이다 — 그 플레이어가 먼저 양보한다.</p>
+<!-- ══════════════════════════════════════════
+     ACT 2 — 플레이어: 누가 어떤 패를 들고 있는가
+     ══════════════════════════════════════════ -->
+<section id="s2" class="fi">
+  <div class="lb">ACT II — THE PLAYERS</div>
+  <h2 class="tt">플레이어: 자원, 시간, 전략</h2>
+  <p class="ds">각 플레이어는 서로 다른 비축량, 서로 다른 붕괴 임계, 서로 다른 전략 옵션을 가진다. 치킨게임에서 핵심은 <strong>누가 가장 적은 대안을 가졌는가</strong>이다 — 그 플레이어가 먼저 꺾인다.</p>
 
-  <div class="grid2" style="gap:10px">
-    <div class="player ext">
-      <div class="player-head"><span class="player-flag">🇯🇵</span><span class="player-name">일본</span><span class="badge ext">EXTREME</span></div>
-      <div class="player-stat">원유 95% 중동(70% 호르무즈) · <strong>LNG 3주분 — 전력 40%</strong> · 닛케이 -7% · 비축유 8,000만bbl 방출(15일분)</div>
-      <div class="player-strat"><strong>전략적 딜레마:</strong> 후쿠시마 이후 원전 폐쇄로 카타르 LNG가 생명선이었으나 D+1 피격. 대안 없음. 미국 안보 보증에 의존하나, 그 보증이 중동으로 이동 중. D+30~40(3/30~4/9)에 LNG 물리적 소진.</div>
-      <div class="bar-wrap"><div class="bar-fill" style="width:85%;background:var(--red)"></div></div>
+  <div class="g2" style="gap:10px">
+
+    <!-- IRAN — the missing player, now added -->
+    <div class="pl ir">
+      <div class="pl-h"><span class="pl-f">🇮🇷</span><span class="pl-n">이란</span><span class="bg ir">GAME SETTER</span></div>
+      <div class="pl-s">IRGC 해군 2만명 해협 배치 · 기뢰 이미 살포 · 해안 대함미사일 건재 · 카르그 섬(수출 90%) 피격에도 항전</div>
+      <div class="pl-t"><strong>게임 설계자(Game Setter):</strong> 해협 봉쇄를 선별적으로 운용한다 — 서방 선박은 차단하되, 이란 원유는 중국행으로 계속 통과. 위안화 결제를 통과 조건으로 제시하여, 단순한 봉쇄가 아니라 <strong>달러 체제 대안의 프로토타입</strong>을 전쟁 중에 테스트. 시간이 지날수록 상대국 비축이 소진되고 이란의 협상력이 증가하므로, 이란의 최적 전략은 버티기(hold)다.</div>
     </div>
-    <div class="player ext">
-      <div class="player-head"><span class="player-flag">🇰🇷</span><span class="player-name">한국</span><span class="badge ext">EXTREME</span></div>
-      <div class="player-stat">원유 70.7%, LNG 20.4% 중동 · KOSPI -12% 서킷브레이커 · 1997년 이후 최초 유류 상한제 검토</div>
-      <div class="player-strat"><strong>하류 리스크:</strong> 삼성·SK하이닉스 반도체 팹은 안정 전력 필수. 그리드 불안정 → 수율 저하 → 글로벌 AI 인프라 차질. 한국의 위기는 한국에서 끝나지 않는다. D+30~40(3/30~4/9).</div>
-      <div class="bar-wrap"><div class="bar-fill" style="width:83%;background:var(--red)"></div></div>
+
+    <div class="pl lo">
+      <div class="pl-h"><span class="pl-f">🇨🇳</span><span class="pl-n">중국</span><span class="bg lo">FULCRUM</span></div>
+      <div class="pl-s">1차에너지 6.6% 호르무즈 의존 · 비축 12~14억bbl(3~6개월) · 신에너지차 50%+ · 전력 석유의존 4% · CSI300 -0.1%</div>
+      <div class="pl-t"><strong>게임의 축(Fulcrum):</strong> 유일하게 3개 전구(걸프·동중국해·한반도) 모두에 레버리지를 보유한 플레이어. 정제유 수출 중단으로 국내를 보호하면서, 이란유는 계속 수입. 방관자가 아니라 <strong>게임의 규칙을 재설계할 수 있는 유일한 존재</strong>. 시간이 지날수록 동맹국 LNG 소진과 태평양 공백 확대로 협상력이 자동 복리 증가한다.</div>
+      <div class="br"><div class="bf" style="width:15%;background:var(--grn)"></div></div>
     </div>
-    <div class="player hi">
-      <div class="player-head"><span class="player-flag">🇮🇳</span><span class="player-name">인도</span><span class="badge hi">HIGH</span></div>
-      <div class="player-stat">일 소비 550만b/d(45~50% 호르무즈) · LPG 62% 수입, 90% 호르무즈 · <strong>전략 LPG 비축 없음</strong></div>
-      <div class="player-strat"><strong>사회적 전이:</strong> LPG는 수억 가구 조리 연료. 푸네 화장장이 가스→장작 전환. 러시아 원유 30일 면제로 원유는 완충되나, LPG 체인은 대안 없음. D+20~30(3/20~30)에 사회 수준 충격.</div>
-      <div class="bar-wrap"><div class="bar-fill" style="width:70%;background:var(--org)"></div></div>
+
+    <div class="pl ex">
+      <div class="pl-h"><span class="pl-f">🇯🇵</span><span class="pl-n">일본</span><span class="bg ex">EXTREME</span></div>
+      <div class="pl-s">원유 95% 중동(70% 호르무즈) · <strong>LNG 3주분 — 전력 40%</strong> · 닛케이 -7% · 비축유 8,000만bbl 방출</div>
+      <div class="pl-t"><strong>대안 부재(No Alternative):</strong> 후쿠시마 이후 카타르 LNG가 생명선이었으나 D+1 피격. 미국 안보 보증에 의존하나 그 보증이 중동으로 이동 중. 중국 민병대가 남서쪽에서, 북한 미사일이 서쪽에서 동시 압박. <strong>D+30~40(3/30~4/9)</strong>에 LNG 물리적 소진.</div>
+      <div class="br"><div class="bf" style="width:85%;background:var(--red)"></div></div>
     </div>
-    <div class="player md">
-      <div class="player-head"><span class="player-flag">🇪🇺</span><span class="player-name">유럽</span><span class="badge md">MODERATE</span></div>
-      <div class="player-stat">디젤 30%, 제트연료 50% 걸프 · 가스 저장 30%(네덜란드 10.7%) · 가스 +75%</div>
-      <div class="player-strat"><strong>전략적 역설:</strong> 러시아 제재 완화 → 가스 회복 가능. 그러나 4년간 쌓은 유럽 안보 구조 해체가 대가. 트럼프가 이 교환을 제안할 수 있다 — 워싱턴에서 실제로 유통 중인 정책 옵션.</div>
-      <div class="bar-wrap"><div class="bar-fill" style="width:50%;background:var(--gld)"></div></div>
+
+    <div class="pl ex">
+      <div class="pl-h"><span class="pl-f">🇰🇷</span><span class="pl-n">한국</span><span class="bg ex">EXTREME</span></div>
+      <div class="pl-s">원유 70.7%, LNG 20.4% 중동 · KOSPI -12% 서킷브레이커 · 1997년 이후 최초 유류 상한제 검토</div>
+      <div class="pl-t"><strong>하류 전이(Downstream Contagion):</strong> 삼성·SK하이닉스 반도체 팹은 안정 전력 필수. 그리드 불안정 → 수율 저하 → 글로벌 AI 인프라 차질. 한국의 에너지 위기는 실리콘밸리의 서버 랙에서 끝난다. <strong>D+30~40(3/30~4/9).</strong></div>
+      <div class="br"><div class="bf" style="width:83%;background:var(--red)"></div></div>
     </div>
-    <div class="player md">
-      <div class="player-head"><span class="player-flag">🇺🇸</span><span class="player-name">미국</span><span class="badge md">MODERATE</span></div>
-      <div class="player-stat">호르무즈 통과 미국행 2.5% · SPR 4.15억bbl · 셰일 증산 3~6개월 시차</div>
-      <div class="player-strat"><strong>양립불가능한 약속:</strong> 이란전 수행 + 유가 인하 — 호르무즈 폐쇄 중 물리적으로 양립 불가. 캘리포니아 정유소 원유 61% 수입(30% 호르무즈). 물리적 위기는 낮으나 정치적 위기가 D+60~90(4/29~5/29) 도달.</div>
-      <div class="bar-wrap"><div class="bar-fill" style="width:35%;background:var(--gld)"></div></div>
+
+    <div class="pl hi">
+      <div class="pl-h"><span class="pl-f">🇮🇳</span><span class="pl-n">인도</span><span class="bg hi">HIGH</span></div>
+      <div class="pl-s">일 550만b/d(45~50% 호르무즈) · LPG 62% 수입, 90% 호르무즈 · <strong>전략 LPG 비축 없음</strong></div>
+      <div class="pl-t"><strong>사회적 전이(Social Transmission):</strong> LPG는 수억 가구의 조리 연료. 푸네 화장장이 가스→장작 전환. 러시아유 30일 면제로 원유는 완충되나 LPG는 대안 없음. 이란이 인도 선박 통과를 선별 허용 중 — 양자 협정의 씨앗. <strong>D+20~30(3/20~30)</strong>에 사회 수준 충격.</div>
+      <div class="br"><div class="bf" style="width:70%;background:var(--org)"></div></div>
     </div>
-    <div class="player lo">
-      <div class="player-head"><span class="player-flag">🇨🇳</span><span class="player-name">중국</span><span class="badge lo">FULCRUM</span></div>
-      <div class="player-stat">1차에너지 6.6% · 비축 12~14억bbl(3~6개월) · 신에너지차 50%+ · 전력 석유의존 4% · CSI300 -0.1%</div>
-      <div class="player-strat"><strong>게임의 축(Fulcrum):</strong> 유일하게 3개 전구 모두에 레버리지 보유. 정제유 수출 중단(국내 보호). 이란유 계속 중국행. 방관자가 아니라 <strong>게임의 규칙을 설계할 수 있는 유일한 플레이어</strong>. 시간이 지날수록 자동으로 협상력이 복리 증가.</div>
-      <div class="bar-wrap"><div class="bar-fill" style="width:15%;background:var(--grn)"></div></div>
+
+    <div class="pl md">
+      <div class="pl-h"><span class="pl-f">🇺🇸</span><span class="pl-n">미국</span><span class="bg md">MODERATE</span></div>
+      <div class="pl-s">호르무즈 통과 미국행 2.5% · SPR 4.15억bbl · 셰일 증산 3~6개월 시차</div>
+      <div class="pl-t"><strong>양립불가의 약속(Impossible Promise):</strong> 이란전 수행 + 유가 인하를 동시에 약속했으나, 호르무즈 폐쇄 중 물리적으로 양립 불가. 물리적 위기는 낮으나, MEU를 태평양에서 빼면서 두 대양 동시 운용 한계를 노출. <strong>D+60~90(4/29~5/29)</strong> 정치적 임계.</div>
+      <div class="br"><div class="bf" style="width:35%;background:var(--gld)"></div></div>
     </div>
-    <div class="player ben">
-      <div class="player-head"><span class="player-flag">🇷🇺</span><span class="player-name">러시아</span><span class="badge ben">BENEFICIARY</span></div>
-      <div class="player-stat">2주간 화석연료 추가수익 €60억 · 러시아산이 "가장 단순한 옵션"으로 급부상</div>
-      <div class="player-strat"><strong>무임승차자(Free Rider):</strong> 게임에 참여하지 않고 수혜만 수확. 유럽·아시아 탈러시아 흐름 역전. 인도 러시아유 면제로 제재 체제 부분 재개방. 게임이 길어질수록 러시아의 이익 증가.</div>
-      <div class="bar-wrap"><div class="bar-fill" style="width:95%;background:var(--nvy)"></div></div>
+
+    <div class="pl md">
+      <div class="pl-h"><span class="pl-f">🇪🇺</span><span class="pl-n">유럽</span><span class="bg md">MODERATE</span></div>
+      <div class="pl-s">디젤 30%, 제트연료 50% 걸프 · 가스 저장 30%(네덜란드 10.7%) · 가스 +75%</div>
+      <div class="pl-t"><strong>전략적 역설(Strategic Paradox):</strong> 러시아 제재 완화 → 가스 회복 가능. 그러나 4년간 쌓은 유럽 안보 구조의 해체가 대가. 트럼프가 이 교환을 제안할 수 있다 — 워싱턴에서 실제 유통 중인 정책 옵션. 러시아 추가 수익 2주간 €60억.</div>
+      <div class="br"><div class="bf" style="width:50%;background:var(--gld)"></div></div>
     </div>
-    <div class="player hi">
-      <div class="player-head"><span class="player-flag">🌏</span><span class="player-name">동남아</span><span class="badge hi">HIGH</span></div>
-      <div class="player-stat">파키스탄 LNG 99% 카타르 · 휘발유 +20%/2주 · 필리핀 주4일제 · 인도네시아 이동제한</div>
-      <div class="player-strat"><strong>가격 수용자(Price Taker):</strong> 협상력 없음, 재정 여력 없음. 이미 배급 체제 진입 중. 개도국은 수요를 파괴하지 않고 사회를 파괴한다.</div>
-      <div class="bar-wrap"><div class="bar-fill" style="width:60%;background:var(--org)"></div></div>
+
+    <div class="pl bn">
+      <div class="pl-h"><span class="pl-f">🇷🇺</span><span class="pl-n">러시아</span><span class="bg bn">FREE RIDER</span></div>
+      <div class="pl-s">2주간 화석연료 추가수익 €60억 · 인도 러시아유 면제로 제재 부분 재개방</div>
+      <div class="pl-t"><strong>무임승차자(Free Rider):</strong> 게임에 참여하지 않고 수혜만 수확. 유럽·아시아의 탈러시아 흐름이 역전되어 러시아 파이프라인과 북극 LNG가 "가장 단순한 옵션"으로 급부상. 게임이 길어질수록 러시아의 이익만 증가.</div>
+      <div class="br"><div class="bf" style="width:95%;background:var(--nvy)"></div></div>
+    </div>
+
+    <div class="pl hi">
+      <div class="pl-h"><span class="pl-f">🌏</span><span class="pl-n">동남아</span><span class="bg hi">PRICE TAKER</span></div>
+      <div class="pl-s">파키스탄 LNG 99% 카타르 · 휘발유 +20%/2주 · 필리핀 주4일제 · 인도네시아 이동제한</div>
+      <div class="pl-t"><strong>가격 수용자(Price Taker):</strong> 협상력 없음, 재정 여력 없음. 이미 배급 진입. Bernstein이 분석한 수요 파괴 임계($155)에 도달하기 훨씬 전에, 개도국은 수요를 파괴하지 않고 사회를 파괴한다.</div>
+      <div class="br"><div class="bf" style="width:60%;background:var(--org)"></div></div>
     </div>
   </div>
+
+  <p class="cue">9명의 플레이어가 각자의 패를 들고 있다. 그러나 이 게임의 진짜 비대칭은 패의 차이가 아니라 — 시계의 차이에 있다.</p>
 </section>
 
-<!-- ═══════════ 3. THE ASYMMETRY ═══════════ -->
-<section id="asym" class="fi">
-  <div class="label">ACT III — THE ASYMMETRY</div>
-  <h2 class="title">비대칭: 공급 갭과 비동시적 붕괴</h2>
-  <p class="desc">이 게임의 핵심 비대칭은 두 가지다. 첫째, 대응 메커니즘(SPR·파이프라인)이 차단량의 ~35%만 충당한다. 둘째, 붕괴 시점이 국가마다 다르다. 이 비동시성은 공조를 파괴하고, 이란과 중국에 유리하게 작용한다.</p>
+<!-- ══════════════════════════════════════════
+     ACT 3 — 시간의 비대칭: 왜 공조가 불가능한가
+     ══════════════════════════════════════════ -->
+<section id="s3" class="fi">
+  <div class="lb">ACT III — THE ASYMMETRY OF TIME</div>
+  <h2 class="tt">시간의 비대칭: 왜 공조가 불가능한가</h2>
+  <p class="ds">이 위기를 단일한 동시 충격으로 보는 것이 가장 흔한 분석 오류다. 실제로는 국가마다 수입 의존도, 비축량, 전력 구성, 사회적 내성에 따라 붕괴 시점이 모두 다르다. 휴전 협상은 모든 당사자가 <em>동시에</em> 해결을 원해야 성립한다. 그 조건은 충족되지 않는다.</p>
 
-  <!-- Supply Gap -->
-  <div class="card" style="margin-bottom:14px">
-    <div style="font-weight:700;font-size:12px;margin-bottom:10px">공급 갭 해부 — 미충당 잔여 약 65%</div>
-    <div style="margin-bottom:8px"><div style="font-size:11px;display:flex;justify-content:space-between;margin-bottom:3px"><span style="color:var(--red);font-weight:700">총 차단량</span><span class="mono" style="color:var(--red)">~20 mb/d</span></div><div style="height:20px;background:#F0EDE6;border-radius:3px;overflow:hidden"><div style="height:100%;width:100%;background:var(--red);border-radius:3px;display:flex;align-items:center;padding-left:6px;font-size:9px;font-weight:600;color:#fff">100%</div></div></div>
-    <div style="margin-bottom:8px"><div style="font-size:11px;display:flex;justify-content:space-between;margin-bottom:3px"><span>IEA SPR 4억bbl</span><span class="mono">~2.5~3</span></div><div style="height:20px;background:#F0EDE6;border-radius:3px;overflow:hidden"><div style="height:100%;width:14%;background:var(--blu);border-radius:3px;display:flex;align-items:center;padding-left:4px;font-size:8px;font-weight:600;color:#fff">12~15%</div></div></div>
-    <div style="margin-bottom:8px"><div style="font-size:11px;display:flex;justify-content:space-between;margin-bottom:3px"><span>사우디 야부 파이프라인</span><span class="mono">~2.5~3</span></div><div style="height:20px;background:#F0EDE6;border-radius:3px;overflow:hidden"><div style="height:100%;width:14%;background:var(--gld);border-radius:3px;display:flex;align-items:center;padding-left:4px;font-size:8px;font-weight:600;color:#fff">~15%</div></div></div>
-    <div><div style="font-size:11px;display:flex;justify-content:space-between;margin-bottom:3px"><span style="color:var(--red);font-weight:700">미충당 갭</span><span class="mono" style="color:var(--red)">~13+</span></div><div style="height:20px;background:#F0EDE6;border-radius:3px;overflow:hidden"><div style="height:100%;width:65%;background:linear-gradient(90deg,var(--org),var(--red));border-radius:3px;display:flex;align-items:center;padding-left:6px;font-size:8px;font-weight:600;color:#fff">~65% 미해소</div></div></div>
-    <div style="margin-top:10px;font-size:10px;color:var(--t2);line-height:1.6">
-      SPR은 원유만 해소하며 <strong>일본·한국의 핵심 취약점인 LNG에는 무효</strong>. 사우디 파이프라인 명판 7mb/d이나 실제 적재 2.72mb/d — 터미널 물리적 상한. 해협 재개통 없이는 어떤 메커니즘도 갭을 채울 수 없다.
+  <div class="cd">
+    <div style="font-weight:700;font-size:12px;margin-bottom:12px">비동시적 붕괴 시계</div>
+    <div style="font-size:10px;line-height:1.9;font-family:'JetBrains Mono',monospace">
+      <div style="display:flex;gap:8px;align-items:baseline;padding:4px 0;border-bottom:1px solid var(--brl)"><span style="color:var(--cr);font-weight:700;min-width:110px;flex-shrink:0">D+14 · 3/14</span><span>오늘 — 게임 전환. 에너지 위기 → 다전구 안보 위기</span></div>
+      <div style="display:flex;gap:8px;align-items:baseline;padding:4px 0;border-bottom:1px solid var(--brl)"><span style="color:var(--org);font-weight:700;min-width:110px;flex-shrink:0">D+20~30 · 3/20~30</span><span>🇮🇳 인도 LPG 사회적 임계. 🌏 동남아 배급 심화</span></div>
+      <div style="display:flex;gap:8px;align-items:baseline;padding:4px 0;border-bottom:1px solid var(--brl)"><span style="color:var(--red);font-weight:700;min-width:110px;flex-shrink:0">D+30~40 · 3/30~4/9</span><span>🇯🇵🇰🇷 일본·한국 LNG 물리적 소진. 그리드 불안정/배급</span></div>
+      <div style="display:flex;gap:8px;align-items:baseline;padding:4px 0;border-bottom:1px solid var(--brl)"><span style="color:var(--gld);font-weight:700;min-width:110px;flex-shrink:0">D+31 · 3/31</span><span>🇺🇸🇨🇳 트럼프 방중 — 시진핑 정상회담</span></div>
+      <div style="display:flex;gap:8px;align-items:baseline;padding:4px 0"><span style="color:var(--gld);font-weight:700;min-width:110px;flex-shrink:0">D+60~90 · 4/29~5/29</span><span>🇺🇸 미국 SPR 가시적 압축. 주유소 가격 → 선거 이슈</span></div>
     </div>
   </div>
 
-  <!-- Asynchrony -->
-  <div class="card">
-    <div style="font-weight:700;font-size:12px;margin-bottom:10px">비동시적 붕괴 시계 — 치킨게임의 시간 변수</div>
-    <div style="padding:8px 0">
-      <div style="font-size:10px;line-height:1.8;font-family:'JetBrains Mono',monospace">
-        <div style="display:flex;gap:8px;align-items:baseline"><span style="color:var(--red);font-weight:700;min-width:100px">D+14 (오늘)</span><span>게임 전환 — 에너지 → 안보 다전구</span></div>
-        <div style="display:flex;gap:8px;align-items:baseline"><span style="color:var(--org);font-weight:700;min-width:100px">D+20~30 (3/20~30)</span><span>인도 LPG 사회적 임계. 동남아 배급</span></div>
-        <div style="display:flex;gap:8px;align-items:baseline"><span style="color:var(--red);font-weight:700;min-width:100px">D+30~40 (3/30~4/9)</span><span>일본·한국 LNG 소진. 그리드 불안정</span></div>
-        <div style="display:flex;gap:8px;align-items:baseline"><span style="color:var(--gld);font-weight:700;min-width:100px">D+31 (3/31)</span><span>트럼프 방중 — 시진핑 정상회담</span></div>
-        <div style="display:flex;gap:8px;align-items:baseline"><span style="color:var(--gld);font-weight:700;min-width:100px">D+60~90 (4/29~5/29)</span><span>미국 SPR 가시적 압축. 정치적 임계</span></div>
-      </div>
-    </div>
-    <div style="font-size:10px;color:var(--t2);line-height:1.6;margin-top:6px;padding:8px;background:var(--accent);border-radius:var(--r)">
-      <strong>게임이론적 함의:</strong> 휴전 협상은 모든 당사자가 <em>동시에</em> 해결을 원해야 성립한다. 그러나 일본·한국이 D+35(4/4)에 비명을 지를 때, 미국은 정치적으로 아직 흡수 중이고, 인도는 이미 거리 수준 소요를 겪고 있다. <strong>이 비동시성은 이란의 전략적 자산이며, 중국의 레버리지를 매일 복리로 키운다.</strong>
-    </div>
+  <div class="co">
+    <b>🎲 비동시성은 누구의 자산인가</b>
+    <p>일본·한국이 D+35(4/4)에 비명을 지를 때, 미국은 아직 정치적으로 위기를 흡수 중이고, 인도는 이미 거리 수준 LPG 소요를 겪고 있다. 통일된 동맹 대응은 동등한 압력이 동등한 시점에 가해져야 가능하다. <strong>이 비동시성은 이란의 전략적 자산이며, 중국의 레버리지를 매일 복리로 키운다.</strong> 그래서 IEA의 SPR 방출은 — 물리적으로 부족함에도 — 정치적으로 필수였다. 원유가 아니라 시간을 산 것이다: 일본·한국·인도가 미국보다 먼저 테헤란과 양자 합의에 나서는 것을 막기 위한 정렬 시간.</p>
   </div>
+
+  <p class="cue">시계가 다르게 돌아가면 공조는 불가능하다. 그런데 D+14, 위기는 에너지 시장을 넘어 훨씬 더 위험한 영역으로 확산되기 시작했다.</p>
 </section>
 
-<!-- ═══════════ 4. THE CHAIN ═══════════ -->
-<section id="chain" class="fi">
-  <div class="label">ACT IV — THE CHAIN REACTION</div>
-  <h2 class="title">연쇄: 호르무즈에서 서태평양으로</h2>
-  <p class="desc">에너지 봉쇄가 어떻게 글로벌 안보 구조의 균열로 전이되는가. 이것은 도미노가 아니라 — 각 단계가 다음 단계의 <strong>필수 전제 조건</strong>이 되는 인과 사슬이다.</p>
+<!-- ══════════════════════════════════════════
+     ACT 4 — 연쇄 반응: 에너지가 어떻게 안보로 전이되는가
+     ══════════════════════════════════════════ -->
+<section id="s4" class="fi">
+  <div class="lb">ACT IV — THE CHAIN REACTION</div>
+  <h2 class="tt">연쇄 반응: 에너지 봉쇄는 어떻게 안보 구조를 무너뜨리는가</h2>
+  <p class="ds">이것은 도미노가 아니다. 각 단계가 다음 단계의 필수 전제 조건이 되는 인과 사슬이다. 호르무즈 봉쇄 → 비축 소진 → 미군 재배치 → 태평양 공백 → 동맹 균열 → 중국 레버리지 — 이 사슬의 어떤 고리도 이전 고리 없이는 존재하지 않는다.</p>
 
-  <div class="flow">
-    <div class="flow-node" style="border-color:var(--red)"><strong>① 호르무즈 봉쇄 (2/28)</strong><span>~20mb/d 차단. 전 세계 원유·LNG 20%</span></div><div class="flow-arr"></div>
-    <div class="flow-node" style="border-color:var(--org)"><strong>② 비축 소진 경쟁 (3/1~13)</strong><span>SPR+파이프라인 35%만 충당. 65% 갭 잔존</span></div><div class="flow-arr"></div>
-    <div class="flow-node" style="border-color:var(--org)"><strong>③ 미군 전력 재배치 (3/14)</strong><span>31st MEU 태평양→중동. 해협 탈환 준비</span></div><div class="flow-arr"></div>
-    <div class="flow-node" style="border-color:var(--gld)"><strong>④ 서태평양 억제 공백 (3/14~)</strong><span>중국 민병대 3차 진형 + 북한 최대 미사일</span></div><div class="flow-arr"></div>
-    <div class="flow-node" style="border-color:var(--blu)"><strong>⑤ 동맹 신뢰 균열</strong><span>일본: 삼중 압박 / 대만: 봉쇄 리허설 / 한국: 팹 불안정</span></div><div class="flow-arr"></div>
-    <div class="flow-node" style="border-color:var(--nvy)"><strong>⑥ 중국 레버리지 일일 복리</strong><span>동맹 LNG 임계 접근 → 미국 양보 공간 자동 확대</span></div><div class="flow-arr"></div>
-    <div class="flow-node" style="border-color:var(--cr)"><strong>⑦ 파리 → 베이징 (3/15~16 → 3/31)</strong><span>무역 협상 → 3개 전구 동시 조율. 게임의 최종 단계</span></div>
+  <div class="fl">
+    <div class="fn" style="border-color:var(--red)"><strong>① 호르무즈 봉쇄 (2/28)</strong><span>이란이 해협을 선별적으로 폐쇄. ~20mb/d 차단, 전 세계 원유·LNG 20%</span></div><div class="fa"></div>
+    <div class="fn" style="border-color:var(--org)"><strong>② 비축 소진 경쟁 (3/1~13)</strong><span>SPR+파이프라인이 35%만 충당. 65% 갭 해소 불가. 각국 시계 작동 개시</span></div><div class="fa"></div>
+    <div class="fn" style="border-color:var(--org)"><strong>③ 미군 전력 재배치 (3/14)</strong><span>공중전만으로는 해협이 열리지 않음. 31st MEU(태평양 유일 신속대응군)를 중동에 투입</span></div><div class="fa"></div>
+    <div class="fn" style="border-color:var(--gld)"><strong>④ 서태평양 억제 공백 (3/14~)</strong><span>MEU 출발 수시간 내 — 중국 민병대 1,200척 3차 진형, 북한 ~10발 탄도미사일</span></div><div class="fa"></div>
+    <div class="fn" style="border-color:var(--blu)"><strong>⑤ 동맹 신뢰 균열</strong><span>일본: LNG 소진+민병대+미사일 삼중 압박. 대만: 봉쇄 리허설 관측. 한국: 팹 불안정</span></div><div class="fa"></div>
+    <div class="fn" style="border-color:var(--nvy)"><strong>⑥ 중국 레버리지 일일 복리</strong><span>동맹 LNG 임계 접근 → 미국 양보 공간 자동 확대. 태평양 공백 → 중국 자제의 가격 상승</span></div><div class="fa"></div>
+    <div class="fn" style="border-color:var(--cr)"><strong>⑦ 파리 → 베이징 (3/15~16 → 3/31)</strong><span>무역 협상으로 시작 → 3개 전구 동시 조율이 실질 의제. 게임의 결산 단계</span></div>
   </div>
 
-  <!-- Three Theaters -->
+  <!-- 3 Theaters -->
   <div style="margin-top:20px">
-    <div style="font-weight:700;font-size:12px;margin-bottom:10px">3개 전구 — 하나의 전쟁, 세 개의 전선</div>
-    <div class="grid3">
-      <div class="card">
-        <div style="font-size:18px;margin-bottom:4px">🔥</div>
-        <div style="font-weight:700;font-size:13px;margin-bottom:4px">호르무즈</div>
-        <div style="font-size:10px;color:var(--t2);line-height:1.65">15,000표적 파괴, 이란 해군 무력화. 그러나 기뢰+해안 대함미사일 건재. MEU D+22~25(3/22~25) 도착. 호송 가능: 월말~1개월. 성공해도 일 10~15회(전쟁 전 ~100).</div>
-      </div>
-      <div class="card">
-        <div style="font-size:18px;margin-bottom:4px">🌊</div>
-        <div style="font-weight:700;font-size:13px;margin-bottom:4px">서태평양</div>
-        <div style="font-size:10px;color:var(--t2);line-height:1.65">중국 민병대: 12월 2,000→1월 1,400→3월 1,200척. 매회 더 동쪽. CSIS: "어업 아닌 것 확실, 국가 지시 외 설명 없음." MEU 부재 = 태평양 유일 신속대응군 공백.</div>
-      </div>
-      <div class="card">
-        <div style="font-size:18px;margin-bottom:4px">🚀</div>
-        <div style="font-weight:700;font-size:13px;margin-bottom:4px">한반도</div>
-        <div style="font-size:10px;color:var(--t2);line-height:1.65">D+14 ~10발 탄도미사일(2026최대). 자유의방패 축소 기간. 북한 외무성: "강자만이 살아남고 발전한다." 미군 과신장의 3번째 시험장.</div>
-      </div>
+    <div style="font-weight:700;font-size:12px;margin-bottom:10px">3개 전구 — 하나의 전쟁이 만든 세 개의 전선</div>
+    <div class="g3">
+      <div class="cd"><div style="font-size:18px;margin-bottom:4px">🔥</div><div style="font-weight:700;font-size:13px;margin-bottom:4px">호르무즈</div><div style="font-size:10px;color:var(--t2);line-height:1.65">미군이 15,000표적을 파괴하고 이란 해군을 무력화했으나, 기뢰와 해안 대함미사일은 건재. MEU가 D+22~25(3/22~25) 도착하면 물리적 강행 옵션이 열리나, 성공해도 일 10~15회 통과(전쟁 전 ~100). 호송 시작 가능: 월말~1개월.</div></div>
+      <div class="cd"><div style="font-size:18px;margin-bottom:4px">🌊</div><div style="font-weight:700;font-size:13px;margin-bottom:4px">서태평양 · 동중국해</div><div style="font-size:10px;color:var(--t2);line-height:1.65">중국 해상민병대가 12월 2,000→1월 1,400→3월 1,200척으로 매회 더 동쪽, 일본 근해에 접근. CSIS: "어업이 아닌 것은 확실. 국가 지시 외의 설명이 없다." MEU 부재 = 태평양 유일 신속대응군의 공백. 중국은 에스컬레이션할 필요 없이, 리허설만으로 충분하다.</div></div>
+      <div class="cd"><div style="font-size:18px;margin-bottom:4px">🚀</div><div style="font-weight:700;font-size:13px;margin-bottom:4px">한반도</div><div style="font-size:10px;color:var(--t2);line-height:1.65">D+14에 북한이 ~10발 탄도미사일을 발사(2026 최대 단일 살보). 미한 자유의 방패 훈련이 축소 템포로 진행 중인 시점. 북한 외무성: "강자만이 살아남고 발전한다." 미군 과신장(overextension)의 세 번째 시험장.</div></div>
     </div>
   </div>
+
+  <div class="co">
+    <b>🎯 두 전선의 딜레마</b>
+    <p>미국은 호르무즈를 열기 위해 MEU가 필요하다. 그러나 MEU가 태평양을 떠난 매일이 중국과 북한에게 더 허용적인 환경을 만든다. 걸프에서 이기면 태평양을 잃고, 태평양을 지키면 동맹의 에너지가 먼저 바닥난다. 미국이 80년간 회피해온 선택 — <strong>"어떤 전구를 포기할 것인가"</strong> — 에 직면할 수 있다.</p>
+  </div>
+
+  <p class="cue">에너지 위기가 안보 위기로 전이되었다. 내일 파리에서, 이 모든 것이 하나의 테이블 위에 올라간다.</p>
 </section>
 
-<!-- ═══════════ 5. THE PAYOFF MATRIX ═══════════ -->
-<section id="payoff" class="fi">
-  <div class="label">ACT V — SCENARIO MATRIX</div>
-  <h2 class="title">시나리오 매트릭스: 파리에서의 4가지 경로</h2>
-  <p class="desc">3/15~16 파리에서 Bessent와 He Lifeng이 마주 앉는다. 무역 협상으로 시작되었지만, 이미 3개 전구의 동시 레버리지 게임으로 변질. 이란의 위안화 결제 제안이 새로운 변수로 테이블에 올라왔다.</p>
+<!-- ══════════════════════════════════════════
+     ACT 5 — 시나리오: 어떤 결말이 가능한가
+     ══════════════════════════════════════════ -->
+<section id="s5" class="fi">
+  <div class="lb">ACT V — THE SCENARIOS</div>
+  <h2 class="tt">시나리오: 파리에서 열리는 4가지 경로</h2>
+  <p class="ds">3/15~16 파리에서 Bessent와 He Lifeng이 마주 앉는다. 무역 협상으로 시작되었지만, 테이블 위에는 3개 전구의 동시 레버리지가 올라와 있다. 이란의 위안화 결제 제안이 새로운 차원을 추가했다.</p>
 
-  <!-- Asymmetry box -->
-  <div class="card" style="margin-bottom:14px">
+  <!-- Asymmetry -->
+  <div class="cd" style="margin-bottom:14px">
     <div style="font-weight:700;font-size:12px;margin-bottom:8px">⚖️ 테이블 위의 비대칭</div>
-    <div class="grid2">
-      <div style="font-size:11px;line-height:1.65">
-        <div style="font-weight:700;color:var(--ub);margin-bottom:3px">🇺🇸 미국의 패</div>
-        대두·보잉·에너지 구매 요구<br>MEU 걸프行 = 암묵적 위협<br>요청: 이란 압박, 러시아유↓, 태평양 자제
-      </div>
-      <div style="font-size:11px;line-height:1.65">
-        <div style="font-weight:700;color:var(--cr);margin-bottom:3px">🇨🇳 중국의 패</div>
-        3개 전구 동시 레버리지<br>이란 위안화 결제 = 달러 체제 대안<br>시간 → 자동 복리 협상력
-      </div>
+    <div class="g2">
+      <div style="font-size:11px;line-height:1.65"><div style="font-weight:700;color:var(--ub);margin-bottom:3px">🇺🇸 미국의 패</div>대두·보잉·에너지 구매 확대 요구<br>MEU 걸프行 = 암묵적 군사 위협<br>요청: 이란 압박, 러시아유↓, 태평양 자제</div>
+      <div style="font-size:11px;line-height:1.65"><div style="font-weight:700;color:var(--cr);margin-bottom:3px">🇨🇳 중국의 패</div>3개 전구 동시 레버리지<br>이란 위안화 결제 = 달러 체제 대안 프로토타입<br>시간 → 자동 복리 협상력</div>
     </div>
-    <div style="margin-top:8px;padding:8px;background:var(--gdl);border-radius:var(--r);font-size:10px;line-height:1.6">
-      <strong>위안화 변수:</strong> 이란이 호르무즈 통과 조건으로 원유 위안화 결제를 요구 중(CNN 보도, 중국 외교부 미확인). 확인 시 1973년 석유 금수 이래 글로벌 통화 질서의 가장 중대한 구조 변화. 처음에는 "해결책"처럼 보일 것이라는 점이 가장 위험하다.
-    </div>
+    <div style="margin-top:8px;padding:8px;background:var(--gdl);border-radius:var(--r);font-size:10px;line-height:1.6"><strong>위안화 변수:</strong> 이란이 호르무즈 통과 조건으로 위안화 결제를 요구 중(CNN 보도, 중국 외교부 미확인). 확인 시 1973년 석유 금수 이래 글로벌 통화 질서의 가장 중대한 변화. 가장 위험한 점: 처음에는 "해결책"처럼 보일 것이라는 것.</div>
   </div>
 
-  <!-- Matrix table -->
+  <!-- Matrix -->
   <div style="overflow-x:auto;-webkit-overflow-scrolling:touch">
-  <table class="matrix-table">
-    <thead><tr>
-      <th style="width:22%">시나리오</th>
-      <th style="width:30%">전개 경로</th>
-      <th style="width:24%">🇺🇸 미국에 미치는 영향</th>
-      <th style="width:24%">🇨🇳 중국에 미치는 영향</th>
-    </tr></thead>
+  <table class="mx">
+    <thead><tr><th style="width:20%">시나리오</th><th style="width:30%">전개 경로</th><th style="width:25%">🇺🇸 미국에 미치는 영향</th><th style="width:25%">🇨🇳 중국에 미치는 영향</th></tr></thead>
     <tbody>
     <tr>
       <td><strong>① 중국이 중재</strong><br><span style="font-size:9px;color:var(--grn)">EIA 기본선</span></td>
-      <td><strong>중국</strong>이 이란을 설득하여 호르무즈 재개통을 중재하고, 해상민병대 활동을 자제. 위안화 결제는 유보. Brent 연말 $70~80</td>
-      <td style="color:var(--grn)">에너지 위기 해소, 선거 리스크↓<br><span style="color:var(--org);font-size:10px">대가: 중국의 중재자 지위 공인</span></td>
+      <td><strong>중국</strong>이 이란을 설득하여 호르무즈를 재개통하고, 해상민병대를 자제. 위안화 결제는 유보. Brent 연말 $70~80</td>
+      <td style="color:var(--grn)">에너지 위기 해소, 선거 리스크↓<br><span style="color:var(--org);font-size:10px">대가: 중국의 글로벌 중재자 지위 공인</span></td>
       <td style="color:var(--grn)">글로벌 중재자 위상 확보<br><span style="font-size:10px">위안화 카드는 미사용 보유</span></td>
     </tr>
     <tr>
       <td><strong>② 미국이 양보</strong><br><span style="font-size:9px;color:var(--org)">고가 거래</span></td>
-      <td><strong>미국</strong>이 대만·반도체 수출규제·통화 구조에서 전략적 양보를 제공하고, <strong>중국</strong>이 그 대가로 호르무즈를 중국 조건으로 재개통</td>
+      <td><strong>미국</strong>이 대만·반도체 수출규제·통화 구조에서 전략적 양보를 제공. <strong>중국</strong>이 그 대가로 호르무즈를 중국 조건으로 재개통</td>
       <td style="color:var(--org)">에너지 해소<br><span style="color:var(--red);font-size:10px">대가: CHIPS Act 후퇴, 대만 보증↓, 30년 인태 전략 훼손</span></td>
       <td style="color:var(--grn)">반도체·대만에서 전략적 돌파<br><span style="font-size:10px">위안화 결제 정착 → 달러 패권 변동</span></td>
     </tr>
     <tr>
       <td><strong>③ 미국이 강행</strong><br><span style="font-size:9px;color:var(--red)">고위험</span></td>
-      <td>외교 교착 → <strong>미군</strong>이 D+25~30(3/25~30) MEU를 투입하여 해협을 물리적으로 강행 개통. 성공해도 일 10~15회 통과(전쟁 전 ~100회)</td>
+      <td>외교 교착 → <strong>미군</strong>이 D+25~30(3/25~30) MEU를 투입하여 해협을 물리적 강행 개통. 성공해도 일 10~15회 통과(전쟁 전 ~100)</td>
       <td style="color:var(--org)">걸프에서 "승리"<br><span style="color:var(--red);font-size:10px">대가: 태평양 억제력 장기 훼손(향후 30년 핵심 전구)</span></td>
       <td style="color:var(--grn)">양보 없이 태평양 공백 향유<br><span style="font-size:10px">민병대 실전 데이터 축적</span></td>
     </tr>
     <tr>
       <td><strong>④ 양쪽 모두 실패</strong><br><span style="font-size:9px;color:var(--red)">최악</span></td>
-      <td>외교도 군사도 실패. <strong>일본·한국·인도</strong>가 물리적 배급 진입. <strong>중국 민병대</strong>의 태평양 탐색이 리허설에서 실행으로 전환. 3개 전구 합류</td>
-      <td style="color:var(--red)">80년 동맹 구조의 근본 선택 강요:<br>"어떤 전구를 포기할 것인가"</td>
+      <td>외교도 군사도 실패. <strong>일본·한국·인도</strong>가 배급 진입. <strong>중국 민병대</strong>의 태평양 탐색이 리허설→실행. 3개 전구가 하나의 위기로 합류</td>
+      <td style="color:var(--red)">80년 동맹의 근본 선택 강요:<br>"어떤 전구를 포기할 것인가"</td>
       <td style="color:var(--org)">레버리지 극대화<br><span style="color:var(--red);font-size:10px">그러나 통제불능 에스컬레이션 리스크</span></td>
     </tr>
     </tbody>
   </table>
   </div>
 
-  <div class="callout">
-    <b>🎯 내시 균형(Nash Equilibrium) 분석</b>
-    <p>시나리오 ①이 유일한 파레토 개선이나, 중국은 ②로 이동할 유인이 크다 — 시간이 지날수록 미국의 양보 공간이 자동 확대되기 때문. 미국의 최적 전략은 ①을 조기에 수용하여 ②로의 전이를 차단하는 것이지만, 그것은 D+14 시점에서 이미 중국의 중재자 지위를 공인하는 비용을 수반한다. <strong>파리 회담은 위기를 해결하지 않는다. 3개 전구가 아직 분리된 마지막 순간일 뿐이다.</strong></p>
-  </div>
-</section>
-
-<!-- ═══════════ 6. THE CLOCK ═══════════ -->
-<section id="clock" class="fi">
-  <div class="label">ACT VI — THE CLOCK</div>
-  <h2 class="title">시계: 수요 파괴의 임계점</h2>
-  <p class="desc">원유는 자체 소화 메커니즘을 가진다 — 가격이 충분히 높으면 수요가 붕괴되어 위기가 해소. 그러나 Bernstein 분석에 따르면 필요한 가격은 <strong>연평균 $155</strong>이며, 수요 파괴는 균등하지 않다.</p>
-
-  <div class="card">
-    <div style="font-weight:700;font-size:12px;margin-bottom:8px">가격 임계점 스펙트럼</div>
-    <div style="display:flex;flex-wrap:wrap;gap:5px;font-size:10px;margin-bottom:12px">
+  <!-- Background condition: demand destruction -->
+  <div class="cd" style="margin-top:14px">
+    <div style="font-weight:700;font-size:12px;margin-bottom:6px">배경 조건 — 아무도 양보하지 않으면?</div>
+    <div style="font-size:11px;color:var(--t2);line-height:1.7">
+      원유에는 자기 소화 메커니즘이 있다. 가격이 충분히 높으면 수요가 붕괴되어 위기가 해소된다. Bernstein 분석에 따르면 호르무즈 공급 손실을 상쇄할 수요 파괴에는 <strong>연평균 $155/bbl</strong>이 필요하다 — 석유 부담(oil burden)이 GDP 대비 5.2%에 도달하는 2007년 수준.
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:5px;font-size:10px;margin:8px 0">
       <span style="padding:3px 8px;background:var(--gl);border-radius:4px">$72 전쟁 전</span>
-      <span style="padding:3px 8px;background:var(--bl);border-radius:4px">$95 EIA 해소</span>
+      <span style="padding:3px 8px;background:var(--bl);border-radius:4px">$95 EIA 해소 시</span>
       <span style="padding:3px 8px;background:var(--rl);border-radius:4px;font-weight:700">$101 현재 D+14</span>
       <span style="padding:3px 8px;background:var(--ol);border-radius:4px">$120 Barclays 2주↑</span>
       <span style="padding:3px 8px;background:var(--rl);border-radius:4px">$155 수요파괴 임계</span>
     </div>
-    <div style="height:12px;background:linear-gradient(to right,var(--grn),var(--gld),var(--org),var(--red));border-radius:4px;margin-bottom:10px"></div>
-    <div class="grid2" style="font-size:10px;gap:8px">
-      <div style="padding:8px;background:var(--accent);border-radius:var(--r);line-height:1.6">
-        <strong>탄력적 수요</strong> — 감소 가능<br>
-        휘발유(~25%): 재량 주행 축소<br>항공유(8%): 비즈니스 여행 감소
-      </div>
-      <div style="padding:8px;background:var(--rl);border-radius:var(--r);line-height:1.6">
-        <strong>비탄력적 수요</strong> — 감소 곤란<br>
-        디젤(17%): 물류는 공급망이 요구<br>석유화학(15~17%): 투입 비용 인플레<br><strong>LPG:</strong> 개도국은 수요를 파괴하지 않고 사회를 파괴
-      </div>
+    <div style="font-size:10px;color:var(--t2);line-height:1.65">
+      그러나 수요 파괴는 균등하지 않다. 휘발유(25%)와 항공유(8%)는 탄력적이다 — 운전자가 주행을 줄이고 출장이 감소한다. 디젤(17%)과 석유화학(15~17%)은 비탄력적이다 — 물류는 공급망이 요구하고 플라스틱 원료에 대안이 없다. 그리고 LPG와 난방유는 — <strong>개도국에서 수요를 파괴하지 않고 사회를 파괴한다</strong>. $155에 도달하기 전에 동남아와 인도의 사회 구조가 먼저 무너진다. 이것이 시나리오 ④의 실제 모습이다.
     </div>
+  </div>
+
+  <div class="co">
+    <b>🎲 균형 분석</b>
+    <p>시나리오 ①이 유일한 파레토 개선이나, 중국은 ②로 이동할 유인이 크다 — 시간이 지날수록 미국의 양보 공간이 자동 확대되기 때문. 미국의 최적 전략은 ①을 조기 수용하여 ②로의 전이를 차단하는 것이지만, 그것은 중국의 중재자 지위를 공인하는 비용을 수반한다. <strong>파리 회담은 위기를 해결하지 않는다. 3개 전구가 아직 분리된 위기인 마지막 순간 — 하나의 연쇄 대결로 합류하기 전의 마지막 간격일 뿐이다.</strong></p>
   </div>
 </section>
 
-<!-- ═══════════ 7. THE SIGNALS ═══════════ -->
-<section id="signal" class="fi">
-  <div class="label">ACT VII — THE SIGNALS</div>
-  <h2 class="title">신호: 게임 전환의 조건</h2>
-  <p class="desc">현재의 기본전제(고유가·구조적 취약 심화)가 무효화되는 조건과, 게임이 어떤 시나리오로 이동하는지를 판별하는 핵심 신호.</p>
+<!-- ══════════════════════════════════════════
+     ACT 6 — 신호: 무엇을 지켜봐야 하는가
+     ══════════════════════════════════════════ -->
+<section id="s6" class="fi">
+  <div class="lb">ACT VI — THE SIGNALS</div>
+  <h2 class="tt">신호: 게임이 어디로 가는지를 알려주는 것들</h2>
+  <p class="ds">현재의 기본전제(고유가·구조적 취약 심화)를 무효화하는 조건과, 게임이 어떤 시나리오로 이동하는지를 판별하는 핵심 신호.</p>
 
-  <div class="watch-grid">
-    <div class="watch-item"><div class="watch-icon" style="background:var(--ol)">🛢️</div><div><h4>호르무즈 조기 재개통</h4><p>10~14일 내 휴전. 독립 해상 확인 필수. Brent $70~80 복귀. 시나리오 ① 진입.</p></div></div>
-    <div class="watch-item"><div class="watch-icon" style="background:var(--rl)">⚓</div><div><h4>미 해군 호송 작전</h4><p>D+30(3/30) 전 사고 없는 호송 시작 시 군사 해결 경로. 시나리오 ③ 진입.</p></div></div>
-    <div class="watch-item"><div class="watch-icon" style="background:var(--ol)">📊</div><div><h4>야부 3.5mb/d 돌파</h4><p>1주+ 유지 시 실질적 공급 완화. 비대칭 축소 신호.</p></div></div>
-    <div class="watch-item"><div class="watch-icon" style="background:var(--gl)">📉</div><div><h4>조기 수요 파괴</h4><p>IATA 항공 + EIA 디젤 동시 급감 → $120~155 메커니즘 조기 작동.</p></div></div>
-    <div class="watch-item"><div class="watch-icon" style="background:var(--gdl)">💴</div><div><h4>위안화 결제 정착</h4><p>이란 공식발표 + 위안화 중개 선박 확인. 1973년 이래 최대 통화 변동. 장기 구조 전환.</p></div></div>
-    <div class="watch-item"><div class="watch-icon" style="background:var(--rl)">🎯</div><div><h4>태평양 실전 전환</h4><p>센카쿠 충돌 / 일본 EEZ 근접 낙하 / 대만 해협 통과. 시나리오 ④ 진입 트리거.</p></div></div>
-    <div class="watch-item"><div class="watch-icon" style="background:var(--bl)">📊</div><div><h4>SPR 방출 초과</h4><p>일일 4+mb/d 지속 시 갭 충당 20%↑. 불충분하나 기본선 개선.</p></div></div>
-    <div class="watch-item"><div class="watch-icon" style="background:var(--bl)">🤝</div><div><h4>파리 → 베이징 3/31</h4><p>무역 양보 수준, 대만·반도체 언급, 이란 중재 프레임 여부가 분기점.</p></div></div>
+  <div class="wg">
+    <div class="wi"><div class="wi-i" style="background:var(--ol)">🛢️</div><div><h4>호르무즈 조기 재개통 → 시나리오 ①</h4><p>10~14일 내 이란이 재개통 결정 또는 휴전. 독립 해상 확인 필수. Brent $70~80 복귀.</p></div></div>
+    <div class="wi"><div class="wi-i" style="background:var(--rl)">⚓</div><div><h4>미 해군 호송 작전 개시 → 시나리오 ③</h4><p>D+30(3/30) 전 사고 없는 호송 시작. CENTCOM 호송 회랑 선언, 보험시장 재가입 여부.</p></div></div>
+    <div class="wi"><div class="wi-i" style="background:var(--gdl)">💴</div><div><h4>위안화 결제 정착 → 구조 전환</h4><p>이란 공식발표 + 위안화 중개 선박 통과 확인. 1973년 이래 최대 통화 변동. 처음에는 "해결책"처럼 보일 것.</p></div></div>
+    <div class="wi"><div class="wi-i" style="background:var(--rl)">🎯</div><div><h4>태평양 실전 전환 → 시나리오 ④</h4><p>센카쿠 물리 충돌 / 일본 EEZ 근접 낙하 / MEU 부재 시 대만 해협 중국 해군 통과.</p></div></div>
+    <div class="wi"><div class="wi-i" style="background:var(--ol)">📊</div><div><h4>사우디 야부 3.5mb/d 돌파</h4><p>1주+ 유지 시 공급 완화. 비대칭 축소.</p></div></div>
+    <div class="wi"><div class="wi-i" style="background:var(--gl)">📉</div><div><h4>조기 수요 파괴</h4><p>IATA 항공 + EIA 디젤 동시 급감 → $120~155 메커니즘 조기 작동. 유가↓ but 경기침체.</p></div></div>
+    <div class="wi"><div class="wi-i" style="background:var(--bl)">📊</div><div><h4>SPR 방출 속도 초과</h4><p>일일 4+mb/d 지속 시 갭 충당 20%↑. 불충분하나 기본선 개선.</p></div></div>
+    <div class="wi"><div class="wi-i" style="background:var(--bl)">🤝</div><div><h4>파리 → 베이징 (3/31)</h4><p>무역 양보 수준, 대만·반도체 언급 여부, 이란 중재 프레임이 시나리오 분기점.</p></div></div>
   </div>
 
   <!-- Full Timeline -->
-  <div class="callout" style="margin-top:16px">
-    <b>📌 전체 타임라인 (2월 초 ~ 향후 전망)</b>
-    <div class="tl-compact">
-      <span class="phase a">── 전쟁 전: 핵 협상기 ──</span>
-      <span class="row">2/3~7 · $73~75 OPEC+ 증산전망 속 제재 프리미엄</span>
-      <span class="row">2/9~10 · 핵 협상 "긍정적" → $67~68 급락</span>
-      <span class="row">2/11~14 · $64~66 과잉공급론 (J.P.Morgan "연평균$60")</span>
-      <span class="row">2/18~21 · 재긴장. 호르무즈 경고. $68→$74 회복</span>
-      <span class="row">2/24~27 · $71~74 핵 협상 결렬 시그널. 전운 고조</span>
-      <span class="phase b">── 전쟁 발발: 호르무즈 위기 ──</span>
-      <span class="row">D+0 · 2/28 ⚔️ 개전 $72→$77</span>
-      <span class="row">D+3 · 3/3 이란보복 $85 해협폐쇄</span>
-      <span class="row">D+4 · 3/4 IRGC 공식폐쇄 "적법 표적"</span>
-      <span class="row">D+7 · 3/7 670만b/d 감산 장중$119.50</span>
-      <span class="row">D+10 · 3/10 "곧 종결"→WTI 10%↓</span>
-      <span class="row">D+12 · 3/12 IEA 4억bbl 방출 $100돌파</span>
-      <span class="row">D+13 · 3/13 카르그섬 타격 $103결산</span>
-      <span class="phase c">── 게임 전환: 에너지 → 안보 ──</span>
-      <span class="row">D+14 · 3/14 (오늘) MEU·북한·중국 어선</span>
-      <span class="row">D+16~17 · 3/15~16 Bessent-He Lifeng 파리</span>
-      <span class="phase d">── 향후 전망 ──</span>
-      <span class="row">D+20~25 · 3/20~25 MEU 도착. 인도LPG 임계</span>
-      <span class="row">D+25~30 · 3/25~30 해협 강행 개통 창</span>
-      <span class="row">D+30~40 · 3/30~4/9 일한 LNG 소진</span>
-      <span class="row">D+31 · 3/31 트럼프 방중</span>
-      <span class="row">D+60~90 · 4/29~5/29 SPR 압축. 선거 이슈</span>
+  <div class="co" style="margin-top:16px">
+    <b>📌 전체 타임라인</b>
+    <div class="tc">
+      <span class="ph a">── 전쟁 전: 핵 협상기 ──</span>
+      <span class="rw">2/3~7 · $73~75 OPEC+ 증산전망. 제재 프리미엄</span>
+      <span class="rw">2/9~10 · 핵 협상 "긍정적" → $67~68 급락</span>
+      <span class="rw">2/11~14 · $64~66 과잉공급론 (J.P.Morgan "연평균$60")</span>
+      <span class="rw">2/18~21 · 재긴장. 호르무즈 경고. $68→$74</span>
+      <span class="rw">2/24~27 · $71~74 핵 협상 결렬 시그널</span>
+      <span class="ph b">── 전쟁 발발 ──</span>
+      <span class="rw">D+0 · 2/28 ⚔️ 개전 $72→$77</span>
+      <span class="rw">D+3 · 3/3 이란보복 $85 해협폐쇄</span>
+      <span class="rw">D+4 · 3/4 IRGC 공식폐쇄 "적법 표적"</span>
+      <span class="rw">D+7 · 3/7 670만b/d감산 장중$119.50</span>
+      <span class="rw">D+10 · 3/10 "곧 종결"→WTI 10%↓</span>
+      <span class="rw">D+12 · 3/12 IEA 4억bbl $100돌파</span>
+      <span class="rw">D+13 · 3/13 카르그섬 $103결산</span>
+      <span class="ph c">── 게임 전환 ──</span>
+      <span class="rw">D+14 · 3/14 (오늘) MEU전개·북한·중국어선</span>
+      <span class="rw">D+16~17 · 3/15~16 Bessent-He Lifeng 파리</span>
+      <span class="ph d">── 향후 ──</span>
+      <span class="rw">D+20~25 · 3/20~25 MEU도착. 인도LPG임계</span>
+      <span class="rw">D+25~30 · 3/25~30 해협 강행 개통 창</span>
+      <span class="rw">D+30~40 · 3/30~4/9 일한 LNG 소진</span>
+      <span class="rw">D+31 · 3/31 트럼프 방중</span>
+      <span class="rw">D+60~90 · 4/29~5/29 SPR압축. 선거 이슈</span>
     </div>
   </div>
 </section>
@@ -447,114 +417,56 @@ section:last-of-type{border-bottom:none}
 
 <footer class="ft">
   원문: <a href="https://www.garrettsignal.com/p/who-breaks-first" target="_blank">Garrett's Signal — "Who Breaks First?"</a> (2026.03.14) · 게임이론 프레임 재구성<br>
-  보완 참조: CRS R45281, Wikipedia, CNBC, Reuters, AP, CNN, Al Jazeera, The Diplomat, EIA STEO, IEA OMR
+  보완: CRS R45281, Wikipedia, CNBC, Reuters, AP, CNN, Al Jazeera, The Diplomat, EIA STEO, IEA OMR
 </footer>
 
 <script>
-// ── Scroll fade ──
 const obs=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('v')})},{threshold:.06});
 document.querySelectorAll('.fi').forEach(el=>obs.observe(el));
-// ── Active nav ──
 const ss=document.querySelectorAll('section[id]'),ns=document.querySelectorAll('.nav a');
 window.addEventListener('scroll',()=>{let c='';ss.forEach(s=>{if(scrollY>=s.offsetTop-60)c=s.id});ns.forEach(a=>{a.classList.toggle('on',a.getAttribute('href')==='#'+c)})});
 
-// ── HORIZONTAL LINE CHART ──
+// ── CHART ──
 (function(){
 const cv=document.getElementById('chart');if(!cv)return;
 const ctx=cv.getContext('2d'),dpr=window.devicePixelRatio||1;
-
 const D=[
-  ['2/3',73.8],['2/4',74.5],['2/5',73.2],['2/6',74.8],['2/7',75.2],
-  ['2/10',68],['2/11',69.3],['2/12',64.5],['2/13',65.1],['2/14',66.2],
-  ['2/18',67.5],['2/19',70.3],['2/20',72.5],['2/21',73.8],
-  ['2/24',74.1],['2/25',73.5],['2/26',72.8],['2/27',71.3],
-  ['2/28',77.2],
-  ['3/3',85],['3/4',88.5],['3/5',91],['3/6',93.5],
-  ['3/7',101],['3/9',94],['3/10',79.5],
-  ['3/11',96],['3/12',100.5],['3/13',103.1],['3/14',101.2]
+['2/3',73.8],['2/4',74.5],['2/5',73.2],['2/6',74.8],['2/7',75.2],
+['2/10',68],['2/11',69.3],['2/12',64.5],['2/13',65.1],['2/14',66.2],
+['2/18',67.5],['2/19',70.3],['2/20',72.5],['2/21',73.8],
+['2/24',74.1],['2/25',73.5],['2/26',72.8],['2/27',71.3],
+['2/28',77.2],
+['3/3',85],['3/4',88.5],['3/5',91],['3/6',93.5],
+['3/7',101],['3/9',94],['3/10',79.5],
+['3/11',96],['3/12',100.5],['3/13',103.1],['3/14',101.2]
 ];
-const wi=18; // index of 2/28
-
-const events=[
-  {i:5,t:'협상 낙관',c:'#1D6FA5'},
-  {i:wi,t:'⚔️ 개전',c:'#BD3227',bold:1},
-  {i:20,t:'IRGC 폐쇄',c:'#BD3227'},
-  {i:23,t:'장중 $119.50',c:'#C76B1E'},
-  {i:25,t:'"곧 종결"↓',c:'#1A7B3E'},
-  {i:26,t:'IEA SPR',c:'#1D6FA5'},
-  {i:28,t:'카르그 섬',c:'#BD3227'},
-  {i:29,t:'D+14 MEU★',c:'#7A2018',bold:1}
-];
-
+const wi=18;
+const ev=[{i:5,t:'협상 낙관',c:'#1D6FA5'},{i:wi,t:'⚔️ 개전',c:'#BD3227',b:1},{i:20,t:'IRGC 폐쇄',c:'#BD3227'},{i:23,t:'장중 $119.50',c:'#C76B1E'},{i:25,t:'"곧 종결"↓',c:'#1A7B3E'},{i:26,t:'IEA SPR',c:'#1D6FA5'},{i:28,t:'카르그 섬',c:'#BD3227'},{i:29,t:'D+14 MEU★',c:'#7A2018',b:1}];
 function draw(){
-  const box=cv.parentElement;
-  const W=box.clientWidth-28,H=260;
-  cv.width=W*dpr;cv.height=H*dpr;cv.style.width=W+'px';cv.style.height=H+'px';
-  ctx.setTransform(1,0,0,1,0,0);ctx.scale(dpr,dpr);ctx.clearRect(0,0,W,H);
-
-  const mob=W<400;
-  const p={t:40,r:16,b:36,l:mob?36:42};
-  const cw=W-p.l-p.r,ch=H-p.t-p.b;
-  const mn=58,mx=125,rg=mx-mn;
-  const x=i=>p.l+(i/(D.length-1))*cw;
-  const y=v=>p.t+(1-(v-mn)/rg)*ch;
-
-  // War zone bg
-  ctx.fillStyle='rgba(189,50,39,.04)';
-  ctx.fillRect(x(wi),p.t,W-p.r-x(wi),ch);
-  ctx.strokeStyle='rgba(189,50,39,.45)';ctx.lineWidth=1.5;ctx.setLineDash([6,3]);
-  ctx.beginPath();ctx.moveTo(x(wi),p.t);ctx.lineTo(x(wi),p.t+ch);ctx.stroke();ctx.setLineDash([]);
-  ctx.fillStyle='#BD3227';ctx.font='bold '+(mob?8:9)+'px "Noto Sans KR"';ctx.textAlign='left';
-  ctx.fillText('⚔️ 전쟁 발발 (2/28)',x(wi)+4,p.t+12);
-
-  // Grid
-  for(let v=60;v<=120;v+=10){
-    ctx.strokeStyle='#EDEBE6';ctx.lineWidth=.5;ctx.beginPath();ctx.moveTo(p.l,y(v));ctx.lineTo(p.l+cw,y(v));ctx.stroke();
-    ctx.fillStyle='#999';ctx.font=(mob?8:9)+'px "JetBrains Mono"';ctx.textAlign='right';ctx.fillText('$'+v,p.l-4,y(v)+3);
-  }
-  // $100 line
-  ctx.strokeStyle='rgba(189,50,39,.2)';ctx.lineWidth=1;ctx.setLineDash([3,3]);
-  ctx.beginPath();ctx.moveTo(p.l,y(100));ctx.lineTo(p.l+cw,y(100));ctx.stroke();ctx.setLineDash([]);
-
-  // Area fill
-  ctx.beginPath();ctx.moveTo(x(0),y(D[0][1]));
-  for(let i=1;i<D.length;i++)ctx.lineTo(x(i),y(D[i][1]));
-  ctx.lineTo(x(D.length-1),p.t+ch);ctx.lineTo(x(0),p.t+ch);ctx.closePath();
-  const grd=ctx.createLinearGradient(0,p.t,0,p.t+ch);
-  grd.addColorStop(0,'rgba(189,50,39,.1)');grd.addColorStop(1,'rgba(255,255,255,0)');
-  ctx.fillStyle=grd;ctx.fill();
-
-  // Line pre-war
-  ctx.strokeStyle='#1D6FA5';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x(0),y(D[0][1]));
-  for(let i=1;i<=wi;i++)ctx.lineTo(x(i),y(D[i][1]));ctx.stroke();
-  // Line post-war
-  ctx.strokeStyle='#BD3227';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x(wi),y(D[wi][1]));
-  for(let i=wi+1;i<D.length;i++)ctx.lineTo(x(i),y(D[i][1]));ctx.stroke();
-
-  // Dots
-  D.forEach((d,i)=>{ctx.beginPath();ctx.arc(x(i),y(d[1]),2.5,0,Math.PI*2);ctx.fillStyle=i>=wi?'#BD3227':'#1D6FA5';ctx.fill()});
-
-  // X labels
-  ctx.font=(mob?7:9)+'px "JetBrains Mono"';ctx.textAlign='center';
-  D.forEach((d,i)=>{
-    if(mob&&i%4!==0&&i!==wi&&i!==D.length-1)return;
-    if(!mob&&i%3!==0&&i!==wi&&i!==D.length-1)return;
-    ctx.fillStyle=i===wi?'#BD3227':'#999';
-    ctx.font=i===wi?'bold '+(mob?7:9)+'px "JetBrains Mono"':(mob?7:9)+'px "JetBrains Mono"';
-    ctx.fillText(d[0],x(i),p.t+ch+14);
-  });
-
-  // Events
-  events.forEach(ev=>{
-    const ex=x(ev.i),ey=y(D[ev.i][1]);
-    ctx.fillStyle=ev.c;ctx.font=(ev.bold?'bold ':'')+(mob?7:8)+'px "Noto Sans KR"';ctx.textAlign='center';
-    ctx.fillText(ev.t,ex,ey-8);
-  });
-
-  // Legend
-  const ly=H-6;ctx.font=(mob?8:9)+'px "Noto Sans KR"';ctx.textAlign='left';
-  ctx.fillStyle='#1D6FA5';ctx.fillRect(p.l,ly-4,10,3);ctx.fillStyle='#444';ctx.fillText('전쟁 전',p.l+14,ly);
-  ctx.fillStyle='#BD3227';ctx.fillRect(p.l+56,ly-4,10,3);ctx.fillStyle='#444';ctx.fillText('전쟁 후',p.l+70,ly);
+const box=cv.parentElement,W=box.clientWidth-28,H=260;
+cv.width=W*dpr;cv.height=H*dpr;cv.style.width=W+'px';cv.style.height=H+'px';
+ctx.setTransform(1,0,0,1,0,0);ctx.scale(dpr,dpr);ctx.clearRect(0,0,W,H);
+const mob=W<400,p={t:40,r:16,b:36,l:mob?36:42},cw=W-p.l-p.r,ch=H-p.t-p.b;
+const mn=58,mx=125,rg=mx-mn;
+const x=i=>p.l+(i/(D.length-1))*cw,y=v=>p.t+(1-(v-mn)/rg)*ch;
+ctx.fillStyle='rgba(189,50,39,.04)';ctx.fillRect(x(wi),p.t,W-p.r-x(wi),ch);
+ctx.strokeStyle='rgba(189,50,39,.45)';ctx.lineWidth=1.5;ctx.setLineDash([6,3]);
+ctx.beginPath();ctx.moveTo(x(wi),p.t);ctx.lineTo(x(wi),p.t+ch);ctx.stroke();ctx.setLineDash([]);
+ctx.fillStyle='#BD3227';ctx.font='bold '+(mob?8:9)+'px "Noto Sans KR"';ctx.textAlign='left';
+ctx.fillText('⚔️ 전쟁 발발 (2/28)',x(wi)+4,p.t+12);
+for(let v=60;v<=120;v+=10){ctx.strokeStyle='#EDEBE6';ctx.lineWidth=.5;ctx.beginPath();ctx.moveTo(p.l,y(v));ctx.lineTo(p.l+cw,y(v));ctx.stroke();ctx.fillStyle='#999';ctx.font=(mob?8:9)+'px "JetBrains Mono"';ctx.textAlign='right';ctx.fillText('$'+v,p.l-4,y(v)+3)}
+ctx.strokeStyle='rgba(189,50,39,.2)';ctx.lineWidth=1;ctx.setLineDash([3,3]);ctx.beginPath();ctx.moveTo(p.l,y(100));ctx.lineTo(p.l+cw,y(100));ctx.stroke();ctx.setLineDash([]);
+ctx.beginPath();ctx.moveTo(x(0),y(D[0][1]));for(let i=1;i<D.length;i++)ctx.lineTo(x(i),y(D[i][1]));ctx.lineTo(x(D.length-1),p.t+ch);ctx.lineTo(x(0),p.t+ch);ctx.closePath();
+const grd=ctx.createLinearGradient(0,p.t,0,p.t+ch);grd.addColorStop(0,'rgba(189,50,39,.1)');grd.addColorStop(1,'rgba(255,255,255,0)');ctx.fillStyle=grd;ctx.fill();
+ctx.strokeStyle='#1D6FA5';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x(0),y(D[0][1]));for(let i=1;i<=wi;i++)ctx.lineTo(x(i),y(D[i][1]));ctx.stroke();
+ctx.strokeStyle='#BD3227';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x(wi),y(D[wi][1]));for(let i=wi+1;i<D.length;i++)ctx.lineTo(x(i),y(D[i][1]));ctx.stroke();
+D.forEach((d,i)=>{ctx.beginPath();ctx.arc(x(i),y(d[1]),2.5,0,Math.PI*2);ctx.fillStyle=i>=wi?'#BD3227':'#1D6FA5';ctx.fill()});
+ctx.font=(mob?7:9)+'px "JetBrains Mono"';ctx.textAlign='center';
+D.forEach((d,i)=>{if(mob&&i%4!==0&&i!==wi&&i!==D.length-1)return;if(!mob&&i%3!==0&&i!==wi&&i!==D.length-1)return;ctx.fillStyle=i===wi?'#BD3227':'#999';ctx.font=(i===wi?'bold ':'')+(mob?7:9)+'px "JetBrains Mono"';ctx.fillText(d[0],x(i),p.t+ch+14)});
+ev.forEach(e=>{const ex=x(e.i),ey=y(D[e.i][1]);ctx.fillStyle=e.c;ctx.font=(e.b?'bold ':'')+(mob?7:8)+'px "Noto Sans KR"';ctx.textAlign='center';ctx.fillText(e.t,ex,ey-8)});
+const ly=H-6;ctx.font=(mob?8:9)+'px "Noto Sans KR"';ctx.textAlign='left';
+ctx.fillStyle='#1D6FA5';ctx.fillRect(p.l,ly-4,10,3);ctx.fillStyle='#444';ctx.fillText('전쟁 전',p.l+14,ly);
+ctx.fillStyle='#BD3227';ctx.fillRect(p.l+56,ly-4,10,3);ctx.fillStyle='#444';ctx.fillText('전쟁 후',p.l+70,ly);
 }
 draw();window.addEventListener('resize',draw);
 })();
