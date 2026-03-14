@@ -732,7 +732,6 @@ section:last-of-type { border-bottom: none; }
 <!-- NAV -->
 <nav class="sticky-nav">
   <div class="sticky-nav-inner">
-    <a href="#chart">유가 차트</a>
     <a href="#timeline">14일 타임라인</a>
     <a href="#clocks">비동시적 위기 시계</a>
     <a href="#gap">공급 갭 해부</a>
@@ -745,23 +744,6 @@ section:last-of-type { border-bottom: none; }
 </nav>
 
 <main class="container">
-
-<!-- SECTION 0: OIL PRICE CHART -->
-<section id="chart" class="fade-in">
-  <div class="section-label">SECTION 00 — BRENT CRUDE PRICE TRAJECTORY</div>
-  <h2 class="section-title">Brent 원유 가격 추이: 2월 1일 ~ 3월 14일</h2>
-  <p class="section-desc">
-    2월 내내 $64~$76 밴드에서 이란 핵 협상 기대와 제재 우려가 교차하며 등락했다.
-    2월 28일 개전과 동시에 가격 구조가 완전히 파괴되었다.
-  </p>
-  <div style="background:var(--bg-card);border:1px solid var(--border-light);border-radius:var(--radius-lg);padding:28px 24px 20px;box-shadow:var(--shadow-sm);overflow-x:auto;">
-    <canvas id="oilChart" style="width:100%;height:380px;"></canvas>
-  </div>
-  <div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:12px;font-size:11px;color:var(--text-muted);">
-    <span>● 데이터 출처: Trading Economics, EIA STEO (3/10), CNBC, Barchart, 기고문 내 인용 수치</span>
-    <span>● 주말·공휴일은 직전 거래일 종가 기준</span>
-  </div>
-</section>
 
 <!-- SECTION 1: TIMELINE -->
 <section id="timeline" class="fade-in">
@@ -1353,57 +1335,78 @@ section:last-of-type { border-bottom: none; }
 
 <!-- SECTION 7: DEMAND DESTRUCTION -->
 <section id="demand" class="fade-in">
-  <div class="section-label">SECTION 07 — DEMAND DESTRUCTION THRESHOLD</div>
-  <h2 class="section-title">수요 파괴 임계점: 자기 소화 메커니즘</h2>
+  <div class="section-label">SECTION 07 — OIL PRICE TRAJECTORY & DEMAND DESTRUCTION</div>
+  <h2 class="section-title">유가 궤적과 수요 파괴 임계점</h2>
   <p class="section-desc">
-    원유는 자체 치유 메커니즘을 갖고 있다 — 가격이 충분히 높으면 수요가 붕괴되어 위기가 해소된다.
-    그러나 "충분히 높은" 가격은 대부분의 예상보다 높으며, 수요 파괴는 균등하지 않다.
+    2월 초부터 현재까지의 Brent 유가 흐름을 아래로 읽으면 시간 경과이고, 오른쪽으로 읽으면 가격 상승이다.
+    하단의 스펙트럼과 수직으로 연결되어, 현재 유가가 수요 파괴 임계점 대비 어디에 있는지 직관적으로 확인할 수 있다.
   </p>
 
-  <div class="demand-chart">
-    <div class="gap-title">유가 스펙트럼과 주요 임계점</div>
-    <div class="price-spectrum">
-      <div class="price-marker" style="left:8%;">
-        <div class="price-marker-line" style="background:var(--green-safe);"></div>
-        <div class="price-marker-label">$72<br><span style="font-size:9px;color:var(--text-muted);">전쟁 전</span></div>
-      </div>
-      <div class="price-marker" style="left:28%;">
-        <div class="price-marker-line" style="background:var(--blue-info);"></div>
-        <div class="price-marker-label">$95<br><span style="font-size:9px;color:var(--text-muted);">EIA 해소 시</span></div>
-      </div>
-      <div class="price-marker" style="left:38%;">
-        <div class="price-marker-line" style="background:var(--text-primary);height:84px;"></div>
-        <div class="price-marker-label" style="font-weight:700;">$101<br><span style="font-size:9px;color:var(--red-danger);">현재 (D+14)</span></div>
-      </div>
-      <div class="price-marker" style="left:58%;">
-        <div class="price-marker-line" style="background:var(--orange-warn);"></div>
-        <div class="price-marker-label">$120<br><span style="font-size:9px;color:var(--text-muted);">Barclays 2주↑</span></div>
-      </div>
-      <div class="price-marker" style="left:82%;">
-        <div class="price-marker-line" style="background:var(--red-danger);"></div>
-        <div class="price-marker-label">$155<br><span style="font-size:9px;color:var(--text-muted);">수요파괴 임계</span></div>
-      </div>
+  <div class="demand-chart" style="padding:0;overflow:hidden;">
+    <!-- Vertical Oil Price Chart -->
+    <div style="padding:24px 24px 0;">
+      <div class="gap-title">Brent 원유 가격 추이 (2/3 ~ 3/14) — 세로: 시간 ↓ · 가로: 유가 →</div>
     </div>
-    <div class="price-axis">
-      <span>$60</span>
-      <span>$80</span>
-      <span>$100</span>
-      <span>$120</span>
-      <span>$140</span>
-      <span>$160+</span>
+    <div id="verticalChartWrap" style="padding:8px 24px 0;overflow-x:auto;">
+      <canvas id="verticalOilChart"></canvas>
     </div>
 
-    <div style="margin-top:24px;display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:12px;">
-      <div style="padding:12px;background:var(--bg-accent);border-radius:var(--radius);line-height:1.7;">
-        <strong>탄력적 수요 (감소 가능)</strong><br>
-        · 휘발유 (전체의 ~25%): 재량 주행 축소<br>
-        · 항공유 (8%): 비즈니스 여행 일부 감소
+    <!-- Spectrum directly below, aligned -->
+    <div style="padding:8px 24px 0;">
+      <div style="margin-left:52px;margin-right:30px;position:relative;">
+        <div style="height:14px;background:linear-gradient(to right, var(--green-safe), #B7950B, var(--orange-warn), var(--red-danger));border-radius:4px;"></div>
+        <div style="display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text-muted);margin-top:2px;">
+          <span>$55</span><span>$70</span><span>$85</span><span>$100</span><span>$115</span><span>$130</span><span>$145</span><span>$160</span>
+        </div>
       </div>
-      <div style="padding:12px;background:var(--red-light);border-radius:var(--radius);line-height:1.7;">
-        <strong>비탄력적 수요 (감소 곤란)</strong><br>
-        · 디젤 (17%): 물류·화물은 공급망이 요구<br>
-        · 석유화학 (15~17%): 순수 투입 비용 인플레이션<br>
-        · <strong>LPG·난방유:</strong> 개도국은 연료 전환·영양 감소·활동 축소. 수요를 파괴하지 않고 사회를 파괴
+    </div>
+
+    <div style="padding:12px 24px 4px;">
+      <div class="gap-title">유가 스펙트럼과 주요 임계점</div>
+    </div>
+    <div style="padding:0 24px;">
+      <div style="margin-left:52px;margin-right:30px;position:relative;height:70px;">
+        <div class="price-spectrum" style="margin:0;height:48px;border-radius:6px;">
+          <div class="price-marker" style="left:8%;">
+            <div class="price-marker-line" style="background:var(--green-safe);height:60px;"></div>
+            <div class="price-marker-label">$72<br><span style="font-size:9px;color:var(--text-muted);">전쟁 전</span></div>
+          </div>
+          <div class="price-marker" style="left:28%;">
+            <div class="price-marker-line" style="background:var(--blue-info);height:60px;"></div>
+            <div class="price-marker-label">$95<br><span style="font-size:9px;color:var(--text-muted);">EIA 해소 시</span></div>
+          </div>
+          <div class="price-marker" style="left:38%;">
+            <div class="price-marker-line" style="background:var(--text-primary);height:68px;"></div>
+            <div class="price-marker-label" style="font-weight:700;">$101<br><span style="font-size:9px;color:var(--red-danger);">현재 D+14</span></div>
+          </div>
+          <div class="price-marker" style="left:58%;">
+            <div class="price-marker-line" style="background:var(--orange-warn);height:60px;"></div>
+            <div class="price-marker-label">$120<br><span style="font-size:9px;color:var(--text-muted);">Barclays 2주↑</span></div>
+          </div>
+          <div class="price-marker" style="left:82%;">
+            <div class="price-marker-line" style="background:var(--red-danger);height:60px;"></div>
+            <div class="price-marker-label">$155<br><span style="font-size:9px;color:var(--text-muted);">수요파괴 임계</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="padding:48px 24px 24px;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:12px;">
+        <div style="padding:12px;background:var(--bg-accent);border-radius:var(--radius);line-height:1.7;">
+          <strong>탄력적 수요 (감소 가능)</strong><br>
+          · 휘발유 (전체의 ~25%): 재량 주행 축소<br>
+          · 항공유 (8%): 비즈니스 여행 일부 감소
+        </div>
+        <div style="padding:12px;background:var(--red-light);border-radius:var(--radius);line-height:1.7;">
+          <strong>비탄력적 수요 (감소 곤란)</strong><br>
+          · 디젤 (17%): 물류·화물은 공급망이 요구<br>
+          · 석유화학 (15~17%): 순수 투입 비용 인플레이션<br>
+          · <strong>LPG·난방유:</strong> 개도국은 연료 전환·영양 감소·활동 축소. 수요를 파괴하지 않고 사회를 파괴
+        </div>
+      </div>
+      <div style="margin-top:12px;font-size:11px;color:var(--text-muted);">
+        ● 데이터 출처: Trading Economics, EIA STEO (3/10), CNBC, Barchart, 기고문 내 인용 수치 · 주말/공휴일은 직전 거래일 종가 기준
       </div>
     </div>
   </div>
@@ -1478,13 +1481,29 @@ section:last-of-type { border-bottom: none; }
   </div>
 
   <div class="callout" style="margin-top:24px;">
-    <div class="callout-title">📌 핵심 타임라인 종합</div>
+    <div class="callout-title">📌 핵심 타임라인 종합 (2월 초 ~ 향후 전망)</div>
     <div class="callout-body" style="font-family:'JetBrains Mono',monospace;font-size:12px;line-height:2;">
-      D+14 · 3/14 (오늘) ··· 파리 회담 전야. MEU 루존 해협 통과 확인<br>
+      <span style="color:var(--blue-info);font-weight:700;">── 전쟁 전: 이란 핵 협상기 ──</span><br>
+      2/3~7 ········ Brent $73~75. OPEC+ 증산 전망 속 이란 제재 리스크 프리미엄 형성<br>
+      2/9~10 ······· 이란 핵 협상 "긍정적" 보도 → Brent $67~68 급락. 오만 회담 진전<br>
+      2/11~14 ····· $64~66 밴드. J.P.Morgan "Brent 연평균 $60" 전망. 과잉공급 내러티브<br>
+      2/18~21 ····· 재긴장. 미, 호르무즈 미국 선적 이란수역 회피 경고. $68→$74 회복<br>
+      2/24~27 ····· $71~74 등락. 제네바 핵 협상 결렬 임박 시그널. 전운 고조<br>
+      <span style="color:var(--red-danger);font-weight:700;">── 전쟁 발발: 호르무즈 위기 ──</span><br>
+      D+0 · 2/28 ··· ⚔️ 미·이스라엘 이란 공습 개시. Brent $72→$77 (+8% 당일)<br>
+      D+3 · 3/3 ···· 이란 보복 (라스타누라·카타르 피격). Brent $85. 해협 사실상 폐쇄<br>
+      D+4 · 3/4 ···· IRGC 공식 해협 폐쇄 선언. 서방 선박 "적법 표적" 경고<br>
+      D+7 · 3/7 ···· 걸프 4국 670만 b/d 감산. Brent 장중 $119.50 (52주 최고)<br>
+      D+10 · 3/10 ·· 트럼프 "곧 종결" + 제재 면제 시사 → WTI 10%↓. 동일 날 역대급 공습<br>
+      D+12 · 3/12 ·· IEA 4억 배럴 방출 발표. 유조선 2척 피격. Brent $100 돌파<br>
+      D+13 · 3/13 ·· 카르그 섬 군사시설 타격. Brent $103.14 결산<br>
+      <span style="color:var(--china-red);font-weight:700;">── 질적 전환: 에너지 → 안보 구조 위기 ──</span><br>
+      D+14 · 3/14 ·· (오늘) MEU 태평양→중동. 북한 10발 미사일. 중국 어선 1,200척<br>
       D+16~17 · 3/15~16 · Bessent · He Lifeng 파리 회담<br>
-      D+20~25 · 3/20~25 · MEU 아라비아해 도착 예상. 인도 LPG 사회적 임계 구간 (3/20~30)<br>
+      <span style="color:var(--text-muted);">── 향후 전망 ──</span><br>
+      D+20~25 · 3/20~25 · MEU 아라비아해 도착. 인도 LPG 임계 구간 (3/20~30)<br>
       D+25~30 · 3/25~30 · 해협 군사적 강행 개통 가능 창. 일본·한국 LNG 임계 접근<br>
-      D+30~40 · 3/30~4/9 · 일본·한국 LNG 물리적 소진 임계. 배급 또는 그리드 불안정<br>
+      D+30~40 · 3/30~4/9 · 일본·한국 LNG 물리적 소진. 배급 또는 그리드 불안정<br>
       D+31 · 3/31 ····· 트럼프 방중 — 시진핑과 정상회담<br>
       D+60~90 · 4/29~5/29 · 미국 SPR 가시적 압축. 주유소 가격 선거 이슈화<br>
     </div>
@@ -1533,245 +1552,197 @@ window.addEventListener('scroll', () => {
 });
 </script>
 <script>
-// ===== BRENT CRUDE OIL PRICE CHART =====
+// ===== VERTICAL BRENT CRUDE OIL CHART (Y=time↓, X=price→) =====
 (function(){
-  const canvas = document.getElementById('oilChart');
+  const canvas = document.getElementById('verticalOilChart');
   if(!canvas) return;
   const ctx = canvas.getContext('2d');
   const dpr = window.devicePixelRatio || 1;
+  const wrap = document.getElementById('verticalChartWrap');
+
+  // Data: [label, open, high, low, close, event?]
+  const data = [
+    ['2/3',  73.0, 74.2, 72.5, 73.8, null],
+    ['2/4',  73.8, 75.1, 73.3, 74.5, null],
+    ['2/5',  74.5, 74.8, 72.8, 73.2, null],
+    ['2/6',  73.2, 75.3, 73.0, 74.8, null],
+    ['2/7',  74.8, 76.0, 74.2, 75.2, null],
+    ['2/10', 75.0, 75.5, 67.2, 68.0, '이란 핵 협상 낙관'],
+    ['2/11', 68.0, 69.8, 67.5, 69.3, null],
+    ['2/12', 69.3, 69.5, 63.8, 64.5, null],
+    ['2/13', 64.5, 65.8, 64.0, 65.1, null],
+    ['2/14', 65.1, 66.8, 64.8, 66.2, null],
+    ['2/18', 66.2, 68.0, 65.5, 67.5, '재긴장 시작'],
+    ['2/19', 67.5, 71.0, 67.0, 70.3, null],
+    ['2/20', 70.3, 73.0, 69.8, 72.5, null],
+    ['2/21', 72.5, 74.2, 72.0, 73.8, null],
+    ['2/24', 73.8, 74.8, 73.2, 74.1, null],
+    ['2/25', 74.1, 74.5, 72.8, 73.5, null],
+    ['2/26', 73.5, 73.8, 72.0, 72.8, null],
+    ['2/27', 72.8, 73.0, 70.5, 71.3, '전쟁 전야'],
+    ['2/28', 71.3, 78.5, 71.0, 77.2, '⚔️ 개전 D+0'],
+    ['3/3',  77.2, 86.5, 76.5, 85.0, 'D+3 이란 보복'],
+    ['3/4',  85.0, 90.0, 84.0, 88.5, 'D+4 IRGC 폐쇄'],
+    ['3/5',  88.5, 92.5, 87.5, 91.0, null],
+    ['3/6',  91.0, 95.0, 90.0, 93.5, 'D+6 기뢰 확인'],
+    ['3/7',  93.5,119.5, 93.0,101.0, 'D+7 장중 $119.50'],
+    ['3/9',  101.0,102.0, 91.0, 94.0, 'D+9 EIA $94'],
+    ['3/10', 94.0, 95.0, 78.0, 79.5, 'D+10 "곧 종결"↓'],
+    ['3/11', 79.5, 98.0, 79.0, 96.0, 'D+11 IEA SPR'],
+    ['3/12', 96.0,102.0, 95.0,100.5, 'D+12 유조선 피격'],
+    ['3/13',100.5,104.0, 97.6,103.1, 'D+13 카르그 섬'],
+    ['3/14',101.7,103.9, 97.6,101.2, 'D+14 MEU 전개 ★'],
+  ];
+
+  const warIdx = data.findIndex(d => d[0]==='2/28');
 
   function resize(){
-    const rect = canvas.parentElement.getBoundingClientRect();
-    canvas.width = rect.width * dpr;
-    canvas.height = 380 * dpr;
-    canvas.style.width = rect.width + 'px';
-    canvas.style.height = '380px';
+    const w = Math.max(wrap.clientWidth, 700);
+    const h = data.length * 24 + 80;
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    canvas.style.width = w + 'px';
+    canvas.style.height = h + 'px';
+    ctx.setTransform(1,0,0,1,0,0);
     ctx.scale(dpr, dpr);
-    draw(rect.width, 380);
+    draw(w, h);
   }
 
-  // Brent price data: [date_label, price, isWeekend]
-  // Sources: Trading Economics, EIA STEO, CNBC, Barchart, article citations
-  const data = [
-    // February 2026
-    ['2/3', 73.8, false],
-    ['2/4', 74.5, false],
-    ['2/5', 73.2, false],
-    ['2/6', 74.8, false],
-    ['2/7', 75.2, false],
-    ['2/10', 68.0, false],  // Iran talks optimism -> drop
-    ['2/11', 69.3, false],
-    ['2/12', 64.5, false],  // Diplomatic progress
-    ['2/13', 65.1, false],
-    ['2/14', 66.2, false],
-    ['2/18', 67.5, false],  // Tension re-escalation
-    ['2/19', 70.3, false],
-    ['2/20', 72.5, false],
-    ['2/21', 73.8, false],
-    ['2/24', 74.1, false],
-    ['2/25', 73.5, false],
-    ['2/26', 72.8, false],
-    ['2/27', 71.3, false],  // Pre-war close
-    // War begins 2/28
-    ['2/28', 77.2, false],  // D+0 WAR START
-    // March 2026
-    ['3/3', 85.0, false],   // D+3
-    ['3/4', 88.5, false],   // D+4 IRGC closure
-    ['3/5', 91.0, false],   // D+5
-    ['3/6', 93.5, false],   // D+6 mines confirmed
-    ['3/7', 101.0, false],  // D+7
-    ['3/9', 94.0, false],   // D+9 (EIA writing at $94)
-    ['3/10', 79.5, false],  // D+10 Trump "very soon" -> crash
-    ['3/11', 96.0, false],  // D+11 IEA 400M bbl -> bounce
-    ['3/12', 100.5, false], // D+12 tankers struck
-    ['3/13', 103.1, false], // D+13 $103.14 close
-    ['3/14', 101.2, false], // D+14 today
-  ];
-
-  const warStartIdx = data.findIndex(d => d[0] === '2/28');
-
-  // Key events
-  const events = [
-    { idx: data.findIndex(d=>d[0]==='2/10'), label: '이란 핵 협상\n낙관론', color: '#2471A3', side: 'top' },
-    { idx: warStartIdx, label: '⚔️ 개전\nD+0', color: '#C0392B', side: 'top', major: true },
-    { idx: data.findIndex(d=>d[0]==='3/4'), label: 'IRGC\n해협 폐쇄 선언', color: '#C0392B', side: 'bottom' },
-    { idx: data.findIndex(d=>d[0]==='3/7'), label: '$119.50\n장중 최고', color: '#D35400', side: 'top' },
-    { idx: data.findIndex(d=>d[0]==='3/10'), label: '트럼프\n"곧 종결"', color: '#1E8449', side: 'bottom' },
-    { idx: data.findIndex(d=>d[0]==='3/11'), label: 'IEA SPR\n4억 배럴', color: '#2471A3', side: 'top' },
-    { idx: data.findIndex(d=>d[0]==='3/13'), label: '카르그 섬\n타격', color: '#C0392B', side: 'bottom' },
-    { idx: data.findIndex(d=>d[0]==='3/14'), label: 'D+14\nMEU 전개', color: '#922B21', side: 'top', major: true },
-  ];
-
-  function draw(W, H) {
+  function draw(W, H){
     ctx.clearRect(0,0,W,H);
-    const pad = { top: 60, right: 30, bottom: 50, left: 52 };
+    const pad = { top: 30, right: 30, bottom: 20, left: 52 };
     const cw = W - pad.left - pad.right;
     const ch = H - pad.top - pad.bottom;
-    const prices = data.map(d=>d[1]);
-    const minP = 55;
-    const maxP = 125;
-    const rangeP = maxP - minP;
+    const rowH = ch / data.length;
+    const minP = 55, maxP = 130, rangeP = maxP - minP;
 
-    function x(i){ return pad.left + (i/(data.length-1))*cw; }
-    function y(p){ return pad.top + (1-(p-minP)/rangeP)*ch; }
+    function px(price){ return pad.left + ((price - minP)/rangeP)*cw; }
+    function py(i){ return pad.top + i*rowH + rowH/2; }
 
     // War zone background
-    if(warStartIdx >= 0){
-      ctx.fillStyle = 'rgba(192,57,43,0.06)';
-      ctx.fillRect(x(warStartIdx), pad.top, cw - (warStartIdx/(data.length-1))*cw, ch);
-      // War start line
-      ctx.strokeStyle = '#C0392B';
-      ctx.lineWidth = 2;
-      ctx.setLineDash([6,4]);
+    if(warIdx >= 0){
+      const wy = pad.top + warIdx * rowH;
+      ctx.fillStyle = 'rgba(192,57,43,0.05)';
+      ctx.fillRect(pad.left, wy, cw, ch - warIdx*rowH + pad.bottom);
+      // War line
+      ctx.strokeStyle = 'rgba(192,57,43,0.6)';
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([8,4]);
       ctx.beginPath();
-      ctx.moveTo(x(warStartIdx), pad.top);
-      ctx.lineTo(x(warStartIdx), pad.top+ch);
+      ctx.moveTo(pad.left, wy);
+      ctx.lineTo(pad.left+cw, wy);
       ctx.stroke();
       ctx.setLineDash([]);
-      // Label
       ctx.fillStyle = '#C0392B';
-      ctx.font = 'bold 11px "Noto Sans KR", sans-serif';
+      ctx.font = 'bold 10px "Noto Sans KR", sans-serif';
       ctx.textAlign = 'left';
-      ctx.fillText('⚔️ 전쟁 발발 (2/28)', x(warStartIdx)+6, pad.top+16);
+      ctx.fillText('⚔️ 전쟁 발발', pad.left + cw - 80, wy - 5);
     }
 
-    // Grid lines
-    ctx.strokeStyle = '#E8E4DC';
-    ctx.lineWidth = 0.5;
-    for(let p = 60; p <= 120; p += 10){
+    // Price grid lines
+    ctx.textAlign = 'center';
+    for(let p = 60; p <= 130; p += 10){
+      const gx = px(p);
+      ctx.strokeStyle = '#EDEBE6';
+      ctx.lineWidth = 0.5;
       ctx.beginPath();
-      ctx.moveTo(pad.left, y(p));
-      ctx.lineTo(pad.left+cw, y(p));
+      ctx.moveTo(gx, pad.top);
+      ctx.lineTo(gx, pad.top+ch);
       ctx.stroke();
       ctx.fillStyle = '#8A8A8A';
-      ctx.font = '10px "JetBrains Mono", monospace';
-      ctx.textAlign = 'right';
-      ctx.fillText('$'+p, pad.left-6, y(p)+3);
+      ctx.font = '9px "JetBrains Mono", monospace';
+      ctx.fillText('$'+p, gx, pad.top - 8);
     }
 
-    // $100 line emphasis
-    ctx.strokeStyle = 'rgba(192,57,43,0.3)';
+    // $100 emphasis
+    ctx.strokeStyle = 'rgba(192,57,43,0.25)';
     ctx.lineWidth = 1;
-    ctx.setLineDash([4,4]);
+    ctx.setLineDash([3,3]);
     ctx.beginPath();
-    ctx.moveTo(pad.left, y(100));
-    ctx.lineTo(pad.left+cw, y(100));
+    ctx.moveTo(px(100), pad.top);
+    ctx.lineTo(px(100), pad.top+ch);
     ctx.stroke();
     ctx.setLineDash([]);
-    ctx.fillStyle = 'rgba(192,57,43,0.5)';
-    ctx.font = '9px "JetBrains Mono", monospace';
-    ctx.textAlign = 'left';
-    ctx.fillText('$100', pad.left+cw+4, y(100)+3);
 
-    // Intraday high annotation
-    const highY = y(119.5);
-    ctx.strokeStyle = 'rgba(211,84,0,0.4)';
-    ctx.lineWidth = 1;
-    ctx.setLineDash([2,3]);
-    ctx.beginPath();
-    const highIdx = data.findIndex(d=>d[0]==='3/7');
-    ctx.moveTo(x(highIdx)-20, highY);
-    ctx.lineTo(x(highIdx)+40, highY);
-    ctx.stroke();
-    ctx.setLineDash([]);
-    ctx.fillStyle = '#D35400';
-    ctx.font = '9px "JetBrains Mono", monospace';
-    ctx.textAlign = 'center';
-    ctx.fillText('장중 $119.50', x(highIdx)+10, highY-6);
+    // Candles
+    data.forEach((d, i) => {
+      const [label, open, high, low, close, evt] = d;
+      const cy = py(i);
+      const isUp = close >= open;
+      const isWar = i >= warIdx;
+      const color = isWar ? (isUp ? '#C0392B' : '#2471A3') : (isUp ? '#1E8449' : '#C0392B');
 
-    // Area fill under line
-    ctx.beginPath();
-    ctx.moveTo(x(0), y(data[0][1]));
-    for(let i=1;i<data.length;i++) ctx.lineTo(x(i), y(data[i][1]));
-    ctx.lineTo(x(data.length-1), pad.top+ch);
-    ctx.lineTo(x(0), pad.top+ch);
-    ctx.closePath();
-    const grad = ctx.createLinearGradient(0, pad.top, 0, pad.top+ch);
-    grad.addColorStop(0, 'rgba(192,57,43,0.12)');
-    grad.addColorStop(0.5, 'rgba(183,149,11,0.06)');
-    grad.addColorStop(1, 'rgba(255,255,255,0)');
-    ctx.fillStyle = grad;
-    ctx.fill();
-
-    // Price line - before war
-    ctx.strokeStyle = '#2471A3';
-    ctx.lineWidth = 2.5;
-    ctx.beginPath();
-    ctx.moveTo(x(0), y(data[0][1]));
-    for(let i=1;i<=warStartIdx;i++) ctx.lineTo(x(i), y(data[i][1]));
-    ctx.stroke();
-
-    // Price line - after war
-    ctx.strokeStyle = '#C0392B';
-    ctx.lineWidth = 2.5;
-    ctx.beginPath();
-    ctx.moveTo(x(warStartIdx), y(data[warStartIdx][1]));
-    for(let i=warStartIdx+1;i<data.length;i++) ctx.lineTo(x(i), y(data[i][1]));
-    ctx.stroke();
-
-    // Data points
-    data.forEach((d,i) => {
+      // High-low wick
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 1;
       ctx.beginPath();
-      ctx.arc(x(i), y(d[1]), 3, 0, Math.PI*2);
-      ctx.fillStyle = i >= warStartIdx ? '#C0392B' : '#2471A3';
-      ctx.fill();
-    });
+      ctx.moveTo(px(low), cy);
+      ctx.lineTo(px(high), cy);
+      ctx.stroke();
 
-    // X-axis labels (every few)
-    ctx.fillStyle = '#8A8A8A';
-    ctx.font = '10px "JetBrains Mono", monospace';
-    ctx.textAlign = 'center';
-    data.forEach((d,i) => {
-      if(i % 3 === 0 || i === data.length-1 || i === warStartIdx){
-        ctx.fillStyle = i === warStartIdx ? '#C0392B' : '#8A8A8A';
-        ctx.font = i === warStartIdx ? 'bold 10px "JetBrains Mono", monospace' : '10px "JetBrains Mono", monospace';
-        ctx.fillText(d[0], x(i), pad.top+ch+16);
+      // Body
+      const bodyLeft = px(Math.min(open, close));
+      const bodyRight = px(Math.max(open, close));
+      const bodyW = Math.max(bodyRight - bodyLeft, 2);
+      const bodyH = Math.min(rowH * 0.6, 14);
+      ctx.fillStyle = isUp ? color : color;
+      ctx.globalAlpha = isUp ? 0.85 : 0.4;
+      ctx.fillRect(bodyLeft, cy - bodyH/2, bodyW, bodyH);
+      ctx.globalAlpha = 1;
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 0.8;
+      ctx.strokeRect(bodyLeft, cy - bodyH/2, bodyW, bodyH);
+
+      // Y-axis label (date)
+      ctx.fillStyle = isWar ? '#922B21' : '#4A4A4A';
+      ctx.font = (i === warIdx || i === data.length-1) ? 'bold 10px "JetBrains Mono", monospace' : '9px "JetBrains Mono", monospace';
+      ctx.textAlign = 'right';
+      ctx.fillText(label, pad.left - 6, cy + 3);
+
+      // Event annotation
+      if(evt){
+        const annotX = px(high) + 8;
+        ctx.fillStyle = isWar ? '#922B21' : '#2471A3';
+        ctx.font = '9px "Noto Sans KR", sans-serif';
+        ctx.textAlign = 'left';
+        const maxAnnotW = W - annotX - pad.right;
+        if(maxAnnotW > 40){
+          ctx.fillText(evt, annotX, cy + 3);
+        }
       }
     });
 
-    // Event annotations
-    events.forEach(ev => {
-      if(ev.idx < 0) return;
-      const ex = x(ev.idx);
-      const ey = y(data[ev.idx][1]);
-      const lines = ev.label.split('\n');
-      const isTop = ev.side === 'top';
-      const offset = isTop ? -14 : 18;
-
-      // Tick line
-      ctx.strokeStyle = ev.color;
-      ctx.lineWidth = ev.major ? 1.5 : 0.8;
-      ctx.globalAlpha = 0.5;
-      ctx.beginPath();
-      ctx.moveTo(ex, ey);
-      ctx.lineTo(ex, ey + (isTop ? -10 : 10));
-      ctx.stroke();
-      ctx.globalAlpha = 1;
-
-      ctx.fillStyle = ev.color;
-      ctx.font = ev.major ? 'bold 10px "Noto Sans KR", sans-serif' : '9px "Noto Sans KR", sans-serif';
-      ctx.textAlign = 'center';
-      lines.forEach((line, li) => {
-        ctx.fillText(line, ex, ey + offset + (isTop ? -1 : 1)*li*12);
-      });
+    // Close price line connecting closes
+    ctx.strokeStyle = 'rgba(26,26,26,0.15)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    data.forEach((d,i) => {
+      const cx = px(d[4]); // close
+      const cy = py(i);
+      if(i===0) ctx.moveTo(cx,cy); else ctx.lineTo(cx,cy);
     });
+    ctx.stroke();
 
     // Legend
-    ctx.font = '11px "Noto Sans KR", sans-serif';
+    ctx.font = '10px "Noto Sans KR", sans-serif';
     ctx.textAlign = 'left';
-    // Pre-war
-    ctx.fillStyle = '#2471A3';
-    ctx.fillRect(pad.left, H-18, 14, 3);
-    ctx.fillText('전쟁 전 (이란 핵 협상기)', pad.left+20, H-13);
-    // Post-war
+    const ly = H - 6;
+    ctx.fillStyle = '#1E8449';
+    ctx.fillRect(pad.left, ly-6, 12, 6);
+    ctx.fillStyle = '#4A4A4A';
+    ctx.fillText('전쟁 전 상승', pad.left+16, ly);
     ctx.fillStyle = '#C0392B';
-    ctx.fillRect(pad.left+180, H-18, 14, 3);
-    ctx.fillText('전쟁 후 (호르무즈 봉쇄)', pad.left+200, H-13);
-    // Shaded area
-    ctx.fillStyle = 'rgba(192,57,43,0.15)';
-    ctx.fillRect(pad.left+370, H-20, 14, 8);
-    ctx.fillStyle = '#8A8A8A';
-    ctx.fillText('전쟁 구간', pad.left+390, H-13);
+    ctx.fillRect(pad.left+90, ly-6, 12, 6);
+    ctx.fillStyle = '#4A4A4A';
+    ctx.fillText('전쟁 후 상승', pad.left+106, ly);
+    ctx.fillStyle = '#2471A3';
+    ctx.fillRect(pad.left+190, ly-6, 12, 6);
+    ctx.fillStyle = '#4A4A4A';
+    ctx.fillText('하락', pad.left+206, ly);
+    ctx.fillStyle = 'rgba(192,57,43,0.12)';
+    ctx.fillRect(pad.left+250, ly-6, 12, 6);
+    ctx.fillStyle = '#4A4A4A';
+    ctx.fillText('전쟁 구간', pad.left+266, ly);
   }
 
   resize();
