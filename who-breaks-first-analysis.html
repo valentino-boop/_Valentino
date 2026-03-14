@@ -126,7 +126,7 @@ section:last-of-type{border-bottom:none}
   <a href="#players">플레이어</a>
   <a href="#asym">비대칭</a>
   <a href="#chain">연쇄</a>
-  <a href="#payoff">보수행렬</a>
+  <a href="#payoff">시나리오</a>
   <a href="#clock">시계</a>
   <a href="#signal">신호</a>
 </div></nav>
@@ -244,12 +244,7 @@ section:last-of-type{border-bottom:none}
   <!-- Asynchrony -->
   <div class="card">
     <div style="font-weight:700;font-size:12px;margin-bottom:10px">비동시적 붕괴 시계 — 치킨게임의 시간 변수</div>
-    <div style="position:relative;padding:12px 0">
-      <!-- Visual timeline bar -->
-      <div style="position:relative;height:24px;background:linear-gradient(90deg,var(--grn) 0%,var(--gld) 35%,var(--org) 55%,var(--red) 80%,#8B0000 100%);border-radius:4px;margin-bottom:8px">
-        <div style="position:absolute;top:-2px;left:0;font-size:8px;color:var(--tm)">D+0</div>
-        <div style="position:absolute;top:-2px;right:0;font-size:8px;color:var(--tm)">D+90</div>
-      </div>
+    <div style="padding:8px 0">
       <div style="font-size:10px;line-height:1.8;font-family:'JetBrains Mono',monospace">
         <div style="display:flex;gap:8px;align-items:baseline"><span style="color:var(--red);font-weight:700;min-width:100px">D+14 (오늘)</span><span>게임 전환 — 에너지 → 안보 다전구</span></div>
         <div style="display:flex;gap:8px;align-items:baseline"><span style="color:var(--org);font-weight:700;min-width:100px">D+20~30 (3/20~30)</span><span>인도 LPG 사회적 임계. 동남아 배급</span></div>
@@ -305,8 +300,8 @@ section:last-of-type{border-bottom:none}
 
 <!-- ═══════════ 5. THE PAYOFF MATRIX ═══════════ -->
 <section id="payoff" class="fi">
-  <div class="label">ACT V — THE PAYOFF MATRIX</div>
-  <h2 class="title">보수행렬: 파리에서의 4개 시나리오</h2>
+  <div class="label">ACT V — SCENARIO MATRIX</div>
+  <h2 class="title">시나리오 매트릭스: 파리에서의 4가지 경로</h2>
   <p class="desc">3/15~16 파리에서 Bessent와 He Lifeng이 마주 앉는다. 무역 협상으로 시작되었지만, 이미 3개 전구의 동시 레버리지 게임으로 변질. 이란의 위안화 결제 제안이 새로운 변수로 테이블에 올라왔다.</p>
 
   <!-- Asymmetry box -->
@@ -331,35 +326,35 @@ section:last-of-type{border-bottom:none}
   <div style="overflow-x:auto;-webkit-overflow-scrolling:touch">
   <table class="matrix-table">
     <thead><tr>
-      <th style="width:25%">시나리오</th>
-      <th style="width:25%">결과</th>
-      <th style="width:25%">🇺🇸 미국 보수</th>
-      <th style="width:25%">🇨🇳 중국 보수</th>
+      <th style="width:22%">시나리오</th>
+      <th style="width:30%">전개 경로</th>
+      <th style="width:24%">🇺🇸 미국에 미치는 영향</th>
+      <th style="width:24%">🇨🇳 중국에 미치는 영향</th>
     </tr></thead>
     <tbody>
     <tr>
-      <td><strong>① 중국 중재</strong><br><span style="font-size:9px;color:var(--grn)">EIA 기본선</span></td>
-      <td>호르무즈 재개통, 민병대 자제, 위안화 유보. Brent 연말 $70~80</td>
-      <td style="color:var(--grn)">에너지 해소, 선거↓<br><span style="color:var(--org);font-size:10px">중국 중재자 지위 공인</span></td>
-      <td style="color:var(--grn)">글로벌 중재자 위상<br><span style="font-size:10px">위안화 카드 보유 지속</span></td>
+      <td><strong>① 중국이 중재</strong><br><span style="font-size:9px;color:var(--grn)">EIA 기본선</span></td>
+      <td><strong>중국</strong>이 이란을 설득하여 호르무즈 재개통을 중재하고, 해상민병대 활동을 자제. 위안화 결제는 유보. Brent 연말 $70~80</td>
+      <td style="color:var(--grn)">에너지 위기 해소, 선거 리스크↓<br><span style="color:var(--org);font-size:10px">대가: 중국의 중재자 지위 공인</span></td>
+      <td style="color:var(--grn)">글로벌 중재자 위상 확보<br><span style="font-size:10px">위안화 카드는 미사용 보유</span></td>
     </tr>
     <tr>
-      <td><strong>② 구조적 양보</strong><br><span style="font-size:9px;color:var(--org)">고가 거래</span></td>
-      <td>대만·반도체·통화 전반 양보. 중국 조건 재개통</td>
-      <td style="color:var(--org)">에너지 해소<br><span style="color:var(--red);font-size:10px">CHIPS Act↓ 대만 보증↓ 30년 전략 훼손</span></td>
-      <td style="color:var(--grn)">반도체·대만 돌파<br><span style="font-size:10px">위안화 정착 → 달러 변동</span></td>
+      <td><strong>② 미국이 양보</strong><br><span style="font-size:9px;color:var(--org)">고가 거래</span></td>
+      <td><strong>미국</strong>이 대만·반도체 수출규제·통화 구조에서 전략적 양보를 제공하고, <strong>중국</strong>이 그 대가로 호르무즈를 중국 조건으로 재개통</td>
+      <td style="color:var(--org)">에너지 해소<br><span style="color:var(--red);font-size:10px">대가: CHIPS Act 후퇴, 대만 보증↓, 30년 인태 전략 훼손</span></td>
+      <td style="color:var(--grn)">반도체·대만에서 전략적 돌파<br><span style="font-size:10px">위안화 결제 정착 → 달러 패권 변동</span></td>
     </tr>
     <tr>
-      <td><strong>③ 군사 강행</strong><br><span style="font-size:9px;color:var(--red)">고위험</span></td>
-      <td>D+25~30 해협 강행. 성공해도 일 10~15회만</td>
-      <td style="color:var(--org)">걸프 "승리"<br><span style="color:var(--red);font-size:10px">태평양 억제력 훼손 (향후 30년)</span></td>
-      <td style="color:var(--grn)">양보 없이 태평양 공백<br><span style="font-size:10px">실전 데이터 축적</span></td>
+      <td><strong>③ 미국이 강행</strong><br><span style="font-size:9px;color:var(--red)">고위험</span></td>
+      <td>외교 교착 → <strong>미군</strong>이 D+25~30(3/25~30) MEU를 투입하여 해협을 물리적으로 강행 개통. 성공해도 일 10~15회 통과(전쟁 전 ~100회)</td>
+      <td style="color:var(--org)">걸프에서 "승리"<br><span style="color:var(--red);font-size:10px">대가: 태평양 억제력 장기 훼손(향후 30년 핵심 전구)</span></td>
+      <td style="color:var(--grn)">양보 없이 태평양 공백 향유<br><span style="font-size:10px">민병대 실전 데이터 축적</span></td>
     </tr>
     <tr>
-      <td><strong>④ 양 트랙 실패</strong><br><span style="font-size:9px;color:var(--red)">최악</span></td>
-      <td>일한인 배급. 태평양 리허설→실행. 3전구 합류</td>
-      <td style="color:var(--red)">80년 동맹의 근본 선택:<br>"어떤 전구를 포기할 것인가"</td>
-      <td style="color:var(--org)">레버리지 극대화<br><span style="color:var(--red);font-size:10px">통제불능 에스컬레이션</span></td>
+      <td><strong>④ 양쪽 모두 실패</strong><br><span style="font-size:9px;color:var(--red)">최악</span></td>
+      <td>외교도 군사도 실패. <strong>일본·한국·인도</strong>가 물리적 배급 진입. <strong>중국 민병대</strong>의 태평양 탐색이 리허설에서 실행으로 전환. 3개 전구 합류</td>
+      <td style="color:var(--red)">80년 동맹 구조의 근본 선택 강요:<br>"어떤 전구를 포기할 것인가"</td>
+      <td style="color:var(--org)">레버리지 극대화<br><span style="color:var(--red);font-size:10px">그러나 통제불능 에스컬레이션 리스크</span></td>
     </tr>
     </tbody>
   </table>
