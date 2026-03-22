@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>ICN → Bohol GPS Flight Tracker</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+
+<style id="style-neo-brutalism">
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+:root{--yk-bg:#fef6e4;--yk-surface:#fff;--yk-surface-hover:#fef6e4;--yk-shadow-raised:4px 4px 0 #222;--yk-shadow-sm:3px 3px 0 #222;--yk-border:3px solid #222;--yk-border-sm:2px solid #222;--yk-font:'Syne','Noto Sans KR',sans-serif;--yk-text:#222;--yk-text-secondary:#555;--yk-text-muted:#999;--yk-primary:#ff5c5c;--yk-primary-soft:rgba(255,92,92,0.12);--yk-secondary:#5c7cfa;--yk-secondary-soft:rgba(92,124,250,0.12);--yk-danger:#ff922b;--yk-danger-soft:rgba(255,146,43,0.12);--yk-success:#51cf66;--yk-success-soft:rgba(81,207,102,0.12);--yk-warning:#ffd43b;--yk-warning-soft:rgba(255,212,59,0.15);--yk-radius:8px;--yk-radius-sm:4px;--yk-gap:1rem;--yk-transition:all 0.15s ease}
+</style>
+<style id="style-soft-brutalism" disabled>
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800&family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+:root{--yk-bg:#f5f0e8;--yk-surface:#fff;--yk-surface-hover:#f5f0e8;--yk-shadow-raised:3px 3px 0 #c8c0b0;--yk-shadow-sm:2px 2px 0 #c8c0b0;--yk-border:2px solid #c8c0b0;--yk-border-sm:1px solid #d9d2c5;--yk-font:'Rubik','Noto Sans KR',sans-serif;--yk-text:#3d3929;--yk-text-secondary:#7a7262;--yk-text-muted:#b5ad9e;--yk-primary:#7eb77f;--yk-primary-soft:rgba(126,183,127,0.12);--yk-secondary:#c9a96e;--yk-secondary-soft:rgba(201,169,110,0.12);--yk-danger:#d4776b;--yk-danger-soft:rgba(212,119,107,0.1);--yk-success:#6baa7c;--yk-success-soft:rgba(107,170,124,0.12);--yk-warning:#8fb4c9;--yk-warning-soft:rgba(143,180,201,0.12);--yk-radius:6px;--yk-radius-sm:4px;--yk-gap:1rem;--yk-transition:all 0.2s ease}
+</style>
+<style id="style-bootstra-386" disabled>
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap');
+:root{--yk-bg:#0000aa;--yk-surface:#0000aa;--yk-surface-hover:#0000cc;--yk-shadow-raised:none;--yk-border:2px solid #5555ff;--yk-border-sm:1px solid #5555ff;--yk-font:'Press Start 2P','VT323',monospace;--yk-text:#fff;--yk-text-secondary:#aaa;--yk-text-muted:#555;--yk-primary:#ffff55;--yk-primary-soft:rgba(255,255,85,0.15);--yk-secondary:#55ff55;--yk-secondary-soft:rgba(85,255,85,0.12);--yk-danger:#ff5555;--yk-danger-soft:rgba(255,85,85,0.12);--yk-success:#55ff55;--yk-success-soft:rgba(85,255,85,0.12);--yk-warning:#55ffff;--yk-warning-soft:rgba(85,255,255,0.12);--yk-radius:0;--yk-radius-sm:0;--yk-gap:8px;--yk-transition:none}
+</style>
+<style id="style-claymorphism" disabled>
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800;900&family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+:root{--yk-bg:#f2f3f7;--yk-surface:#f2f3f7;--yk-surface-hover:#e8e9ee;--yk-shadow-raised:8px 8px 16px rgba(180,185,195,0.4),-8px -8px 16px rgba(255,255,255,0.85),inset 0 2px 0 rgba(255,255,255,0.6);--yk-shadow-sm:4px 4px 10px rgba(180,185,195,0.35),-4px -4px 10px rgba(255,255,255,0.75),inset 0 1px 0 rgba(255,255,255,0.5);--yk-font:'Rubik','Noto Sans KR',sans-serif;--yk-text:#3a3a4a;--yk-text-secondary:#6a6a7a;--yk-text-muted:#a0a5b0;--yk-primary:#ff7eb3;--yk-primary-soft:rgba(255,126,179,0.15);--yk-secondary:#7c4dff;--yk-secondary-soft:rgba(124,77,255,0.12);--yk-danger:#ff6e40;--yk-danger-soft:rgba(255,110,64,0.12);--yk-success:#69f0ae;--yk-success-soft:rgba(105,240,174,0.15);--yk-warning:#ffab40;--yk-warning-soft:rgba(255,171,64,0.15);--yk-radius:24px;--yk-radius-sm:16px;--yk-gap:1rem;--yk-transition:all 0.3s ease}
+</style>
+<style id="style-neu-bootstrap" disabled>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+:root{--yk-bg:#e0e5ec;--yk-surface:#e0e5ec;--yk-surface-hover:#d5dae1;--yk-shadow-raised:6px 6px 12px #b8bec7,-6px -6px 12px #fff;--yk-shadow-sm:3px 3px 6px #b8bec7,-3px -3px 6px #fff;--yk-font:'DM Sans','Noto Sans KR',-apple-system,sans-serif;--yk-text:#2d3436;--yk-text-secondary:#636e72;--yk-text-muted:#b2bec3;--yk-primary:#0984e3;--yk-primary-soft:rgba(9,132,227,0.12);--yk-secondary:#6c5ce7;--yk-secondary-soft:rgba(108,92,231,0.12);--yk-danger:#e17055;--yk-danger-soft:rgba(225,112,85,0.12);--yk-success:#00b894;--yk-success-soft:rgba(0,184,148,0.12);--yk-warning:#fdcb6e;--yk-warning-soft:rgba(253,203,110,0.15);--yk-radius:16px;--yk-radius-sm:10px;--yk-gap:1rem;--yk-transition:all 0.25s ease}
+</style>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--yk-font);background:var(--yk-bg);color:var(--yk-text);height:100vh;height:100dvh;overflow:hidden}
+.app{display:flex;flex-direction:column;height:100%}
+
+.hdr{padding:8px 12px;display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap;border-bottom:var(--yk-border-sm,1px solid #ddd);z-index:1000;background:var(--yk-bg)}
+.hdr-left{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.title{font-size:.9rem;font-weight:800;display:flex;align-items:center;gap:5px}
+.title .rt{color:var(--yk-primary)}
+
+.badges{display:flex;gap:4px}
+.b{font-size:.5rem;font-weight:800;padding:2px 6px;border-radius:10px;text-transform:uppercase;display:inline-flex;align-items:center;gap:3px}
+.b .dot{width:5px;height:5px;border-radius:50%}
+.b.gps-off{background:var(--yk-danger-soft);color:var(--yk-danger);border:1px solid var(--yk-danger)}.b.gps-off .dot{background:var(--yk-danger)}
+.b.gps-search{background:var(--yk-warning-soft);color:var(--yk-text);border:1px solid var(--yk-warning)}.b.gps-search .dot{background:var(--yk-warning);animation:bk 1s infinite}
+.b.gps-lock{background:var(--yk-success-soft);color:var(--yk-success);border:1px solid var(--yk-success)}.b.gps-lock .dot{background:var(--yk-success);animation:bk 1.5s infinite}
+.b.st-ground{background:var(--yk-warning-soft);color:var(--yk-text);border:1px solid var(--yk-warning)}
+.b.st-fly{background:var(--yk-primary-soft);color:var(--yk-primary);border:1px solid var(--yk-primary);animation:pulse 2s infinite}
+.b.st-land{background:var(--yk-success-soft);color:var(--yk-success);border:1px solid var(--yk-success)}
+@keyframes bk{0%,100%{opacity:1}50%{opacity:.2}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
+
+.sw{display:flex;gap:2px;flex-wrap:wrap}
+.sw button{font-family:var(--yk-font);font-size:.45rem;font-weight:700;padding:2px 5px;border:var(--yk-border-sm,1px solid #ccc);border-radius:var(--yk-radius-sm,3px);background:var(--yk-surface);color:var(--yk-text-muted);cursor:pointer;text-transform:uppercase}
+.sw button.active{background:var(--yk-primary);color:#fff;border-color:var(--yk-primary)}
+
+.ctrl{padding:6px 12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;border-bottom:var(--yk-border-sm,1px solid #ddd);z-index:1000;background:var(--yk-bg)}
+.ctrl button{font-family:var(--yk-font);font-size:.65rem;font-weight:700;padding:5px 14px;border:var(--yk-border-sm,1px solid #ccc);border-radius:var(--yk-radius-sm,4px);cursor:pointer;text-transform:uppercase}
+.ctrl .go{background:var(--yk-success);color:#fff;border-color:var(--yk-success)}
+.ctrl .go.on{background:var(--yk-danger);color:#fff;border-color:var(--yk-danger)}
+.ctrl select{font-family:var(--yk-font);font-size:.65rem;padding:4px 6px;border:var(--yk-border-sm,1px solid #ccc);border-radius:var(--yk-radius-sm,3px);background:var(--yk-surface);color:var(--yk-text)}
+.ctrl .follow-btn{background:var(--yk-secondary,#5c7cfa);color:#fff;border-color:var(--yk-secondary,#5c7cfa);opacity:.5}
+.ctrl .follow-btn.active{opacity:1}
+
+.prog{padding:0 12px 3px;z-index:1000}
+.prog-bg{height:4px;background:var(--yk-surface-hover,#eee);border-radius:2px;border:var(--yk-border-sm,1px solid #ddd);overflow:hidden}
+.prog-fill{height:100%;background:var(--yk-primary);border-radius:2px;transition:width 1s}
+
+.map-wrap{flex:1;position:relative;min-height:200px}
+#map{width:100%;height:100%;z-index:1}
+
+.info{display:grid;grid-template-columns:repeat(auto-fit,minmax(95px,1fr));gap:4px;padding:6px 12px;border-top:var(--yk-border-sm,1px solid #ddd);z-index:1000;background:var(--yk-bg)}
+.ib{background:var(--yk-surface);border:var(--yk-border-sm,1px solid #ddd);border-radius:var(--yk-radius-sm,4px);padding:5px 7px;box-shadow:var(--yk-shadow-sm,none)}
+.ib .l{font-size:.46rem;font-weight:700;color:var(--yk-text-muted);text-transform:uppercase;letter-spacing:.05em}
+.ib .v{font-size:.85rem;font-weight:800}
+.ib .v.hi{color:var(--yk-primary)}
+.ib .s{font-size:.46rem;color:var(--yk-text-muted)}
+
+.acc{display:flex;gap:2px;margin-top:1px}
+.acc span{width:6px;height:3px;border-radius:1px;background:var(--yk-surface-hover,#ddd)}
+.acc span.g{background:var(--yk-success)}.acc span.m{background:var(--yk-warning)}.acc span.r{background:var(--yk-danger)}
+
+.leaflet-tooltip.apt{font-family:var(--yk-font);font-size:11px;font-weight:700;border:var(--yk-border-sm,1px solid #222);background:var(--yk-surface);color:var(--yk-text);box-shadow:var(--yk-shadow-sm,2px 2px 0 #222);border-radius:var(--yk-radius-sm,4px);padding:3px 8px}
+
+@media(max-width:600px){
+  .info{grid-template-columns:repeat(3,1fr)}
+  .hdr{flex-direction:column;align-items:flex-start}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="hdr">
+    <div class="hdr-left">
+      <div class="title">✈ ICN <span style="color:var(--yk-text-muted)">→</span> <span class="rt">BOHOL</span></div>
+      <div class="badges">
+        <span id="stBadge" class="b st-ground">대기</span>
+        <span id="gpsBadge" class="b gps-off"><span class="dot"></span>GPS OFF</span>
+      </div>
+    </div>
+    <div class="sw" id="sw"></div>
+  </div>
+
+  <div class="ctrl">
+    <button class="go" id="gpsBtn" onclick="toggleGPS()">GPS 시작</button>
+    <select id="mapType" onchange="switchMap()">
+      <option value="satellite">위성</option>
+      <option value="osm">일반지도</option>
+      <option value="topo">지형도</option>
+    </select>
+    <button class="follow-btn" id="followBtn" onclick="toggleFollow()">추적</button>
+  </div>
+
+  <div class="prog"><div class="prog-bg"><div class="prog-fill" id="progBar" style="width:0%"></div></div></div>
+
+  <div class="map-wrap"><div id="map"></div></div>
+
+  <div class="info">
+    <div class="ib"><div class="l">진행률</div><div class="v hi" id="vProg">--</div></div>
+    <div class="ib"><div class="l">위도</div><div class="v" id="vLat">--</div></div>
+    <div class="ib"><div class="l">경도</div><div class="v" id="vLon">--</div></div>
+    <div class="ib"><div class="l">GPS 정확도</div><div class="v" id="vAcc">--</div><div class="acc" id="accD"><span></span><span></span><span></span><span></span><span></span></div></div>
+    <div class="ib"><div class="l">고도</div><div class="v" id="vAlt">--</div><div class="s" id="vAltS"></div></div>
+    <div class="ib"><div class="l">속도</div><div class="v" id="vSpd">--</div></div>
+    <div class="ib"><div class="l">남은 거리</div><div class="v" id="vDist">--</div></div>
+    <div class="ib"><div class="l">방위</div><div class="v" id="vHdg">--</div></div>
+  </div>
+</div>
+
+<script>
+// ===== CONSTANTS =====
+const ICN=[37.4602,126.4407], TAG=[9.5844,123.7714];
+
+// ===== MATH =====
+const RAD=Math.PI/180, DEG=180/Math.PI;
+function gcI(a1,o1,a2,o2,t){
+  const p1=a1*RAD,l1=o1*RAD,p2=a2*RAD,l2=o2*RAD;
+  const d=2*Math.asin(Math.sqrt(Math.sin((p2-p1)/2)**2+Math.cos(p1)*Math.cos(p2)*Math.sin((l2-l1)/2)**2));
+  if(d<1e-10)return[a1,o1];
+  const A=Math.sin((1-t)*d)/Math.sin(d),B=Math.sin(t*d)/Math.sin(d);
+  const x=A*Math.cos(p1)*Math.cos(l1)+B*Math.cos(p2)*Math.cos(l2);
+  const y=A*Math.cos(p1)*Math.sin(l1)+B*Math.cos(p2)*Math.sin(l2);
+  const z=A*Math.sin(p1)+B*Math.sin(p2);
+  return[Math.atan2(z,Math.sqrt(x*x+y*y))*DEG,Math.atan2(y,x)*DEG];
+}
+function hav(a1,o1,a2,o2){
+  const dp=(a2-a1)*RAD,dl=(o2-o1)*RAD;
+  const a=Math.sin(dp/2)**2+Math.cos(a1*RAD)*Math.cos(a2*RAD)*Math.sin(dl/2)**2;
+  return 6371*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+}
+function progOnRoute(lat,lon){
+  let best=Infinity,bestT=0;
+  for(let t=0;t<=1;t+=.002){const p=gcI(ICN[0],ICN[1],TAG[0],TAG[1],t);const d=hav(lat,lon,p[0],p[1]);if(d<best){best=d;bestT=t;}}
+  for(let t=Math.max(0,bestT-.005);t<=Math.min(1,bestT+.005);t+=.0002){const p=gcI(ICN[0],ICN[1],TAG[0],TAG[1],t);const d=hav(lat,lon,p[0],p[1]);if(d<best){best=d;bestT=t;}}
+  return bestT;
+}
+
+// ===== TILE LAYERS =====
+const TILES={
+  satellite:{url:'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',attr:'ESRI Imagery',max:18},
+  osm:{url:'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',attr:'© OpenStreetMap',max:19,sub:'abc'},
+  topo:{url:'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',attr:'© OpenTopoMap',max:17,sub:'abc'}
+};
+
+// ===== MAP =====
+const map=L.map('map',{center:[23,125],zoom:5,zoomControl:false});
+L.control.zoom({position:'topright'}).addTo(map);
+let layer=null;
+
+function switchMap(){
+  const t=document.getElementById('mapType').value;
+  if(layer)map.removeLayer(layer);
+  const s=TILES[t];
+  layer=L.tileLayer(s.url,{attribution:s.attr,maxZoom:s.max,subdomains:s.sub||''}).addTo(map);
+}
+switchMap();
+
+// Route line
+const routePts=[];
+for(let t=0;t<=1;t+=.004){routePts.push(gcI(ICN[0],ICN[1],TAG[0],TAG[1],t));}
+L.polyline(routePts,{color:'#ff5c5c',weight:3,opacity:.45,dashArray:'10 6'}).addTo(map);
+
+// Airport markers
+function aptIcon(color){return L.divIcon({className:'',html:`<div style="background:${color};width:14px;height:14px;border-radius:50%;border:2.5px solid #fff;box-shadow:0 0 8px rgba(0,0,0,.5)"></div>`,iconSize:[14,14],iconAnchor:[7,7]});}
+L.marker(ICN,{icon:aptIcon('#5c7cfa')}).addTo(map).bindTooltip('ICN 인천',{permanent:true,direction:'right',className:'apt'});
+L.marker(TAG,{icon:aptIcon('#51cf66')}).addTo(map).bindTooltip('TAG 보홀',{permanent:true,direction:'right',className:'apt'});
+map.fitBounds(L.latLngBounds(routePts),{padding:[30,30]});
+
+// ===== GPS STATE =====
+let gpsOn=false, watchId=null, gps=null, trail=[], following=true;
+let posMarker=null, accCircle=null, trailLine=null;
+
+function toggleGPS(){gpsOn?stopGPS():startGPS();}
+function toggleFollow(){
+  following=!following;
+  document.getElementById('followBtn').classList.toggle('active',following);
+  if(following&&gps)map.panTo([gps.lat,gps.lon]);
+}
+
+function startGPS(){
+  if(!navigator.geolocation){alert('이 기기에서 GPS를 지원하지 않습니다.');return;}
+  gpsOn=true;
+  const btn=document.getElementById('gpsBtn');
+  btn.textContent='GPS 중지';btn.classList.add('on');
+  document.getElementById('followBtn').classList.add('active');
+  following=true;
+  setGPS('gps-search','검색중');
+
+  watchId=navigator.geolocation.watchPosition(
+    p=>{
+      gps={lat:p.coords.latitude,lon:p.coords.longitude,acc:p.coords.accuracy,alt:p.coords.altitude,altAcc:p.coords.altitudeAccuracy,spd:p.coords.speed,hdg:p.coords.heading,ts:p.timestamp};
+      setGPS('gps-lock','수신중');
+      render();
+      const last=trail[trail.length-1];
+      if(!last||(p.timestamp-last.ts>8000)){trail.push({lat:gps.lat,lon:gps.lon,ts:p.timestamp});if(trail.length>2000)trail.shift();drawTrail();}
+    },
+    e=>{console.warn('GPS:',e.message);setGPS('gps-search','검색중');},
+    {enableHighAccuracy:true,maximumAge:20000,timeout:15000}
+  );
+}
+function stopGPS(){
+  gpsOn=false;if(watchId!==null){navigator.geolocation.clearWatch(watchId);watchId=null;}
+  gps=null;
+  const btn=document.getElementById('gpsBtn');btn.textContent='GPS 시작';btn.classList.remove('on');
+  setGPS('gps-off','OFF');
+  document.getElementById('stBadge').className='b st-ground';
+  document.getElementById('stBadge').textContent='대기';
+  clearInfo();
+}
+function setGPS(cls,txt){const b=document.getElementById('gpsBadge');b.className='b '+cls;b.innerHTML='<span class="dot"></span>'+txt;}
+
+// ===== RENDER =====
+function render(){
+  if(!gps)return;
+  const ll=[gps.lat,gps.lon];
+
+  // Plane marker
+  if(!posMarker){
+    posMarker=L.marker(ll,{icon:L.divIcon({className:'',html:'<div id="plane" style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;filter:drop-shadow(0 2px 5px rgba(0,0,0,.6))"><svg width="26" height="26" viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5A1.5 1.5 0 0 0 11.5 2 1.5 1.5 0 0 0 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" fill="#ff5c5c" stroke="#fff" stroke-width=".5"/></svg></div>',iconSize:[32,32],iconAnchor:[16,16]}),zIndexOffset:1000}).addTo(map);
+  } else {posMarker.setLatLng(ll);}
+
+  // Accuracy circle
+  if(!accCircle){accCircle=L.circle(ll,{radius:gps.acc,color:'#ff5c5c',fillColor:'#ff5c5c',fillOpacity:.06,weight:1,opacity:.25}).addTo(map);}
+  else{accCircle.setLatLng(ll);accCircle.setRadius(gps.acc);}
+
+  // Rotate plane
+  const el=document.getElementById('plane');
+  if(el&&gps.hdg!=null&&!isNaN(gps.hdg)){el.style.transform='rotate('+(gps.hdg)+'deg)';}
+
+  // Follow
+  if(following)map.panTo(ll,{animate:true,duration:.5});
+
+  // Progress
+  const prog=progOnRoute(gps.lat,gps.lon);
+  const rem=hav(gps.lat,gps.lon,TAG[0],TAG[1]);
+
+  // Status
+  const sb=document.getElementById('stBadge');
+  if(rem<30){sb.className='b st-land';sb.textContent='도착';}
+  else if((gps.spd!=null&&gps.spd>50)||(gps.alt!=null&&gps.alt>3000)){sb.className='b st-fly';sb.textContent='비행중';}
+  else{sb.className='b st-ground';sb.textContent='지상';}
+
+  // Info
+  document.getElementById('vProg').textContent=Math.round(prog*100)+'%';
+  document.getElementById('progBar').style.width=Math.round(prog*100)+'%';
+  document.getElementById('vLat').textContent=gps.lat.toFixed(4)+'°'+(gps.lat>=0?'N':'S');
+  document.getElementById('vLon').textContent=gps.lon.toFixed(4)+'°'+(gps.lon>=0?'E':'W');
+  document.getElementById('vAcc').textContent='±'+Math.round(gps.acc)+'m';
+  document.getElementById('vDist').textContent=rem<10?rem.toFixed(1)+'km':Math.round(rem).toLocaleString()+'km';
+
+  const dots=document.getElementById('accD').children;
+  const lv=gps.acc<50?5:gps.acc<100?4:gps.acc<500?3:gps.acc<2000?2:1;
+  for(let i=0;i<5;i++)dots[i].className=i<lv?(lv>=4?'g':lv>=3?'m':'r'):'';
+
+  if(gps.alt!=null){
+    document.getElementById('vAlt').textContent=Math.round(gps.alt*3.281).toLocaleString()+'ft';
+    document.getElementById('vAltS').textContent=Math.round(gps.alt)+'m GPS';
+  }else{document.getElementById('vAlt').textContent='--';document.getElementById('vAltS').textContent='';}
+
+  document.getElementById('vSpd').textContent=(gps.spd!=null&&gps.spd>0)?Math.round(gps.spd*3.6)+'km/h':'--';
+
+  if(gps.hdg!=null&&!isNaN(gps.hdg)){
+    const dirs=['N','NE','E','SE','S','SW','W','NW'];
+    document.getElementById('vHdg').textContent=Math.round(gps.hdg)+'° '+dirs[Math.round(gps.hdg/45)%8];
+  }else{document.getElementById('vHdg').textContent='--';}
+}
+
+function drawTrail(){
+  const c=trail.map(p=>[p.lat,p.lon]);
+  if(!trailLine){trailLine=L.polyline(c,{color:'#51cf66',weight:3,opacity:.8}).addTo(map);}
+  else{trailLine.setLatLngs(c);}
+}
+
+function clearInfo(){
+  ['vProg','vLat','vLon','vAcc','vAlt','vSpd','vDist','vHdg'].forEach(id=>document.getElementById(id).textContent='--');
+  document.getElementById('vAltS').textContent='';
+  document.getElementById('progBar').style.width='0%';
+  const dots=document.getElementById('accD').children;for(let i=0;i<5;i++)dots[i].className='';
+}
+
+// Map drag disables follow
+map.on('dragstart',()=>{following=false;document.getElementById('followBtn').classList.remove('active');});
+
+// ===== STYLE SWITCHING =====
+const SN=['neo-brutalism','soft-brutalism','bootstra-386','claymorphism','neu-bootstrap'];
+const SL=['Neo Brutal','Soft Brutal','DOS 386','Clay','Neu'];
+function switchStyle(n){SN.forEach(id=>{const e=document.getElementById('style-'+id);if(id===n){e.removeAttribute('disabled');if(e.sheet)e.sheet.disabled=false;}else{e.setAttribute('disabled','');if(e.sheet)e.sheet.disabled=true;}});}
+(function(){
+  const sw=document.getElementById('sw');
+  SN.forEach((s,i)=>{const btn=document.createElement('button');btn.textContent=SL[i];if(i===0)btn.classList.add('active');btn.onclick=()=>{switchStyle(s);sw.querySelectorAll('button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');};sw.appendChild(btn);});
+  document.getElementById('followBtn').classList.add('active');
+})();
+</script>
+</body>
+</html>
