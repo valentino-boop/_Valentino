@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Who Breaks First — 게임이론으로 본 호르무즈 위기</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700;900&family=Noto+Sans+KR:wght@300;400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <style>
 :root{
   --bg:#FAFAF7;--card:#FFF;--accent:#FFF9EB;
@@ -125,149 +127,19 @@ section:last-of-type{border-bottom:none}
   </div>
 
   <!-- THEATER MAP -->
-  <div class="cd" style="margin-bottom:14px;padding:12px;overflow-x:auto;-webkit-overflow-scrolling:touch">
+  <div class="cd" style="margin-bottom:14px;padding:12px;">
     <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;flex-wrap:wrap;gap:4px">
       <span style="font-weight:700;font-size:12px">전구도 — 동유럽에서 파키스탄까지</span>
       <span style="font-size:9px;color:var(--tm)">타격 방향 · 진영 · 초크포인트</span>
     </div>
-    <svg viewBox="0 0 900 480" style="width:100%;max-width:900px;height:auto;font-family:'Noto Sans KR',sans-serif;background:#F0EDE6;border-radius:8px;" xmlns="http://www.w3.org/2000/svg">
-      <!-- Sea areas -->
-      <path d="M0 200 Q100 180 200 210 Q280 230 320 280 Q360 310 400 300 Q440 290 480 310 Q520 330 560 320 Q600 310 650 330 Q700 350 750 340 Q800 330 850 350 L900 360 L900 480 L0 480 Z" fill="#D6EAF8" opacity="0.5"/>
-      <!-- Mediterranean -->
-      <path d="M0 250 Q60 230 120 250 Q180 265 220 255 Q260 245 280 260" fill="#D6EAF8" stroke="#AED6F1" stroke-width="0.5"/>
-      <!-- Black Sea -->
-      <path d="M220 160 Q280 150 340 160 Q380 170 390 180 Q370 190 330 185 Q290 180 250 185 Q230 180 220 170 Z" fill="#D6EAF8" stroke="#AED6F1" stroke-width="0.5"/>
-      <!-- Caspian -->
-      <ellipse cx="500" cy="155" rx="22" ry="45" fill="#D6EAF8" stroke="#AED6F1" stroke-width="0.5"/>
-      <!-- Red Sea -->
-      <path d="M295 295 Q300 330 305 360 Q310 390 315 420 Q310 440 305 460" fill="#D6EAF8" stroke="#AED6F1" stroke-width="0.5" stroke-dasharray="2"/>
-      <!-- Persian Gulf -->
-      <path d="M430 300 Q460 290 490 295 Q520 300 540 310 Q555 318 560 325" fill="#AED6F1" stroke="#85C1E9" stroke-width="1"/>
-      <!-- Gulf of Oman / Arabian Sea -->
-      <path d="M560 325 Q600 340 650 350 Q700 360 760 370 L900 400 L900 480 L550 480 Q560 400 555 360 Z" fill="#D6EAF8" opacity="0.4"/>
-
-      <!-- Land masses (simplified) -->
-      <!-- Turkey -->
-      <path d="M200 190 Q250 170 300 175 Q350 170 400 185 Q420 195 430 210 Q410 220 380 215 Q340 210 300 220 Q260 225 230 215 Q210 205 200 190 Z" fill="#E8E4DC" stroke="#CCC" stroke-width="0.5"/>
-      <!-- Iran -->
-      <path d="M440 210 Q480 195 520 200 Q560 205 600 220 Q620 240 630 270 Q620 300 590 320 Q560 330 540 315 Q520 305 500 300 Q470 295 450 280 Q435 260 430 240 Q435 225 440 210 Z" fill="#F5E6E4" stroke="#D5B5B0" stroke-width="1"/>
-      <!-- Saudi Arabia -->
-      <path d="M350 280 Q380 270 420 280 Q450 290 460 310 Q470 340 460 370 Q440 400 400 420 Q360 440 330 430 Q310 410 310 380 Q315 340 320 310 Q330 290 350 280 Z" fill="#E8E4DC" stroke="#CCC" stroke-width="0.5"/>
-      <!-- Iraq -->
-      <path d="M380 220 Q410 215 430 230 Q440 250 445 270 Q440 285 420 280 Q400 275 385 260 Q370 245 375 230 Z" fill="#E8E4DC" stroke="#CCC" stroke-width="0.5"/>
-      <!-- Pakistan/Afghanistan -->
-      <path d="M630 220 Q670 210 720 220 Q760 235 780 260 Q770 290 740 310 Q710 330 680 340 Q650 340 635 320 Q625 300 630 270 Q635 245 630 220 Z" fill="#E8E4DC" stroke="#CCC" stroke-width="0.5"/>
-      <!-- Egypt -->
-      <path d="M250 270 Q280 260 300 275 Q310 295 305 330 Q290 360 270 380 Q255 370 250 340 Q245 310 250 270 Z" fill="#E8E4DC" stroke="#CCC" stroke-width="0.5"/>
-      <!-- Israel/Lebanon -->
-      <rect x="298" y="255" width="8" height="25" rx="2" fill="#E8E4DC" stroke="#1A5276" stroke-width="1"/>
-      <!-- UAE/Qatar -->
-      <path d="M460 300 Q475 295 490 300 Q495 310 485 315 Q470 315 460 305 Z" fill="#E8E4DC" stroke="#CCC" stroke-width="0.5"/>
-      <!-- Ukraine region -->
-      <path d="M280 120 Q320 110 360 115 Q390 120 400 140 Q390 155 360 155 Q330 150 300 150 Q280 145 275 135 Z" fill="#F9E79F" stroke="#F4D03F" stroke-width="0.8" opacity="0.6"/>
-      <!-- India (partial) -->
-      <path d="M700 340 Q740 350 770 380 Q780 410 770 440 Q750 460 720 470 Q700 460 690 430 Q685 400 690 370 Z" fill="#E8E4DC" stroke="#CCC" stroke-width="0.5"/>
-
-      <!-- ===== CHOKEPOINTS ===== -->
-      <!-- Strait of Hormuz -->
-      <circle cx="558" cy="322" r="8" fill="none" stroke="#BD3227" stroke-width="2.5" stroke-dasharray="3,2"/>
-      <circle cx="558" cy="322" r="3" fill="#BD3227"/>
-      <text x="558" y="342" text-anchor="middle" font-size="7" font-weight="700" fill="#BD3227">호르무즈 해협</text>
-      <text x="558" y="350" text-anchor="middle" font-size="5.5" fill="#7A2018">봉쇄 중 · ~20mb/d</text>
-
-      <!-- Bab el-Mandeb -->
-      <circle cx="320" cy="430" r="6" fill="none" stroke="#C76B1E" stroke-width="2" stroke-dasharray="3,2"/>
-      <circle cx="320" cy="430" r="2.5" fill="#C76B1E"/>
-      <text x="320" y="448" text-anchor="middle" font-size="6" font-weight="600" fill="#C76B1E">바브엘만데브</text>
-      <text x="320" y="455" text-anchor="middle" font-size="5" fill="#C76B1E">이란 확전 위협</text>
-
-      <!-- Suez -->
-      <circle cx="288" cy="290" r="5" fill="none" stroke="#9E8A15" stroke-width="1.5"/>
-      <text x="268" y="287" text-anchor="end" font-size="5.5" fill="#9E8A15">수에즈</text>
-
-      <!-- ===== COUNTRY LABELS ===== -->
-      <text x="310" y="200" text-anchor="middle" font-size="8" fill="#666">튀르키예</text>
-      <text x="530" y="255" text-anchor="middle" font-size="9" font-weight="700" fill="#7A2018">이란 🇮🇷</text>
-      <text x="395" y="250" text-anchor="middle" font-size="7" fill="#666">이라크</text>
-      <text x="400" y="350" text-anchor="middle" font-size="7" fill="#666">사우디</text>
-      <text x="302" y="272" text-anchor="middle" font-size="6" font-weight="700" fill="#1A5276">🇮🇱</text>
-      <text x="475" y="308" text-anchor="middle" font-size="5.5" fill="#666">UAE·카타르</text>
-      <text x="265" y="310" text-anchor="middle" font-size="7" fill="#666">이집트</text>
-      <text x="690" y="260" text-anchor="middle" font-size="7" fill="#666">파키스탄</text>
-      <text x="660" y="230" text-anchor="middle" font-size="6" fill="#666">아프간</text>
-      <text x="340" y="135" text-anchor="middle" font-size="7" fill="#9E8A15">우크라이나</text>
-      <text x="730" y="400" text-anchor="middle" font-size="7" fill="#666">인도</text>
-      <text x="500" y="145" text-anchor="middle" font-size="6" fill="#666">카스피해</text>
-
-      <!-- Kharg Island -->
-      <circle cx="490" cy="298" r="4" fill="#BD3227" opacity="0.7"/>
-      <text x="490" y="292" text-anchor="middle" font-size="5" font-weight="600" fill="#BD3227">카르그 섬</text>
-
-      <!-- ===== STRIKE ARROWS: US/Israel → Iran ===== -->
-      <!-- From Israel -->
-      <line x1="310" y1="268" x2="460" y2="245" stroke="#1A5276" stroke-width="1.8" marker-end="url(#arrowBlue)"/>
-      <!-- From US bases in Gulf -->
-      <line x1="470" y1="310" x2="510" y2="280" stroke="#1A5276" stroke-width="1.8" marker-end="url(#arrowBlue)"/>
-      <!-- B-52 long range -->
-      <line x1="150" y1="180" x2="480" y2="220" stroke="#1A5276" stroke-width="1" stroke-dasharray="6,3" marker-end="url(#arrowBlue)"/>
-      <text x="280" y="195" font-size="5" fill="#1A5276" transform="rotate(-5,280,195)">B-52 장거리</text>
-
-      <!-- ===== STRIKE ARROWS: Iran → targets ===== -->
-      <!-- Iran → Israel -->
-      <line x1="460" y1="240" x2="315" y2="265" stroke="#BD3227" stroke-width="1.5" marker-end="url(#arrowRed)"/>
-      <!-- Iran → UAE -->
-      <line x1="500" y1="300" x2="478" y2="305" stroke="#BD3227" stroke-width="1.2" marker-end="url(#arrowRed)"/>
-      <!-- Iran → Saudi (Ras Tanura) -->
-      <line x1="470" y1="285" x2="430" y2="290" stroke="#BD3227" stroke-width="1.2" marker-end="url(#arrowRed)"/>
-      <!-- Iran → Qatar LNG -->
-      <line x1="490" y1="295" x2="470" y2="305" stroke="#BD3227" stroke-width="1" marker-end="url(#arrowRed)"/>
-      <!-- Iran → US bases (Iraq) -->
-      <line x1="450" y1="250" x2="405" y2="240" stroke="#BD3227" stroke-width="1" marker-end="url(#arrowRed)"/>
-
-      <!-- ===== Hezbollah front ===== -->
-      <line x1="305" y1="250" x2="305" y2="265" stroke="#BD3227" stroke-width="1" marker-end="url(#arrowRed)"/>
-      <text x="290" y="248" text-anchor="end" font-size="5" fill="#BD3227">헤즈볼라</text>
-
-      <!-- ===== ALLIANCE INDICATORS ===== -->
-      <!-- US allies -->
-      <circle cx="302" cy="267" r="3" fill="#1A5276" opacity="0.6"/>
-      <circle cx="470" cy="305" r="2.5" fill="#1A5276" opacity="0.4"/>
-      <circle cx="400" cy="340" r="2.5" fill="#1A5276" opacity="0.4"/>
-
-      <!-- Russia benefit arrow -->
-      <text x="400" y="115" text-anchor="middle" font-size="6" fill="#151D26">🇷🇺 러시아 — 유일한 수혜자</text>
-      <line x1="400" y1="120" x2="400" y2="140" stroke="#151D26" stroke-width="0.8" stroke-dasharray="2,2"/>
-      <text x="400" y="148" text-anchor="middle" font-size="5" fill="#151D26">에너지 수출↑ +€60억/2주</text>
-
-      <!-- China influence -->
-      <text x="830" y="200" text-anchor="middle" font-size="6" fill="#1A7B3E">🇨🇳 중국</text>
-      <text x="830" y="210" text-anchor="middle" font-size="5" fill="#1A7B3E">이란유 수입 지속</text>
-      <text x="830" y="219" text-anchor="middle" font-size="5" fill="#1A7B3E">3전구 레버리지</text>
-      <line x1="810" y1="222" x2="630" y2="270" stroke="#1A7B3E" stroke-width="0.8" stroke-dasharray="4,3"/>
-
-      <!-- India/Pakistan escort -->
-      <text x="720" y="345" text-anchor="middle" font-size="5" fill="#666">🇮🇳🇵🇰 독자 호송</text>
-
-      <!-- Arrow markers -->
-      <defs>
-        <marker id="arrowBlue" markerWidth="6" markerHeight="4" refX="5" refY="2" orient="auto"><path d="M0,0 L6,2 L0,4 Z" fill="#1A5276"/></marker>
-        <marker id="arrowRed" markerWidth="6" markerHeight="4" refX="5" refY="2" orient="auto"><path d="M0,0 L6,2 L0,4 Z" fill="#BD3227"/></marker>
-      </defs>
-
-      <!-- Legend -->
-      <rect x="10" y="10" width="160" height="78" rx="4" fill="white" opacity="0.85" stroke="#DDD"/>
-      <line x1="20" y1="25" x2="40" y2="25" stroke="#1A5276" stroke-width="2" marker-end="url(#arrowBlue)"/>
-      <text x="45" y="28" font-size="6" fill="#333">미국·이스라엘 → 이란 타격</text>
-      <line x1="20" y1="39" x2="40" y2="39" stroke="#BD3227" stroke-width="2" marker-end="url(#arrowRed)"/>
-      <text x="45" y="42" font-size="6" fill="#333">이란 → 보복 타격</text>
-      <circle cx="25" cy="53" r="3" fill="#1A5276" opacity="0.5"/>
-      <text x="45" y="56" font-size="6" fill="#333">미국 동맹/기지</text>
-      <circle cx="25" cy="67" r="5" fill="none" stroke="#BD3227" stroke-width="1.5" stroke-dasharray="2,1"/>
-      <text x="45" y="70" font-size="6" fill="#333">해상 초크포인트</text>
-      <line x1="20" y1="80" x2="40" y2="80" stroke="#1A7B3E" stroke-width="0.8" stroke-dasharray="4,3"/>
-      <text x="45" y="83" font-size="6" fill="#333">중국 영향력</text>
-    </svg>
-    <div style="font-size:9px;color:var(--tm);margin-top:6px">※ 개략적 전구도. 실제 국경·축척과 차이 있음. 타격 방향은 보도 기반 주요 벡터만 표시.</div>
+    <div id="theater-map" style="width:100%;height:420px;border-radius:8px;z-index:1;"></div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;font-size:9px;color:var(--t2)">
+      <span>🔵 미·이스라엘 타격 방향</span>
+      <span>🔴 이란 보복 방향</span>
+      <span>⭕ 초크포인트</span>
+      <span>🟢 중국 영향력</span>
+      <span>⚫ 러시아 수혜</span>
+    </div>
   </div>
 
   <!-- Chart -->
@@ -727,6 +599,114 @@ ctx.fillStyle='#1D6FA5';ctx.fillRect(p.l,ly-4,10,3);ctx.fillStyle='#444';ctx.fil
 ctx.fillStyle='#BD3227';ctx.fillRect(p.l+56,ly-4,10,3);ctx.fillStyle='#444';ctx.fillText('전쟁 후',p.l+70,ly);
 }
 draw();window.addEventListener('resize',draw);
+})();
+</script>
+<script>
+// ── THEATER MAP (Leaflet) ──
+(function(){
+  const map = L.map('theater-map',{zoomControl:true,scrollWheelZoom:false,dragging:true,attributionControl:false}).setView([30,52],4);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{maxZoom:8,minZoom:3}).addTo(map);
+  L.control.attribution({prefix:false}).addTo(map);
+
+  // Helper: animated arrow (polyline with decorator)
+  function arrow(from,to,color,weight,dash){
+    const opts={color:color,weight:weight||2,opacity:0.8};
+    if(dash)opts.dashArray=dash;
+    L.polyline([from,to],opts).addTo(map);
+    // arrowhead
+    const dx=to[1]-from[1],dy=to[0]-from[0],ang=Math.atan2(dx,dy);
+    const sz=0.6;
+    const tip=to;
+    const l1=[to[0]-sz*Math.cos(ang-0.4),to[1]-sz*Math.sin(ang-0.4)];
+    const l2=[to[0]-sz*Math.cos(ang+0.4),to[1]-sz*Math.sin(ang+0.4)];
+    L.polygon([tip,l1,l2],{color:color,fillColor:color,fillOpacity:0.8,weight:1}).addTo(map);
+  }
+
+  // ===== CHOKEPOINTS =====
+  function chokepoint(lat,lng,label,sub,color){
+    L.circleMarker([lat,lng],{radius:10,color:color,weight:3,fillColor:color,fillOpacity:0.15,dashArray:'5,4'}).addTo(map);
+    L.circleMarker([lat,lng],{radius:3,color:color,weight:0,fillColor:color,fillOpacity:0.9}).addTo(map)
+      .bindTooltip('<b>'+label+'</b><br>'+sub,{permanent:true,direction:'bottom',className:'choke-tip',offset:[0,8]});
+  }
+  chokepoint(26.56,56.25,'호르무즈 해협','봉쇄 중 · ~20mb/d 차단','#BD3227');
+  chokepoint(12.6,43.3,'바브엘만데브','이란 확전 위협','#C76B1E');
+  chokepoint(30.0,32.3,'수에즈 운하','대체 경로','#9E8A15');
+
+  // ===== KEY LOCATIONS =====
+  // Iran highlight
+  L.circle([32.5,53],{radius:500000,color:'#BD3227',fillColor:'#F5E6E4',fillOpacity:0.2,weight:1.5}).addTo(map);
+
+  // Kharg Island
+  L.circleMarker([29.24,50.32],{radius:6,color:'#BD3227',fillColor:'#BD3227',fillOpacity:0.7,weight:1}).addTo(map)
+    .bindTooltip('카르그 섬<br><span style="font-size:9px">이란 수출 90% · D+14 타격</span>',{direction:'left',className:'loc-tip'});
+
+  // ===== US/ISRAEL STRIKES → IRAN (Blue) =====
+  // Israel → Iran
+  arrow([31.5,34.8],[32.5,51],'#1A5276',2.5);
+  // US Gulf bases → Iran
+  arrow([25.3,51.5],[28,52.5],'#1A5276',2);
+  // US bases Iraq → Iran  
+  arrow([33.3,44.4],[33.5,48],'#1A5276',1.8);
+  // B-52 long range (dashed)
+  arrow([36,30],[34,50],'#1A5276',1.5,'8,5');
+
+  // ===== IRAN RETALIATION → TARGETS (Red) =====
+  // Iran → Israel
+  arrow([33,50],[31.8,35.2],'#BD3227',2);
+  // Iran → UAE (Abu Dhabi)
+  arrow([28,54],[24.5,54.7],'#BD3227',1.5);
+  // Iran → Saudi (Ras Tanura)
+  arrow([28.5,51],[26.6,50.1],'#BD3227',1.5);
+  // Iran → Qatar
+  arrow([27.5,52],[25.3,51.2],'#BD3227',1.2);
+  // Iran → US bases Iraq
+  arrow([33,49],[33.3,44.5],'#BD3227',1.2);
+  // Iran → Kuwait
+  arrow([30,50],[29.4,47.9],'#BD3227',1);
+
+  // Hezbollah → Israel
+  arrow([33.9,35.5],[33.2,35.3],'#BD3227',1.2);
+
+  // ===== COUNTRY/ACTOR MARKERS =====
+  function actorMarker(lat,lng,emoji,label,color){
+    L.marker([lat,lng],{icon:L.divIcon({className:'actor-icon',html:'<div style="text-align:center;font-size:14px;line-height:1.2">'+emoji+'<br><span style="font-size:8px;font-weight:700;color:'+color+'">'+label+'</span></div>',iconSize:[60,30],iconAnchor:[30,15]})}).addTo(map);
+  }
+  actorMarker(32.5,53,'🇮🇷','이란','#7A2018');
+  actorMarker(31.2,34.5,'🇮🇱','이스라엘','#1A5276');
+  actorMarker(24.7,46.7,'🇸🇦','사우디','#666');
+  actorMarker(24.2,54,'🇦🇪','UAE','#666');
+  actorMarker(25.3,51.2,'🇶🇦','카타르','#666');
+  actorMarker(33.3,44,'🇮🇶','이라크','#666');
+  actorMarker(34.5,36,'🇱🇧','레바논','#666');
+  actorMarker(48.5,31,'🇺🇦','우크라이나','#9E8A15');
+  actorMarker(30,67,'🇵🇰','파키스탄','#666');
+  actorMarker(34,66,'🇦🇫','아프간','#666');
+  actorMarker(22,78,'🇮🇳','인도','#666');
+  actorMarker(27,30,'🇪🇬','이집트','#666');
+  actorMarker(39,35,'🇹🇷','튀르키예','#666');
+
+  // ===== STRATEGIC ACTORS (positioned outside the conflict zone) =====
+  // Russia
+  L.marker([55,40],{icon:L.divIcon({className:'strat-icon',html:'<div style="background:rgba(21,29,38,0.85);color:#fff;padding:4px 8px;border-radius:4px;font-size:9px;line-height:1.4;white-space:nowrap">🇷🇺 <b>러시아</b> — 유일한 수혜자<br>에너지 수출↑ +€60억/2주</div>',iconSize:[160,35],iconAnchor:[80,17]})}).addTo(map);
+  L.polyline([[55,40],[45,50]],{color:'#151D26',weight:1,dashArray:'4,4',opacity:0.5}).addTo(map);
+
+  // China
+  L.marker([35,72],{icon:L.divIcon({className:'strat-icon',html:'<div style="background:rgba(26,123,62,0.85);color:#fff;padding:4px 8px;border-radius:4px;font-size:9px;line-height:1.4;white-space:nowrap">🇨🇳 <b>중국</b> — 게임의 축<br>이란유 수입 지속 · 3전구 레버리지</div>',iconSize:[170,35],iconAnchor:[85,17]})}).addTo(map);
+  L.polyline([[35,72],[32,56]],{color:'#1A7B3E',weight:1,dashArray:'4,4',opacity:0.5}).addTo(map);
+
+  // India/Pakistan escort
+  L.marker([23,62],{icon:L.divIcon({className:'strat-icon',html:'<div style="background:rgba(0,0,0,0.6);color:#fff;padding:3px 6px;border-radius:3px;font-size:8px;white-space:nowrap">🇮🇳🇵🇰 독자 호송</div>',iconSize:[90,20],iconAnchor:[45,10]})}).addTo(map);
+
+  // US Military label
+  L.marker([37,28],{icon:L.divIcon({className:'strat-icon',html:'<div style="background:rgba(26,82,122,0.85);color:#fff;padding:4px 8px;border-radius:4px;font-size:9px;line-height:1.4;white-space:nowrap">🇺🇸 <b>미국</b> · Epic Fury<br>B-52 · 해군 · MEU 전개</div>',iconSize:[140,35],iconAnchor:[70,17]})}).addTo(map);
+
+  // Hezbollah label
+  L.marker([34.2,35.8],{icon:L.divIcon({className:'strat-icon',html:'<div style="background:rgba(189,50,39,0.8);color:#fff;padding:2px 5px;border-radius:3px;font-size:7px;white-space:nowrap">헤즈볼라</div>',iconSize:[50,16],iconAnchor:[25,8]})}).addTo(map);
+
+  // Style injection for tooltips
+  const style=document.createElement('style');
+  style.textContent='.choke-tip{background:rgba(255,255,255,0.92)!important;border:1px solid #BD3227!important;border-radius:4px!important;padding:3px 6px!important;font-size:9px!important;font-family:"Noto Sans KR"!important;box-shadow:0 2px 6px rgba(0,0,0,0.15)!important;color:#333!important}.loc-tip{background:rgba(255,255,255,0.92)!important;border:1px solid #999!important;border-radius:4px!important;padding:3px 6px!important;font-size:9px!important;font-family:"Noto Sans KR"!important}.actor-icon,.strat-icon{background:none!important;border:none!important}';
+  document.head.appendChild(style);
 })();
 </script>
 </body>
