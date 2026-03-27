@@ -102,7 +102,7 @@ section:last-of-type{border-bottom:none}
 </header>
 
 <nav class="nav"><div class="nav-in">
-  <a href="#s1">판세</a><a href="#s2">플레이어</a><a href="#s3">시간의 비대칭</a><a href="#s4">연쇄 반응</a><a href="#s5">시나리오</a><a href="#s6">신호</a><a href="#s7" style="color:var(--red);font-weight:700">D+26</a>
+  <a href="#s1">판세</a><a href="#s2">플레이어</a><a href="#s3">시간의 비대칭</a><a href="#s4">연쇄 반응</a><a href="#s5">시나리오</a><a href="#s6">신호</a><a href="#s8">재고</a><a href="#s7" style="color:var(--red);font-weight:700">D+26</a>
 </div></nav>
 
 <main class="w">
@@ -450,6 +450,31 @@ section:last-of-type{border-bottom:none}
 </section>
 
 <!-- ══════════════════════════════════════════
+     APPENDIX — 동아시아·인도 원유 재고
+     ══════════════════════════════════════════ -->
+<section id="s8" class="fi">
+  <div class="lb">APPENDIX — OIL RESERVE DEPLETION</div>
+  <h2 class="tt">동아시아·인도 원유 재고 소진 시뮬레이션</h2>
+  <p class="ds">호르무즈 봉쇄가 지속될 경우 각국의 전략비축유(SPR)+상업재고가 어떤 속도로 소진되는지를 시뮬레이션한다. 위 차트는 "소진까지 남은 일수"로 긴박함을 비교하고, 아래 차트는 절대 재고량(백만 배럴)의 규모 차이를 보여준다.</p>
+
+  <div class="cd" style="padding:14px;">
+    <div style="font-weight:700;font-size:12px;margin-bottom:4px">원유 재고 소진 추이 — 소진까지 남은 일수 (Days of Supply)</div>
+    <div style="font-size:9px;color:var(--tm);margin-bottom:6px">전쟁 개시(D+0) 기준 비축량에서 일일 호르무즈 의존 소비량을 차감하는 단순 모델. SPR 방출·대체 수입은 미반영.</div>
+    <canvas id="reserveChart1" style="width:100%;height:240px;"></canvas>
+  </div>
+  <div class="cd" style="padding:14px;margin-top:10px;">
+    <div style="font-weight:700;font-size:12px;margin-bottom:4px">원유 재고 절대량 (백만 배럴)</div>
+    <div style="font-size:9px;color:var(--tm);margin-bottom:6px">같은 모델. Y축은 절대 재고량. 중국의 규모가 압도적이나, 소진 속도는 의존도에 비례.</div>
+    <canvas id="reserveChart2" style="width:100%;height:240px;"></canvas>
+  </div>
+  <div style="font-size:9px;color:var(--tm);margin-top:8px;line-height:1.6">
+    출처: Atlantic Council/Kpler (일본 350mb, 중국 1,200mb), Wikipedia/IEA (한국 210일, 대만 120일), Asia Media Centre (인도 SPR 39mb+정유 107mb=146mb).<br>
+    일일 소비: IEA OMR 2026.03. 호르무즈 의존 비율: 일본 70%, 한국 62%, 대만 ~65%, 중국 ~25%, 인도 45%.<br>
+    ※ 단순 선형 모델. 실제로는 SPR 방출, 러시아/아프리카 대체 수입, 수요 감소 등으로 소진이 완화됨. 최악 시나리오 참고용.
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
      EPILOGUE — D+26 UPDATE: 예측 vs 현실
      ══════════════════════════════════════════ -->
 <section id="s7" class="fi" style="background:var(--card);margin:0 -14px;padding:40px 14px 32px;border:1px solid var(--brl);border-radius:0;">
@@ -599,6 +624,126 @@ ctx.fillStyle='#1D6FA5';ctx.fillRect(p.l,ly-4,10,3);ctx.fillStyle='#444';ctx.fil
 ctx.fillStyle='#BD3227';ctx.fillRect(p.l+56,ly-4,10,3);ctx.fillStyle='#444';ctx.fillText('전쟁 후',p.l+70,ly);
 }
 draw();window.addEventListener('resize',draw);
+})();
+</script>
+<script>
+// ── RESERVE DEPLETION CHARTS ──
+(function(){
+  // Data: [country, emoji, color, totalReserveMb, dailyConsumptionMb, hormuzDependencyPct]
+  const countries=[
+    ['일본','🇯🇵','#BD3227',350,3.3,0.70],
+    ['한국','🇰🇷','#C76B1E',170,2.7,0.62],
+    ['대만','🇹🇼','#9E8A15',50,1.0,0.65],
+    ['중국','🇨🇳','#1A7B3E',1200,15.5,0.25],
+    ['인도','🇮🇳','#1A5276',146,5.5,0.45],
+  ];
+  const days=90;
+
+  function drawChart(canvasId, mode){
+    const cv=document.getElementById(canvasId);if(!cv)return;
+    const ctx=cv.getContext('2d'),dpr=window.devicePixelRatio||1;
+    const box=cv.parentElement;
+    function render(){
+      const W=box.clientWidth-28,H=240,mob=W<400;
+      cv.width=W*dpr;cv.height=H*dpr;cv.style.width=W+'px';cv.style.height=H+'px';
+      ctx.setTransform(1,0,0,1,0,0);ctx.scale(dpr,dpr);ctx.clearRect(0,0,W,H);
+      const p={t:28,r:14,b:32,l:mob?38:48},cw=W-p.l-p.r,ch=H-p.t-p.b;
+
+      // Compute series
+      const series=countries.map(c=>{
+        const [name,emoji,color,reserve,daily,dep]=c;
+        const dailyLoss=daily*dep;
+        const pts=[];
+        for(let d=0;d<=days;d++){
+          const remaining=Math.max(0,reserve-dailyLoss*d);
+          if(mode==='days'){
+            pts.push(remaining/dailyLoss);
+          } else {
+            pts.push(remaining);
+          }
+        }
+        return {name,emoji,color,pts};
+      });
+
+      // Y range
+      let maxY=0;
+      series.forEach(s=>s.pts.forEach(v=>{if(v>maxY)maxY=v}));
+      maxY=Math.ceil(maxY/10)*10;
+      if(mode==='days')maxY=Math.min(maxY,520);
+
+      const x=d=>p.l+(d/days)*cw;
+      const y=v=>p.t+(1-v/maxY)*ch;
+
+      // Grid
+      const gridN=mode==='days'?5:5;
+      for(let i=0;i<=gridN;i++){
+        const val=maxY*i/gridN;
+        ctx.strokeStyle='#EDEBE6';ctx.lineWidth=0.5;
+        ctx.beginPath();ctx.moveTo(p.l,y(val));ctx.lineTo(p.l+cw,y(val));ctx.stroke();
+        ctx.fillStyle='#999';ctx.font=(mob?7:9)+'px "JetBrains Mono"';ctx.textAlign='right';
+        ctx.fillText(mode==='days'?Math.round(val)+'일':Math.round(val)+'mb',p.l-4,y(val)+3);
+      }
+      // X axis
+      for(let d=0;d<=days;d+=mob?15:10){
+        ctx.fillStyle='#999';ctx.font=(mob?7:8)+'px "JetBrains Mono"';ctx.textAlign='center';
+        ctx.fillText('D+'+d,x(d),p.t+ch+14);
+      }
+      // X axis label
+      ctx.fillStyle='#999';ctx.font=(mob?7:8)+'px "Noto Sans KR"';ctx.textAlign='center';
+      ctx.fillText('전쟁 개시 후 경과일',p.l+cw/2,H-4);
+
+      // D+26 marker (today)
+      ctx.strokeStyle='rgba(189,50,39,0.3)';ctx.lineWidth=1;ctx.setLineDash([4,3]);
+      ctx.beginPath();ctx.moveTo(x(26),p.t);ctx.lineTo(x(26),p.t+ch);ctx.stroke();ctx.setLineDash([]);
+      ctx.fillStyle='#BD3227';ctx.font=(mob?7:8)+'px "JetBrains Mono"';ctx.textAlign='center';
+      ctx.fillText('오늘(D+26)',x(26),p.t-4);
+
+      // Critical threshold for days mode
+      if(mode==='days'){
+        // 90 days IEA minimum
+        if(90<maxY){
+          ctx.strokeStyle='rgba(158,138,21,0.4)';ctx.lineWidth=1;ctx.setLineDash([3,3]);
+          ctx.beginPath();ctx.moveTo(p.l,y(90));ctx.lineTo(p.l+cw,y(90));ctx.stroke();ctx.setLineDash([]);
+          ctx.fillStyle='#9E8A15';ctx.font=(mob?6:8)+'px "JetBrains Mono"';ctx.textAlign='left';
+          ctx.fillText('IEA 최소 90일',p.l+4,y(90)-4);
+        }
+        // 30 days critical
+        ctx.strokeStyle='rgba(189,50,39,0.3)';ctx.lineWidth=1;ctx.setLineDash([3,3]);
+        ctx.beginPath();ctx.moveTo(p.l,y(30));ctx.lineTo(p.l+cw,y(30));ctx.stroke();ctx.setLineDash([]);
+        ctx.fillStyle='#BD3227';ctx.font=(mob?6:8)+'px "JetBrains Mono"';ctx.textAlign='left';
+        ctx.fillText('위기 30일',p.l+4,y(30)-4);
+      }
+
+      // Lines
+      series.forEach(s=>{
+        ctx.strokeStyle=s.color;ctx.lineWidth=2;ctx.beginPath();
+        s.pts.forEach((v,i)=>{i===0?ctx.moveTo(x(i),y(v)):ctx.lineTo(x(i),y(v))});
+        ctx.stroke();
+      });
+
+      // Legend
+      const lgX=p.l+8,lgY=mode==='days'?p.t+10:p.t+ch-50;
+      ctx.font=(mob?8:9)+'px "Noto Sans KR"';ctx.textAlign='left';
+      series.forEach((s,i)=>{
+        const ly=lgY+i*14;
+        ctx.strokeStyle=s.color;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(lgX,ly);ctx.lineTo(lgX+16,ly);ctx.stroke();
+        ctx.fillStyle=s.color;ctx.fillText(s.emoji+' '+s.name,lgX+20,ly+3);
+        // Current value at D+26
+        const v26=s.pts[26];
+        ctx.fillStyle='#666';ctx.font=(mob?7:8)+'px "JetBrains Mono"';
+        if(mode==='days'){
+          ctx.fillText(Math.round(v26)+'일',lgX+80,ly+3);
+        } else {
+          ctx.fillText(Math.round(v26)+'mb',lgX+80,ly+3);
+        }
+      });
+    }
+    render();
+    window.addEventListener('resize',render);
+  }
+
+  drawChart('reserveChart1','days');
+  drawChart('reserveChart2','abs');
 })();
 </script>
 <script>
