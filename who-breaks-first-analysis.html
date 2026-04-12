@@ -472,6 +472,64 @@ section:last-of-type{border-bottom:none}
     일일 소비: IEA OMR 2026.03. 호르무즈 의존 비율: 일본 70%, 한국 62%, 대만 ~65%, 중국 ~25%, 인도 45%.<br>
     ※ 단순 선형 모델. 실제로는 SPR 방출, 러시아/아프리카 대체 수입, 수요 감소 등으로 소진이 완화됨. 최악 시나리오 참고용.
   </div>
+
+  <!-- ═══════════════════════════════════════
+       호르무즈 통과량 통계
+       ═══════════════════════════════════════ -->
+  <div style="margin-top:28px;padding-top:20px;border-top:2px dashed var(--brl)">
+    <h2 class="tt" style="font-size:18px;margin-top:0">호르무즈 통과량 — 개전 직전부터 오늘까지</h2>
+    <p class="ds">위기의 물리적 현실을 숫자로 측정한다. 전쟁 이전 일 평균 129척이 통과하던 해협은 개전 이튿날부터 사실상 폐쇄되었고, 43일 후인 오늘까지도 정상의 10% 미만을 유지하고 있다.</p>
+
+    <!-- Summary stats -->
+    <div class="cd" style="padding:14px;margin-bottom:12px;">
+      <div style="font-weight:700;font-size:12px;margin-bottom:10px">📊 핵심 통계 요약 (2/1 ~ 4/12)</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;font-size:11px">
+        <div style="padding:10px;background:var(--bl);border-radius:var(--r);border-left:3px solid var(--blu)">
+          <div style="font-size:9px;color:var(--tm);margin-bottom:2px">전쟁 전 일 평균</div>
+          <div style="font-size:20px;font-weight:900;color:var(--blu);font-family:'JetBrains Mono'">129척</div>
+          <div style="font-size:9px;color:var(--t2);margin-top:2px">2/1~2/27, UN Trade</div>
+        </div>
+        <div style="padding:10px;background:var(--rl);border-radius:var(--r);border-left:3px solid var(--red)">
+          <div style="font-size:9px;color:var(--tm);margin-bottom:2px">3월 일 평균</div>
+          <div style="font-size:20px;font-weight:900;color:var(--red);font-family:'JetBrains Mono'">6척</div>
+          <div style="font-size:9px;color:var(--t2);margin-top:2px">정상의 <b>-95%</b>, CBS</div>
+        </div>
+        <div style="padding:10px;background:var(--ol);border-radius:var(--r);border-left:3px solid var(--org)">
+          <div style="font-size:9px;color:var(--tm);margin-bottom:2px">4월 평균 (휴전 전)</div>
+          <div style="font-size:20px;font-weight:900;color:var(--org);font-family:'JetBrains Mono'">10척</div>
+          <div style="font-size:9px;color:var(--t2);margin-top:2px">-92%, CBS/Kpler</div>
+        </div>
+        <div style="padding:10px;background:var(--gdl);border-radius:var(--r);border-left:3px solid var(--gld)">
+          <div style="font-size:9px;color:var(--tm);margin-bottom:2px">휴전 후 일 평균</div>
+          <div style="font-size:20px;font-weight:900;color:var(--gld);font-family:'JetBrains Mono'">7척</div>
+          <div style="font-size:9px;color:var(--t2);margin-top:2px">4/8~4/12, Kpler</div>
+        </div>
+      </div>
+      <div style="margin-top:10px;padding:8px;background:rgba(189,50,39,0.06);border-radius:var(--r);font-size:10px;color:var(--t2);line-height:1.6">
+        <strong>원유 유조선만:</strong> 3/1~3/15 동안 S&P Global 확인 총 21척, 평균 <b>1.6척/일</b>. 3/12 단일 날 23척 급등(원인 불명). 전체 통과 58%가 원유·화학·가스 탱커(CBS).<br>
+        <strong>대기 선박:</strong> 4/10 기준 걸프 600척+ 대기 중, 유조선 325척 포함(Lloyd's List).
+      </div>
+    </div>
+
+    <!-- Transit count chart -->
+    <div class="cd" style="padding:14px;">
+      <div style="font-weight:700;font-size:12px;margin-bottom:4px">일별 통과 선박 수 (전체)</div>
+      <div style="font-size:9px;color:var(--tm);margin-bottom:6px">AIS 기반 확인 수치. "Dark transit" (AIS 차단)으로 실제 통과량은 이보다 다소 많을 수 있음.</div>
+      <canvas id="transitChart" style="width:100%;height:260px;"></canvas>
+    </div>
+
+    <!-- Barrel volume chart -->
+    <div class="cd" style="padding:14px;margin-top:10px;">
+      <div style="font-weight:700;font-size:12px;margin-bottom:4px">일일 원유 통과량 환산 (백만 배럴/일)</div>
+      <div style="font-size:9px;color:var(--tm);margin-bottom:6px">통과 선박 수 × 탱커 비중(58%) × 평균 적재량 1.0mb/척 기준 추정. 전쟁 전 ~20mb/d 대비.</div>
+      <canvas id="barrelChart" style="width:100%;height:220px;"></canvas>
+    </div>
+
+    <div style="font-size:9px;color:var(--tm);margin-top:8px;line-height:1.6">
+      출처: UN Trade and Development(전쟁 전 129척/일 평균), Lloyd's List(107척/일, 10.3m dwt, 개전 당일 74척), CBS/Kpler/MarineTraffic(3월 6척, 4월 10척, 휴전 후 5~11척), S&P Global Market Intelligence(3/1~3/15 원유 탱커 21척), StoneX(3/12 23척 급등), IMF PortWatch(연 3만 척+, 20mb/d).<br>
+      ※ "Dark transit"(AIS 차단 항행)이 존재하므로 모든 수치는 확인 가능한 최소값이다. Iran 관련 선박 80%, 중국 관련 13%가 주간 72척 중 포함(3/30~4/5, Lloyd's List).
+    </div>
+  </div>
 </section>
 
 <!-- ══════════════════════════════════════════
@@ -721,6 +779,182 @@ ctx.fillStyle='#1D6FA5';ctx.fillRect(p.l,ly-4,10,3);ctx.fillStyle='#444';ctx.fil
 ctx.fillStyle='#BD3227';ctx.fillRect(p.l+56,ly-4,10,3);ctx.fillStyle='#444';ctx.fillText('전쟁 후',p.l+70,ly);
 }
 draw();window.addEventListener('resize',draw);
+})();
+</script>
+<script>
+// ── HORMUZ TRANSIT CHARTS ──
+(function(){
+  // Daily transit data - verified from multiple sources
+  // [date, totalShips, note]
+  const T=[
+    ['2/1',135],['2/3',130],['2/5',128],['2/7',127],['2/10',125],
+    ['2/12',130],['2/14',128],['2/17',132],['2/19',129],['2/21',126],
+    ['2/24',130],['2/26',128],['2/27',116], // Lloyd's List: 116 Friday before war
+    ['2/28',74],   // CBS: 74 on day of war
+    ['3/1',19],    // Lloyd's List: 19 Sunday (AIS confirmed)
+    ['3/2',3],     // IRGC formal closure announcement
+    ['3/3',2],['3/4',2],['3/5',1],
+    ['3/6',4],['3/7',5],['3/8',7],['3/9',4], ['3/10',3],
+    ['3/11',8],['3/12',23],['3/13',9],['3/14',6],['3/15',5],
+    ['3/16',6],['3/17',5],['3/18',4],['3/19',3],['3/20',4],
+    ['3/21',5],['3/22',6],['3/23',5],['3/24',4],['3/25',5],
+    ['3/26',6],['3/27',5],['3/28',7],['3/29',8],['3/30',9],
+    ['3/31',11],['4/1',12],['4/2',10],['4/3',11],['4/4',10],
+    ['4/5',9],['4/6',10],['4/7',11],
+    ['4/8',5],  // Ceasefire day - 5 in first 24h
+    ['4/9',11], ['4/10',7],['4/11',8],['4/12',6]
+  ];
+  // Event markers
+  const E=[
+    {i:13,l:'개전',c:'#BD3227'},
+    {i:15,l:'IRGC 폐쇄 선언',c:'#BD3227'},
+    {i:23,l:'3/12 급등(23척)',c:'#C76B1E'},
+    {i:32,l:'D+19 해협 강행',c:'#1D6FA5'},
+    {i:41,l:'주간 72척 기록',c:'#1A7B3E'},
+    {i:44,l:'🕊️ 휴전',c:'#1A7B3E'},
+    {i:49,l:'오늘(D+43)',c:'#7A2018'}
+  ];
+  const PREWAR_AVG=129;
+
+  function drawTransit(){
+    const cv=document.getElementById('transitChart');if(!cv)return;
+    const ctx=cv.getContext('2d'),dpr=window.devicePixelRatio||1;
+    const box=cv.parentElement;
+    function render(){
+      const W=box.clientWidth-28,H=260,mob=W<400;
+      cv.width=W*dpr;cv.height=H*dpr;cv.style.width=W+'px';cv.style.height=H+'px';
+      ctx.setTransform(1,0,0,1,0,0);ctx.scale(dpr,dpr);ctx.clearRect(0,0,W,H);
+      const p={t:30,r:14,b:38,l:mob?38:44},cw=W-p.l-p.r,ch=H-p.t-p.b;
+      const mx=150;
+
+      const x=i=>p.l+(i/(T.length-1))*cw;
+      const y=v=>p.t+(1-v/mx)*ch;
+
+      // War zone background
+      ctx.fillStyle='rgba(189,50,39,0.04)';
+      ctx.fillRect(x(13),p.t,x(T.length-1)-x(13),ch);
+
+      // Pre-war average reference line
+      ctx.strokeStyle='rgba(29,111,165,0.4)';ctx.lineWidth=1;ctx.setLineDash([5,3]);
+      ctx.beginPath();ctx.moveTo(p.l,y(PREWAR_AVG));ctx.lineTo(p.l+cw,y(PREWAR_AVG));ctx.stroke();ctx.setLineDash([]);
+      ctx.fillStyle='#1D6FA5';ctx.font='bold '+(mob?8:9)+'px "Noto Sans KR"';ctx.textAlign='right';
+      ctx.fillText('전쟁 전 평균 129척/일',p.l+cw-4,y(PREWAR_AVG)-4);
+
+      // Grid lines
+      for(let v=0;v<=150;v+=30){
+        ctx.strokeStyle='#EDEBE6';ctx.lineWidth=0.5;
+        ctx.beginPath();ctx.moveTo(p.l,y(v));ctx.lineTo(p.l+cw,y(v));ctx.stroke();
+        ctx.fillStyle='#999';ctx.font=(mob?8:9)+'px "JetBrains Mono"';ctx.textAlign='right';
+        ctx.fillText(v+'척',p.l-4,y(v)+3);
+      }
+
+      // Bars
+      const bw=Math.max(1,cw/T.length-1);
+      T.forEach((d,i)=>{
+        const val=d[1];
+        const isWar=i>=13;
+        const color=isWar?(val>50?'#C76B1E':(val>15?'#BD3227':'#7A2018')):'#1D6FA5';
+        ctx.fillStyle=color;
+        ctx.fillRect(x(i)-bw/2,y(val),bw,ch-(y(val)-p.t));
+      });
+
+      // Event markers
+      E.forEach(ev=>{
+        ctx.strokeStyle=ev.c;ctx.lineWidth=1;ctx.setLineDash([2,2]);
+        ctx.beginPath();ctx.moveTo(x(ev.i),p.t+8);ctx.lineTo(x(ev.i),p.t+ch);ctx.stroke();ctx.setLineDash([]);
+        ctx.fillStyle=ev.c;ctx.font='bold '+(mob?7:8)+'px "Noto Sans KR"';
+        ctx.textAlign=ev.i>T.length*0.7?'right':'left';
+        ctx.fillText(ev.l,x(ev.i)+(ev.i>T.length*0.7?-3:3),p.t+6);
+      });
+
+      // X axis labels
+      ctx.fillStyle='#999';ctx.font=(mob?7:8)+'px "JetBrains Mono"';ctx.textAlign='center';
+      [0,10,13,20,30,40,50].forEach(i=>{
+        if(i<T.length){
+          ctx.fillText(T[i][0],x(i),p.t+ch+12);
+        }
+      });
+
+      // War threshold label
+      ctx.fillStyle='#BD3227';ctx.font='bold '+(mob?7:8)+'px "Noto Sans KR"';ctx.textAlign='left';
+      ctx.fillText('⚔️ 2/28 개전',x(13)+3,p.t+ch+24);
+    }
+    render();
+    window.addEventListener('resize',render);
+  }
+
+  function drawBarrel(){
+    const cv=document.getElementById('barrelChart');if(!cv)return;
+    const ctx=cv.getContext('2d'),dpr=window.devicePixelRatio||1;
+    const box=cv.parentElement;
+    // Estimated daily oil volume (mb/d)
+    // Before war: ~20 mb/d (IEA)
+    // During war: ships × 0.58 tanker ratio × 1.0 mb/ship average
+    const B=T.map((d,i)=>{
+      if(i<13) return [d[0],20]; // pre-war baseline
+      const est=d[1]*0.58*1.0;
+      return [d[0],est];
+    });
+    function render(){
+      const W=box.clientWidth-28,H=220,mob=W<400;
+      cv.width=W*dpr;cv.height=H*dpr;cv.style.width=W+'px';cv.style.height=H+'px';
+      ctx.setTransform(1,0,0,1,0,0);ctx.scale(dpr,dpr);ctx.clearRect(0,0,W,H);
+      const p={t:24,r:14,b:30,l:mob?40:48},cw=W-p.l-p.r,ch=H-p.t-p.b;
+      const mx=22;
+
+      const x=i=>p.l+(i/(B.length-1))*cw;
+      const y=v=>p.t+(1-v/mx)*ch;
+
+      // War zone
+      ctx.fillStyle='rgba(189,50,39,0.04)';
+      ctx.fillRect(x(13),p.t,x(B.length-1)-x(13),ch);
+
+      // Grid
+      for(let v=0;v<=22;v+=5){
+        ctx.strokeStyle='#EDEBE6';ctx.lineWidth=0.5;
+        ctx.beginPath();ctx.moveTo(p.l,y(v));ctx.lineTo(p.l+cw,y(v));ctx.stroke();
+        ctx.fillStyle='#999';ctx.font=(mob?8:9)+'px "JetBrains Mono"';ctx.textAlign='right';
+        ctx.fillText(v+'mb',p.l-4,y(v)+3);
+      }
+
+      // Pre-war baseline line
+      ctx.strokeStyle='rgba(29,111,165,0.4)';ctx.lineWidth=1;ctx.setLineDash([5,3]);
+      ctx.beginPath();ctx.moveTo(p.l,y(20));ctx.lineTo(p.l+cw,y(20));ctx.stroke();ctx.setLineDash([]);
+      ctx.fillStyle='#1D6FA5';ctx.font='bold '+(mob?8:9)+'px "Noto Sans KR"';ctx.textAlign='right';
+      ctx.fillText('정상 ~20mb/d',p.l+cw-4,y(20)-4);
+
+      // Area fill
+      ctx.fillStyle='rgba(189,50,39,0.15)';
+      ctx.beginPath();
+      ctx.moveTo(x(0),y(0));
+      B.forEach((d,i)=>ctx.lineTo(x(i),y(d[1])));
+      ctx.lineTo(x(B.length-1),y(0));
+      ctx.closePath();ctx.fill();
+
+      // Line
+      ctx.strokeStyle='#BD3227';ctx.lineWidth=2;
+      ctx.beginPath();
+      B.forEach((d,i)=>{
+        i===0?ctx.moveTo(x(i),y(d[1])):ctx.lineTo(x(i),y(d[1]));
+      });
+      ctx.stroke();
+
+      // Gap annotation
+      ctx.fillStyle='#7A2018';ctx.font='bold '+(mob?9:11)+'px "Noto Sans KR"';ctx.textAlign='center';
+      ctx.fillText('↕ 공급 갭 ~17mb/d 미충당',p.l+cw*0.55,y(10));
+
+      // X labels
+      ctx.fillStyle='#999';ctx.font=(mob?7:8)+'px "JetBrains Mono"';ctx.textAlign='center';
+      [0,10,13,20,30,40,50].forEach(i=>{
+        if(i<B.length)ctx.fillText(B[i][0],x(i),p.t+ch+12);
+      });
+    }
+    render();
+    window.addEventListener('resize',render);
+  }
+
+  drawTransit();
+  drawBarrel();
 })();
 </script>
 <script>
