@@ -98,7 +98,7 @@ section:last-of-type{border-bottom:none}
   <div class="hero-k">Game-Theoretic Analysis · Day 43 of the Hormuz Crisis (Ceasefire D+4)</div>
   <h1><em>누가 먼저</em> 무너지는가?</h1>
   <p class="hero-sub">호르무즈 해협 봉쇄는 다자간 치킨게임을 촉발했다. 모든 플레이어는 상대가 먼저 양보하길 기다리지만, 각자의 시계는 다른 속도로 돌아간다. 이 비동시성이 게임의 균형을 결정한다.</p>
-  <div class="hero-tags"><span>📡 Garrett's Signal 2026.03.14 원문</span><span>🔄 D+43 업데이트 4/12</span><span>🛢️ Brent ~$96</span><span>🕊️ 2주 휴전 (D+39~)</span></div>
+  <div class="hero-tags"><span>📡 Garrett's Signal 2026.03.14 원문</span><span>🔄 D+43 결산 4/12</span><span>🛢️ Brent ~$96</span><span>🕊️ 2주 휴전 (D+39~)</span></div>
 </header>
 
 <nav class="nav"><div class="nav-in">
@@ -460,12 +460,12 @@ section:last-of-type{border-bottom:none}
   <div class="cd" style="padding:14px;">
     <div style="font-weight:700;font-size:12px;margin-bottom:4px">원유 재고 소진 추이 — 소진까지 남은 일수 (Days of Supply)</div>
     <div style="font-size:9px;color:var(--tm);margin-bottom:6px">전쟁 개시(D+0) 기준 비축량에서 일일 호르무즈 의존 소비량을 차감하는 단순 모델. SPR 방출·대체 수입은 미반영.</div>
-    <canvas id="reserveChart1" style="width:100%;height:240px;"></canvas>
+    <canvas id="reserveChart1" style="width:100%;height:340px;"></canvas>
   </div>
   <div class="cd" style="padding:14px;margin-top:10px;">
     <div style="font-weight:700;font-size:12px;margin-bottom:4px">원유 재고 절대량 (백만 배럴)</div>
     <div style="font-size:9px;color:var(--tm);margin-bottom:6px">같은 모델. Y축은 절대 재고량. 중국의 규모가 압도적이나, 소진 속도는 의존도에 비례.</div>
-    <canvas id="reserveChart2" style="width:100%;height:240px;"></canvas>
+    <canvas id="reserveChart2" style="width:100%;height:340px;"></canvas>
   </div>
   <div style="font-size:9px;color:var(--tm);margin-top:8px;line-height:1.6">
     출처: Atlantic Council/Kpler (일본 350mb, 중국 1,200mb), Wikipedia/IEA (한국 210일, 대만 120일), Asia Media Centre (인도 SPR 39mb+정유 107mb=146mb).<br>
@@ -522,7 +522,7 @@ section:last-of-type{border-bottom:none}
     <div class="cd" style="padding:14px;margin-top:10px;">
       <div style="font-weight:700;font-size:12px;margin-bottom:4px">일일 원유 통과량 환산 (백만 배럴/일)</div>
       <div style="font-size:9px;color:var(--tm);margin-bottom:6px">통과 선박 수 × 탱커 비중(58%) × 평균 적재량 1.0mb/척 기준 추정. 전쟁 전 ~20mb/d 대비.</div>
-      <canvas id="barrelChart" style="width:100%;height:220px;"></canvas>
+      <canvas id="barrelChart" style="width:100%;height:300px;"></canvas>
     </div>
 
     <div style="font-size:9px;color:var(--tm);margin-top:8px;line-height:1.6">
@@ -533,188 +533,108 @@ section:last-of-type{border-bottom:none}
 </section>
 
 <!-- ══════════════════════════════════════════
-     EPILOGUE — D+26 UPDATE: 예측 vs 현실
+     RETROSPECTIVE — D+43 결산
      ══════════════════════════════════════════ -->
 <section id="s7" class="fi" style="background:var(--card);margin:0 -14px;padding:40px 14px 32px;border:1px solid var(--brl);border-radius:0;">
-  <div class="lb" style="color:var(--tm)">EPILOGUE PART I — D+26 UPDATE · 3/26 기준</div>
-  <h2 class="tt">12일 후: D+14의 예측 vs D+26의 현실</h2>
-  <p class="ds">기고문이 작성된 D+14(3/14)로부터 12일이 경과했다. 당시의 분석 프레임이 실제 전개와 얼마나 일치했는지, 그리고 예상하지 못한 변수가 무엇인지를 검증한다.</p>
+  <div class="lb" style="color:var(--red)">RETROSPECTIVE — D+43 결산 · 2026.04.12 기준</div>
+  <h2 class="tt">29일 후: 원저자 예측의 최종 검증</h2>
+  <p class="ds">기고문이 작성된 D+14(3/14)로부터 29일이 경과했다. 그 사이에 미군 해협 강행(D+19), 트럼프 최후통첩 번복(D+23, D+38), 극적 2주 휴전 합의(D+39), 이스라엘 베이루트 대규모 공습(D+40), 이슬라마바드 미-이란 직접 협상 결렬(D+43)까지 위기가 여러 차례 극단으로 치달았다. 해협은 여전히 실질적으로 봉쇄 상태이고, 휴전은 "명목만 있고 알맹이는 없는" 상태다. 여기서 원저자의 게임이론 프레임이 어디까지 옳았고, 어디서 현실이 프레임을 초과했는지를 결산한다.</p>
 
-  <!-- Scorecard -->
-  <div class="cd" style="margin-bottom:14px">
-    <div style="font-weight:700;font-size:12px;margin-bottom:10px">📋 D+14 예측 검증 스코어카드</div>
-    <div style="font-size:10px;line-height:1.8">
-
-      <div style="display:grid;grid-template-columns:auto auto 1fr;gap:3px 8px;align-items:baseline;font-family:'JetBrains Mono',monospace">
-        <span style="color:var(--grn);font-weight:700">✓ 적중</span><span style="font-weight:600">미군 해협 강행</span><span style="font-family:'Noto Sans KR'">D+14 예측: D+25~30에 MEU 투입 → <b>실제: D+19(3/19)에 해협 개통 작전 개시.</b> 예상보다 빠름</span>
-
-        <span style="color:var(--grn);font-weight:700">✓ 적중</span><span style="font-weight:600">파리 회담 무성과</span><span style="font-family:'Noto Sans KR'">D+14 예측: "위기를 해결하지 않는다" → <b>실제: Bessent "매우 좋았다"만 발표, 구체적 합의 없이 정상회담 이관 → 이후 3/31에서 5/14~15로 6주 연기</b></span>
-
-        <span style="color:var(--grn);font-weight:700">✓ 적중</span><span style="font-weight:600">비대칭 전술 지속</span><span style="font-family:'Noto Sans KR'">D+14 예측: 기뢰+해안미사일 건재 → <b>실제: 이란 해군 궤멸에도 드론·기뢰·소형정으로 봉쇄 유지. CBS "우크라이나 플레이북"</b></span>
-
-        <span style="color:var(--grn);font-weight:700">✓ 적중</span><span style="font-weight:600">이란 선별적 통과</span><span style="font-family:'Noto Sans KR'">D+14 예측: 이란이 봉쇄를 선별 운용 → <b>실제: 터키·인도·중국 선박 선별 통과 허용. "비적대적" 선박은 이란 조율 하에 통과</b></span>
-
-        <span style="color:var(--grn);font-weight:700">✓ 적중</span><span style="font-weight:600">호르무즈 주권 요구</span><span style="font-family:'Noto Sans KR'">D+14 예측: 위안화 결제 조건 → <b>실제: 더 확대. 이란 5개 조건에 "호르무즈 주권 인정" 포함. 통행료 징수 보도</b></span>
-
-        <span style="color:var(--org);font-weight:700">△ 부분</span><span style="font-weight:600">유가 $100+ 지속</span><span style="font-family:'Noto Sans KR'">D+14 예측: $100 이상 유지 → <b>실제: $95~$126 극심한 변동. 트럼프 발언마다 급등락. 현재 ~$104. 패턴은 적중하나 변동성 과소평가</b></span>
-
-        <span style="color:var(--red);font-weight:700">✗ 미예측</span><span style="font-weight:600">트럼프 최후통첩→번복</span><span style="font-family:'Noto Sans KR'">D+14 분석 없음 → <b>실제: 48시간 내 발전소 "궤멸" 최후통첩 → 직전 번복 → "협상 중" 주장. 이란 부인. 정책 일관성 추가 훼손</b></span>
-
-        <span style="color:var(--red);font-weight:700">✗ 미예측</span><span style="font-weight:600">IRGC 해군사령관 제거</span><span style="font-family:'Noto Sans KR'">→ <b>실제: 이스라엘이 3/26 IRGC 해군사령관 탄그시리 제거. 호르무즈 봉쇄의 핵심 인물이나, 지휘체계 건재 여부 미확인</b></span>
-
-        <span style="color:var(--red);font-weight:700">✗ 미예측</span><span style="font-weight:600">지상군 투입 검토</span><span style="font-family:'Noto Sans KR'">→ <b>실제: Axios 보도 — 미국이 이란 본토 지상군 투입 포함 "최종 타격" 4개 옵션 검토. 82공수사단 훈련 취소 보도</b></span>
-      </div>
+  <!-- Price trajectory -->
+  <div class="cd" style="margin-bottom:14px;border-left:3px solid var(--blu)">
+    <div style="font-weight:700;font-size:12px;margin-bottom:6px">📉 유가 궤적 요약: 43일간의 네 번의 파동</div>
+    <div style="font-size:11px;color:var(--t2);line-height:1.75">
+      <b>① 급등기 (D+0~7):</b> 전쟁 전 $72 → D+7(3/7) 장중 <b>$119.5</b>. 1973년 석유 위기 이후 최대 단기 상승.<br>
+      <b>② 혼조기 (D+8~26):</b> 트럼프 발언마다 출렁이며 $95~$115 밴드. D+14 $101, D+26 $104.<br>
+      <b>③ 재상승기 (D+27~38):</b> 사우디 시설 타격 누적, 휴전 기대 좌절로 장중 $113대 재돌파.<br>
+      <b>④ 급락·반등기 (D+39~43):</b> 휴전 합의로 <b>-16% → $93</b>, 베이루트 공습 반등 → 현재 ~$96. <strong>전쟁 전 대비 33% 프리미엄이 고정.</strong> 백워데이션 구조에도 12월물까지 $10+ 프리미엄이 반영된 것이 시장의 영구적 구조 변화 판단이다.
     </div>
   </div>
 
-  <!-- Key developments -->
+  <!-- Consolidated Timeline -->
   <div class="cd" style="margin-bottom:14px">
-    <div style="font-weight:700;font-size:12px;margin-bottom:10px">🔄 D+14 이후 핵심 전개 (3/14→3/26)</div>
+    <div style="font-weight:700;font-size:12px;margin-bottom:10px">🔄 핵심 전개 타임라인 (D+14 → D+43)</div>
     <div style="font-size:10px;line-height:1.8;font-family:'JetBrains Mono',monospace">
       <div style="display:grid;grid-template-columns:auto 1fr;gap:3px 10px">
-        <span style="color:var(--blu);font-weight:600">D+16~17 · 3/15~16</span><span style="font-family:'Noto Sans KR'">파리 회담 완료. Bessent "매우 좋았다". 구체적 합의 없음. 정상회담 이관 → 이후 5/14~15로 6주 연기</span>
-        <span style="color:var(--org);font-weight:600">D+19 · 3/19</span><span style="font-family:'Noto Sans KR'"><b>미군 해협 개통 작전 개시.</b> 시나리오 ③ 진입 확인</span>
-        <span style="color:var(--red);font-weight:600">D+20 · 3/20</span><span style="font-family:'Noto Sans KR'">Brent $107.40. 카타르 LNG 시설 "광범위한 피해" 보고</span>
-        <span style="color:var(--org);font-weight:600">D+22 · 3/22</span><span style="font-family:'Noto Sans KR'">이스라엘 레바논 내 헤즈볼라 타격 확대. 전선 확장</span>
-        <span style="color:var(--grn);font-weight:600">D+23 · 3/23</span><span style="font-family:'Noto Sans KR'">트럼프 "이란과 협상 중, 발전소 공격 5일 유예". 유가 급락. 이란 "협상 없다" 부인</span>
-        <span style="color:var(--red);font-weight:600">D+25 · 3/25</span><span style="font-family:'Noto Sans KR'">이란 5개 조건 역제안: 공격 중단, 전쟁 배상, <b>호르무즈 주권 인정</b>. 미국 15개 조건 거부</span>
-        <span style="color:var(--cr);font-weight:600">D+26 · 3/26</span><span style="font-family:'Noto Sans KR'">이스라엘, IRGC 해군사령관 탄그시리 제거. 아부다비 미사일 잔해 2명 사망. <b>Brent $104</b>. 미 "최종 타격" 옵션 검토</span>
+        <span style="color:var(--blu);font-weight:600">D+16~17 · 3/15~16</span><span style="font-family:'Noto Sans KR'">파리 회담(Bessent·He Lifeng). 구체적 합의 없이 정상회담 이관</span>
+        <span style="color:var(--org);font-weight:600">D+19 · 3/19</span><span style="font-family:'Noto Sans KR'"><b>미군 해협 개통 작전 개시.</b> 시나리오 ③ 진입 — D+14 예측보다 빠름</span>
+        <span style="color:var(--red);font-weight:600">D+23 · 3/23</span><span style="font-family:'Noto Sans KR'">트럼프 "협상 중, 5일 유예" 주장. 이란 "협상 없다" 부인</span>
+        <span style="color:var(--red);font-weight:600">D+25 · 3/25</span><span style="font-family:'Noto Sans KR'"><b>이란 5개 조건 역제안 + 호르무즈 주권 인정 요구.</b> 미국 15개 조건 거부</span>
+        <span style="color:var(--cr);font-weight:600">D+26 · 3/26</span><span style="font-family:'Noto Sans KR'">이스라엘, IRGC 해군사령관 탄그시리 제거. 방중 5/14~15로 연기 발표</span>
+        <span style="color:var(--red);font-weight:600">D+31 · 3/31</span><span style="font-family:'Noto Sans KR'">쿠웨이트 VLCC Al Salmi 두바이 정박 중 드론 피격. 5/14~15 방중 공식 확정</span>
+        <span style="color:var(--red);font-weight:600">D+36 · 4/5</span><span style="font-family:'Noto Sans KR'">주간 해협 통과 72척(3/30~4/5) — 개전 이래 최고. 80% 이란 관련, 13% 중국 소유</span>
+        <span style="color:var(--red);font-weight:600">D+38 · 4/7</span><span style="font-family:'Noto Sans KR'">트럼프 최후통첩: "해협 개통 아니면 석기시대로"</span>
+        <span style="color:var(--grn);font-weight:700">D+39 · 4/8 🕊️</span><span style="font-family:'Noto Sans KR'"><b>최후통첩 90분 전, 2주 휴전 극적 합의.</b> 이란 별도 10개 조건 제시. Brent 장중 -16% → $93 폭락</span>
+        <span style="color:var(--red);font-weight:600">D+40 · 4/9</span><span style="font-family:'Noto Sans KR'">이스라엘, 베이루트 공습 <b>300명+ 사망</b>. 이란 "중대 위반". 해협 통과 단 5척</span>
+        <span style="color:var(--org);font-weight:600">D+41 · 4/10</span><span style="font-family:'Noto Sans KR'">이란 "대체 항로" 지도 공개. 통행료 $100만+ 요구 보도. UN 결의안 중·러 거부권</span>
+        <span style="color:var(--blu);font-weight:600">D+42 · 4/11</span><span style="font-family:'Noto Sans KR'">미 해군 Peterson·Murphy 전쟁 이래 최초 해협 진입 소해 작전</span>
+        <span style="color:var(--cr);font-weight:700">D+43 · 4/12 (오늘)</span><span style="font-family:'Noto Sans KR'"><b>이슬라마바드 협상 결렬.</b> 밴스: "합의에 이르지 못했다"</span>
       </div>
     </div>
   </div>
 
-  <!-- Updated scenario assessment -->
+  <!-- Final Scorecard: 43-day verdict -->
   <div class="cd" style="margin-bottom:14px">
-    <div style="font-weight:700;font-size:12px;margin-bottom:10px">🎲 시나리오 매트릭스 업데이트</div>
-    <div style="font-size:10px;line-height:1.7;color:var(--t2)">
+    <div style="font-weight:700;font-size:12px;margin-bottom:10px">📋 D+14 원저자 예측 — 최종 검증 스코어카드</div>
+    <div style="font-size:10px;line-height:1.8">
+      <div style="display:grid;grid-template-columns:auto auto 1fr;gap:5px 10px;align-items:baseline;font-family:'JetBrains Mono',monospace">
 
-      <div style="padding:8px;background:var(--rl);border-radius:var(--r);margin-bottom:8px">
-        <strong style="color:var(--red)">시나리오 ③ "미국이 강행" — 현재 진행 중</strong><br>
-        D+19(3/19)에 미군이 해협 개통 작전을 개시했다. D+14의 예측대로 시나리오 ③에 진입했으나, 예상보다 빨랐다. 그러나 해협은 여전히 "물리적으로 열려 있으나 사실상 폐쇄" 상태 — CENTCOM 사령관이 "해협은 물리적으로 열려 있다"고 주장하나, 이란의 미사일·드론 공격으로 선박이 접근을 거부. 트럼프의 "용기를 내라"는 발언과 현실 사이의 괴리가 확대 중.
-      </div>
+        <span style="color:var(--grn);font-weight:700">✓ 적중</span><span style="font-weight:600">미군 해협 강행</span><span style="font-family:'Noto Sans KR'">예측 D+25~30 MEU 투입 → 실제 <b>D+19에 개시</b>. 그러나 해협 개통에는 실패. CENTCOM의 "물리적 개통" 주장과 선박 기피 현실의 괴리</span>
 
-      <div style="padding:8px;background:var(--ol);border-radius:var(--r);margin-bottom:8px">
-        <strong style="color:var(--org)">시나리오 ① "중국이 중재" — 아직 열려 있으나 시간 소진 중</strong><br>
-        파리 회담은 "매우 좋았다"는 수사만 남기고 정상회담으로 이관(이후 5/14~15로 6주 연기). Bessent는 "중국에 호르무즈 관리를 요구한 것은 아니다"라고 부인. 그러나 이란이 "비적대적" 선박의 이란 조율 하 통과를 허용하면서, 사실상 이란이 통행 규칙을 설정하는 새로운 질서가 형성 중. 5/14~15 정상회담(원래 3/31, 6주 연기)이 ① 진입 창으로 이동. 그러나 연기 자체가 미국의 약한 패를 노출.
-      </div>
+        <span style="color:var(--grn);font-weight:700">✓ 적중</span><span style="font-weight:600">파리 회담 무성과</span><span style="font-family:'Noto Sans KR'">"위기 해결 안 함" → <b>Bessent "매우 좋았다"만 발표. 정상회담이 5/14~15로 6주 연기</b></span>
 
-      <div style="padding:8px;background:var(--rl);border-radius:var(--r)">
-        <strong style="color:var(--red)">시나리오 ④ 리스크 상승 — 새로운 변수들</strong><br>
-        D+14에는 "최악 시나리오"였던 ④가 현실에 근접 중: 미국이 이란 본토 지상군 투입("최종 타격") 4개 옵션을 검토하고 있으며(Axios), 이란은 바브엘만데브 해협까지 전선 확장을 위협. 이스라엘은 레바논 헤즈볼라 작전을 확대. 3개 전구가 병합되는 조건이 하나씩 충족되고 있다.
+        <span style="color:var(--grn);font-weight:700">✓ 적중</span><span style="font-weight:600">비대칭 전술 지속</span><span style="font-family:'Noto Sans KR'">기뢰+해안미사일 건재 → <b>해군 궤멸 후에도 드론·기뢰·소형정으로 봉쇄 유지. CBS "우크라이나 플레이북"</b></span>
+
+        <span style="color:var(--grn);font-weight:700">✓ 적중</span><span style="font-weight:600">이란 선별적 통과</span><span style="font-family:'Noto Sans KR'">→ <b>주간 72척 중 80%가 이란 관련, 13% 중국. 90%가 라라크 섬 북쪽 항로(이란 해안 쪽) 사용 — 이란의 직접 통제 가시화</b></span>
+
+        <span style="color:var(--grn);font-weight:700">✓ 적중</span><span style="font-weight:600">호르무즈 주권 요구</span><span style="font-family:'Noto Sans KR'">"위안화 결제 조건" 예측 → <b>실제 더 근본적. 이란 10개 조건에 호르무즈 주권 영구 인정 포함. 통행료 $100만+ 요구</b></span>
+
+        <span style="color:var(--grn);font-weight:700">✓ 적중</span><span style="font-weight:600">중국의 축(Fulcrum) 역할</span><span style="font-family:'Noto Sans KR'">→ <b>UN 안보리 GCC 결의안에 중·러 거부권. 이란유 수입 지속. 책임 없는 이익 수확 구조 제도적으로 확인</b></span>
+
+        <span style="color:var(--grn);font-weight:700">✓ 적중</span><span style="font-weight:600">비동시적 붕괴 시계</span><span style="font-family:'Noto Sans KR'">→ <b>D+43 시점 일본 ~287일, 한국 ~99일, 대만 ~58일, 인도 ~31일 소진 잔여. 원저자 예측대로 극심한 비동시성</b></span>
+
+        <span style="color:var(--org);font-weight:700">△ 부분</span><span style="font-weight:600">유가 $100+ 지속</span><span style="font-family:'Noto Sans KR'">예측 $100+ 유지 → <b>실제 $93~$119 극심한 변동. 패턴 적중했으나 변동성 과소평가</b></span>
+
+        <span style="color:var(--red);font-weight:700">✗ 미예측</span><span style="font-weight:600">파키스탄 중재자 부상</span><span style="font-family:'Noto Sans KR'">원저자 언급 없음 → <b>D+38 최후통첩 직전 파키스탄이 결정적 중재. 이슬라마바드가 협상 무대. 미-중 양극 구도 분석의 맹점</b></span>
+
+        <span style="color:var(--red);font-weight:700">✗ 미예측</span><span style="font-weight:600">트럼프 번복 반복</span><span style="font-family:'Noto Sans KR'">→ <b>최후통첩 → 유예 → 최후통첩 → 휴전 → 이스라엘 공습 묵인의 반복. 미국의 정책 일관성 훼손이 예측 변수로 미반영</b></span>
+
+        <span style="color:var(--red);font-weight:700">✗ 미예측</span><span style="font-weight:600">IRGC 탄그시리 제거</span><span style="font-family:'Noto Sans KR'">→ <b>D+26 이스라엘의 핵심 제거. 그러나 봉쇄 지속 — 지휘부 참수로도 해결되지 않는 시스템 임을 입증</b></span>
+
+        <span style="color:var(--red);font-weight:700">✗ 미예측</span><span style="font-weight:600">사우디 생산능력 영구 손실</span><span style="font-family:'Noto Sans KR'">→ <b>60만bpd + 동서 파이프라인 70만bpd 손실. 원저자가 "갭 보전 15%"로 계산한 대체 경로 자체가 파괴</b></span>
+
+        <span style="color:var(--red);font-weight:700">✗ 미예측</span><span style="font-weight:600">시나리오 ⑤ "하이브리드 교착"</span><span style="font-family:'Noto Sans KR'">→ <b>4개 시나리오 중 어디에도 해당하지 않는 결과. 교전 중단(③ 탈출) + 해협 이란 통제(② 부분) + 레바논 전선 유지(④ 부분) + 파키스탄 중재(외생변수). 내시 균형이 아닌 "불안정한 일시적 탈출"</b></span>
       </div>
     </div>
   </div>
 
-  <!-- What D+14 got right about the game structure -->
+  <!-- The Ceasefire Paradox -->
+  <div class="cd" style="margin-bottom:14px;border-left:3px solid var(--gld)">
+    <div style="font-weight:700;font-size:12px;margin-bottom:6px">🎭 휴전의 역설 — 왜 합의됐는데 해협이 안 열리는가</div>
+    <div style="font-size:11px;color:var(--t2);line-height:1.75">
+      D+39(4/8) 휴전은 원저자의 4개 시나리오 어디에도 없었다. 트럼프의 "석기시대" 최후통첩 90분 전, 파키스탄이 중재에 나서며 합의가 성립했다. 그러나 이 휴전은 <strong>성립된 순간부터 네 가지 구조적 모순</strong>을 안고 있다:<br><br>
+      <strong>① 레바논 제외 논란:</strong> 이스라엘이 휴전 다음 날 베이루트를 강타해 300명 이상이 사망했다. 이란은 "중대 위반"이라고 규정했고, 미국·이스라엘은 "레바논은 휴전에 포함되지 않았다"고 반박했다. 중재자 파키스탄은 "포함되어 있었다"고 맞섰다. 밴스는 "legitimate misunderstanding(정당한 오해)"이라고 표현했다. 이것은 실수가 아니라 <strong>의도된 모호성</strong>일 가능성이 있다 — 네타냐후에게 헤즈볼라 지도부 타격을 완료할 시간을 주는 동시에 공식적으로는 휴전을 유지하는 구조.<br><br>
+      <strong>② 해협 재개통 실패:</strong> 휴전 다음 날(D+40) 해협 통과는 단 5척. 이란 외무장관 아라크치의 공식 입장 — "이란 군의 조율 하에서만 통행 가능". 이란은 "대체 항로 지도"를 발표하며 자신이 통행 규칙의 집행자임을 시각적으로 선언했다. ADNOC CEO Al Jaber: "해협은 열리지 않았다. 이것은 항행의 자유가 아니라 강압(coercion)이다."<br><br>
+      <strong>③ 상반된 두 조건표:</strong> 미국 15개 조건 vs 이란 10개 조건(호르무즈 주권 영구 인정, 전쟁 배상, 레바논 포함 전면 휴전, 동결 자산 해제). 양측은 서로의 조건을 "최대주의적"이라고 규정하며 거부했다. 이슬라마바드 협상 결렬의 핵심 원인이다.<br><br>
+      <strong>④ 밴스 채널 — 예측 적중, 결과 예측 실패:</strong> D+26에 이란이 "위트코프·쿠슈너 거부, 밴스만 수용"이라고 선언한 것이 적중했으나, 밴스의 결론은 "이란이 우리 조건을 수용하지 않았다"였다. <strong>협상 채널은 열렸으나 내용상 합의는 없다.</strong>
+    </div>
+  </div>
+
+  <!-- The unified insight -->
   <div class="co">
-    <b>🔑 게임 구조 자체는 정확했다</b>
-    <p>D+14의 핵심 통찰 — "다음 48시간은 협상 창이 아니라, 3개 전구가 아직 분리된 마지막 간격" — 은 정확했다. 파리 회담은 실질적으로 아무것도 해결하지 못했고, 미국은 시나리오 ③(군사 강행)에 진입했으나 해협을 열지 못했다. 이란은 해군을 잃고도 비대칭 전술로 봉쇄를 유지하며 "우크라이나 플레이북"을 실행 중이다. 그리고 가장 중요하게 — <strong>이란이 호르무즈 주권 인정을 휴전 조건으로 내걸면서, 이 위기는 일시적 봉쇄에서 영구적 해양 질서 재편 시도로 전환</strong>되었다. 위안화 결제 조건보다 더 근본적인 도전이다.</p>
+    <b>🔑 성공의 역설 — 프레임은 정확했으나, 결말은 프레임을 초과했다</b>
+    <p>D+14 원저자의 게임 구조 분석은 거의 모두 적중했다: 비동시성, 비대칭 전술, 중국의 축 역할, 이란의 호르무즈 주권 요구, 시나리오 ③ 조기 진입, 이스라엘의 지역 전선 확장. <strong>그러나 원저자가 예측하지 못한 것은 "게임이 일시적으로 멈추는 방식"이었다.</strong> 원저자는 4개 시나리오 중 하나로 수렴할 것으로 보았으나, 실제 결과는 <strong>모든 시나리오의 부분 요소가 동시에 실현된 하이브리드 교착</strong>이었다: 군사 교전은 중단(③ 탈출), 해협은 이란 통제 하 부분 재개통(② 부분 실현), 이스라엘은 레바논 전선 유지(④ 부분 실현), 파키스탄이 중재자(예측 외). <strong>게임이론의 관점에서 이것은 내시 균형이 아니라 "불안정한 일시적 탈출(unstable temporary exit)"이다.</strong> D+53(4/22) 휴전 만료가 진짜 결산 시점이다.</p>
   </div>
 
-  <!-- Updated watch signals -->
-  <div class="cd">
-    <div style="font-weight:700;font-size:12px;margin-bottom:8px">🎯 D+26 기준 업데이트된 주목 사항</div>
+  <!-- Watch signals D+43 -->
+  <div class="cd" style="margin-top:14px">
+    <div style="font-weight:700;font-size:12px;margin-bottom:8px">🎯 D+43 기준 주목 사항 — 다음 10일</div>
     <div style="font-size:10px;line-height:1.7;color:var(--t2)">
-      <div style="padding:6px 0;border-bottom:1px solid var(--brl)"><strong>5/14~15 트럼프 방중</strong> — 원래 3/31이었으나 이란전 명분으로 6주 연기(3/25 발표). D+14 분석에서 "게임의 결산"으로 지목했으나, 연기 자체가 미국의 약한 패를 노출. CNN: "전쟁이 길어질수록 트럼프의 좌절감이 커지고, 약점이 더 드러난다." 중국은 공식 확인을 유보하며 기동 여지를 확보 중.</div>
-      <div style="padding:6px 0;border-bottom:1px solid var(--brl)"><strong>"최종 타격" 4개 옵션</strong> — 이란 본토 지상군 투입이 실제 검토 중. 82공수사단 투입 가능성. 실행 시 시나리오 ④로 즉시 전환.</div>
-      <div style="padding:6px 0;border-bottom:1px solid var(--brl)"><strong>이란 바브엘만데브 확전 위협</strong> — 호르무즈에 더해 제2해협까지 위협. 전 세계 LNG·석유 통과의 양대 병목을 동시에 인질화하는 시나리오.</div>
-      <div style="padding:6px 0;border-bottom:1px solid var(--brl)"><strong>NATO "호르무즈 연합" 논의</strong> — 영국·프랑스 주도. 에스토니아 참여 의사 표명. 미국 단독 부담에서 다국적 호송 체제로 전환 가능성.</div>
-      <div style="padding:6px 0"><strong>이란 5개 조건의 의미</strong> — "호르무즈 주권 인정"은 단순 휴전 조건이 아니라 국제법적 전례 변경 시도. 수용 시 향후 모든 해양 초크포인트의 법적 프레임이 변동. 거부 시 전쟁 장기화.</div>
-    </div>
-  </div>
-
-  <!-- ═══════════════════════════════════════
-       PART II — D+43 (4/12) 업데이트
-       ═══════════════════════════════════════ -->
-  <div style="margin-top:32px;padding-top:24px;border-top:3px double var(--red)">
-    <div class="lb" style="color:var(--red)">EPILOGUE PART II — D+43 UPDATE · 4/12 기준</div>
-    <h2 class="tt" style="margin-top:4px">17일 후: 불안정한 휴전, 그리고 이름뿐인 재개통</h2>
-    <p class="ds">D+26(3/26) 이후 17일이 경과했다. 그 사이에 트럼프의 최후통첩, 2주 휴전 합의(4/7~8), 이스라엘 베이루트 대규모 공습, 이슬라마바드 미-이란 직접 대면 협상 등이 연속되었다. D+43 오늘, 해협은 여전히 실질적으로 봉쇄되어 있고, 휴전은 "이름은 있으나 알맹이는 없는" 상태다.</p>
-
-    <!-- D+27~43 Timeline -->
-    <div class="cd" style="margin-bottom:14px">
-      <div style="font-weight:700;font-size:12px;margin-bottom:10px">🔄 D+26 이후 17일간의 핵심 전개 (3/27 → 4/12)</div>
-      <div style="font-size:10px;line-height:1.8;font-family:'JetBrains Mono',monospace">
-        <div style="display:grid;grid-template-columns:auto 1fr;gap:3px 10px">
-          <span style="color:var(--cr);font-weight:600">D+27 · 3/27</span><span style="font-family:'Noto Sans KR'">Mayuree Naree호 케슘 섬 좌초. IRGC, 3척 컨테이너선 해협 진입 차단</span>
-          <span style="color:var(--red);font-weight:600">D+30 · 3/30</span><span style="font-family:'Noto Sans KR'">Liberia 선적 Express Rome호, 라스타누라 22해리 근처 투척물 낙하(피해 없음)</span>
-          <span style="color:var(--red);font-weight:600">D+31 · 3/31</span><span style="font-family:'Noto Sans KR'">쿠웨이트 VLCC Al Salmi, 두바이 정박 중 이란 드론 피격 화재. <b>5/14~15 트럼프 방중 공식 확정</b></span>
-          <span style="color:var(--red);font-weight:600">D+36 · 4/5</span><span style="font-family:'Noto Sans KR'">주간 해협 통과 72척(3/30~4/5)으로 개전 이래 최고치. 전쟁 전(100척/일)의 10%. 80%가 이란 관련, 13%가 중국 소유</span>
-          <span style="color:var(--red);font-weight:600">D+38 · 4/7</span><span style="font-family:'Noto Sans KR'">트럼프, 이란에 해협 개통 최후통첩: "완전·즉각 개통 아니면 석기시대로". 이란 에너지 인프라 대량 타격 예고</span>
-          <span style="color:var(--grn);font-weight:700">D+39 · 4/8 🕊️</span><span style="font-family:'Noto Sans KR'"><b>최후통첩 90분 전, 2주 휴전 극적 합의.</b> 트럼프: "이란이 완전·즉각·안전한 해협 개통에 동의하는 조건". 이란은 별도 10개 조건 제시(호르무즈 주권 포함). Brent 장중 $113→$93(-16%) 폭락</span>
-          <span style="color:var(--red);font-weight:600">D+40 · 4/9</span><span style="font-family:'Noto Sans KR'">이스라엘, 베이루트 대규모 공습 <b>300명+ 사망</b>. 이란 "중대 위반" 규정. 해협 통과 휴전 24시간 내 단 5척. ADNOC CEO "해협은 열리지 않았다"</span>
-          <span style="color:var(--org);font-weight:600">D+41 · 4/10</span><span style="font-family:'Noto Sans KR'">이란, 기뢰 회피 목적 "대체 항로" 지도 공개 — 라라크 섬 북/남. 통행료 $100만+ 요구 보도. 밴스 "레바논 혼선은 정당한 오해"</span>
-          <span style="color:var(--blu);font-weight:600">D+42 · 4/11</span><span style="font-family:'Noto Sans KR'">미 해군 구축함 Frank E. Peterson·Michael Murphy, 전쟁 이래 최초 해협 진입 소해 작전. 트럼프 "해협 정리 중"</span>
-          <span style="color:var(--cr);font-weight:700">D+43 · 4/12 (오늘)</span><span style="font-family:'Noto Sans KR'"><b>이슬라마바드 협상 결렬.</b> 밴스·위트코프·쿠슈너 vs 이란 대표단, 파키스탄 중재. 밴스: <b>"합의에 이르지 못했다. 이란이 우리 조건을 수용하지 않기로 했다."</b> Brent ~$96</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- The Ceasefire Paradox -->
-    <div class="cd" style="margin-bottom:14px;border-left:3px solid var(--gld)">
-      <div style="font-weight:700;font-size:12px;margin-bottom:6px">🎭 휴전의 역설 — 왜 합의됐는데 해협이 안 열리는가</div>
-      <div style="font-size:11px;color:var(--t2);line-height:1.75">
-        D+39(4/8) 휴전은 D+14 원저자가 예측한 4개 시나리오 어디에도 없었다. 트럼프의 "석기시대" 최후통첩 90분 전, 파키스탄이 중재에 나서며 합의가 성립했다. 그러나 이 휴전은 <strong>성립된 순간부터 네 가지 구조적 모순</strong>을 안고 있다:<br><br>
-        <strong>① 레바논 제외 논란:</strong> 이스라엘이 휴전 발표 다음 날 베이루트를 강타해 300명 이상이 사망했다. 이란은 "중대 위반"이라고 규정했고, 미국·이스라엘은 "레바논은 휴전에 포함되지 않았다"고 반박했다. 중재자 파키스탄은 "포함되어 있었다"고 맞섰다. 밴스는 "legitimate misunderstanding"(정당한 오해)이라고 표현했다. 이것은 실수가 아니라 <strong>의도된 모호성</strong>일 가능성이 있다 — 네타냐후에게 헤즈볼라 지도부 타격을 완료할 시간을 주는 동시에, 공식적으로는 휴전을 유지하는 구조.<br><br>
-        <strong>② 해협 재개통 실패:</strong> 휴전 다음 날(D+40) 해협 통과는 단 5척. 이란 외무장관 아라크치의 공식 입장 — "이란 군의 조율 하에서만 통행 가능". 이란은 별도로 "대체 항로 지도"를 발표하며 자신이 통행 규칙의 집행자임을 시각적으로 선언했다. ADNOC CEO Al Jaber는 "해협은 열리지 않았다. 이것은 항행의 자유가 아니라 강압(coercion)이다"라고 공개 비판했다. D+14 원저자가 예측한 "호르무즈 주권 인정"이 현실이 되었다.<br><br>
-        <strong>③ 상반된 두 가지 조건 제시:</strong> 미국은 이란에 15개 조건을 제시한 것으로 보도되었고, 이란은 별도로 10개 조건으로 대응했다(호르무즈 주권 영구 인정, 전쟁 배상, 레바논 포함 전면 휴전, 동결 자산 해제 포함). 양측은 서로의 조건을 "최대주의적"이라고 규정하며 거부했다. 이슬라마바드 협상이 결렬된 핵심 원인이다.<br><br>
-        <strong>④ 밴스 채널의 예측 적중 — 그러나 결과는 예측 실패:</strong> D+26에 이란이 "위트코프·쿠슈너 거부, 밴스만 수용"이라고 선언한 것이 적중했다. D+43 오늘 이슬라마바드에서 밴스가 수석 협상자로 등장했다. 그러나 밴스의 결론은 <strong>"이란이 우리 조건을 수용하지 않았다"</strong>였다. 협상 채널은 열렸으나 내용상 합의는 없다.
-      </div>
-    </div>
-
-    <!-- Scenario Matrix Re-evaluation -->
-    <div class="cd" style="margin-bottom:14px">
-      <div style="font-weight:700;font-size:12px;margin-bottom:10px">🎲 시나리오 매트릭스 — D+43 재평가</div>
-      <div style="font-size:10px;line-height:1.7;color:var(--t2)">
-        <div style="padding:8px;background:var(--gdl);border-radius:var(--r);margin-bottom:8px">
-          <strong style="color:var(--gld)">시나리오 ⑤ — 예측에 없었던 결과: "명목 휴전 + 실질 봉쇄 지속"</strong><br>
-          D+14의 4개 시나리오 중 어디에도 정확히 해당하지 않는다. 군사 교전은 일시 중단되었으나(시나리오 ③의 중단), 해협은 재개통되지 않았고, 이란은 구조적 레버리지를 확보했으며, 이스라엘은 레바논 전선을 유지. <strong>이것은 "타협"이 아니라 "교착의 공식화"다.</strong>
-        </div>
-        <div style="padding:8px;background:var(--bl);border-radius:var(--r);margin-bottom:8px">
-          <strong style="color:var(--blu)">시나리오 ① "중국이 중재" — 파키스탄이 대신했다</strong><br>
-          원저자는 중국이 호르무즈 중재자가 될 것으로 예측했다. 실제로는 <strong>파키스탄</strong>이 그 역할을 했다. D+38 최후통첩 당일 파키스탄이 중재에 나서, 이슬라마바드가 협상 무대가 되었다. 중국은 UN 안보리에서 GCC의 해협 개통 결의안에 러시아와 함께 거부권을 행사하는 등 배경에서 이란에 유리하게 작동. 책임 없이 이익 수확 — D+14에 예측한 "축(Fulcrum)" 역할이 전술적으로는 파키스탄에 위탁되었으나, 전략적으로는 그대로 유효.
-        </div>
-        <div style="padding:8px;background:var(--rl);border-radius:var(--r)">
-          <strong style="color:var(--red)">시나리오 ④ 리스크 재점화</strong><br>
-          밴스의 D+43 "합의 없음" 선언은 휴전 만기(4/22, D+53)를 향한 시계를 재가동시켰다. 10일 내 돌파구가 없으면 전쟁 재개 가능성. 이스라엘은 레바논 작전을 계속 중이며, 트럼프는 "모든 미군 자산이 이란 주변에 준비되어 있다"고 공개 경고. D+14에 예측한 "3개 전구 병합"이 재활성화될 수 있다.
-        </div>
-      </div>
-    </div>
-
-    <!-- Unexpected -->
-    <div class="cd" style="margin-bottom:14px;border-left:3px solid var(--red)">
-      <div style="font-weight:700;font-size:12px;margin-bottom:6px">⚠️ D+26 이후 완전히 미예측된 3가지 사건</div>
-      <div style="font-size:10px;color:var(--t2);line-height:1.7">
-        <div style="padding:6px 0;border-bottom:1px solid var(--brl)"><strong>① 파키스탄의 중재자 부상</strong> — D+14 원저자와 D+26 분석 모두 파키스탄을 중재자로 언급하지 않았다. 실제로는 파키스탄이 트럼프 최후통첩 직전 결정적 중재 역할을 했고, 이슬라마바드가 협상 무대가 되었다. 미-중 양극 구도 분석이 <strong>남아시아 중급 국가의 외교 자산을 과소평가</strong>한 결과다.</div>
-        <div style="padding:6px 0;border-bottom:1px solid var(--brl)"><strong>② UN 안보리 거부권 — 중러 연합</strong> — GCC(사우디, UAE, 카타르, 쿠웨이트, 요르단 포함)가 바레인 주도로 UN 안보리에 호르무즈 개통을 위한 방어 임무 결의안을 제출했으나, 러시아와 중국이 나란히 거부권을 행사했다. 이는 <strong>러·중이 이란의 해협 통제를 공식적으로 묵인한 것</strong>과 같다. 원저자가 제시한 "축(Fulcrum)" 개념이 제도적 층위에서 확인된 순간.</div>
-        <div style="padding:6px 0"><strong>③ 사우디 생산능력 영구 손실</strong> — 이란 드론·미사일 공격이 사우디 에너지 시설을 지속 타격하여 <strong>60만bpd 생산능력과 70만bpd 동서 파이프라인 처리량 손실</strong>. D+14 원저자가 "사우디 파이프라인이 갭의 15% 보전"이라고 계산했던 대체 경로 자체가 파괴되었다. 이것은 전쟁이 끝나도 즉시 회복되지 않는 구조적 손실이다.</div>
-      </div>
-    </div>
-
-    <!-- The Paradox of Success -->
-    <div class="co">
-      <b>🔑 성공의 역설 — 원저자가 맞췄으나 결말은 예측 실패</b>
-      <p>D+14 원저자의 프레임은 대부분 적중했다: 비동시성, 비대칭 전술(이란의 "우크라이나 플레이북"), 중국의 축 역할, 이란의 호르무즈 주권 요구, 시나리오 ③ 조기 진입, 이스라엘의 지역 전선 확장 — 모두 현실이 되었다. <strong>그러나 원저자가 예측하지 못한 것은 "게임이 일시적으로 멈추는 방식"이었다.</strong> 원저자는 4개 시나리오 중 하나로 수렴할 것으로 보았으나, 실제 결과는 <strong>모든 시나리오의 부분 요소가 동시에 실현된 하이브리드 교착 상태</strong>였다: 군사 교전은 중단(③ 탈출), 해협은 이란 통제 하 부분 재개통(② 부분 실현), 이스라엘은 레바논 유지(④ 부분 실현), 파키스탄이 중재자(예측 외). <strong>게임이론의 관점에서, 이것은 내시 균형이 아니라 "불안정한 일시적 탈출"이다.</strong> D+53(4/22) 휴전 만료가 진짜 결산 시점이 될 것이다.</p>
-    </div>
-
-    <!-- Watch signals updated -->
-    <div class="cd" style="margin-top:14px">
-      <div style="font-weight:700;font-size:12px;margin-bottom:8px">🎯 D+43 기준 주목 사항</div>
-      <div style="font-size:10px;line-height:1.7;color:var(--t2)">
-        <div style="padding:6px 0;border-bottom:1px solid var(--brl)"><strong>D+53 (4/22) 휴전 만료</strong> — 실질적 합의 없이 시계만 소진 중. 이슬라마바드 결렬 후 10일 내 극적 반전이 없으면 전쟁 재개 가능성 실재. 후속 협상 개최 여부가 1차 지표.</div>
-        <div style="padding:6px 0;border-bottom:1px solid var(--brl)"><strong>해협 통과량</strong> — 휴전 후 24시간 내 5척, 이후에도 일일 한 자릿수. 전쟁 전 일일 100~120척의 10% 수준. 일일 30척 이상 회복이 실질 재개통의 판단 기준. 통행료 $100만 실제 징수 여부가 "주권 행사" 공인 여부와 직결.</div>
-        <div style="padding:6px 0;border-bottom:1px solid var(--brl)"><strong>이스라엘 레바논 전선</strong> — 베이루트 공습으로 300명 이상 사망. 네타냐후가 "레바논 직접 협상"을 발표했으나 타격은 계속. 헤즈볼라가 보복 시 이란이 휴전 탈퇴 명분으로 활용 가능. <strong>레바논 전선이 미-이란 휴전의 실질 뇌관.</strong></div>
-        <div style="padding:6px 0;border-bottom:1px solid var(--brl)"><strong>5/14~15 트럼프 방중</strong> — 휴전 유지 시 예정대로 진행. 휴전 붕괴 시 다시 연기 가능. 현재 구도에서는 중국이 "안보리 거부권 + 이란유 수입 지속 + 파키스탄 대리중재"로 이득을 공식화한 상태에서 정상회담을 맞이. 위안화 결제 이슈 공식 의제화 여부가 분기점.</div>
-        <div style="padding:6px 0"><strong>사우디 생산능력 영구 손실</strong> — 60만bpd + 파이프라인 70만bpd 손상은 전쟁 후에도 회복 안 됨. 유가가 전쟁 전 $72로 복귀하기 어려운 구조적 이유. 장기 프리미엄 $10~15 정착 전망.</div>
-      </div>
-    </div>
-
-    <!-- Price pattern summary -->
-    <div class="cd" style="margin-top:14px">
-      <div style="font-weight:700;font-size:12px;margin-bottom:6px">📉 유가 궤적: 43일간의 패턴</div>
-      <div style="font-size:10px;color:var(--t2);line-height:1.7">
-        전쟁 전 $72 → D+7(3/7) 장중 $119.5 → D+14(3/14) $101 → D+26(3/26) $104 → D+37(4/6) 장중 약 $113 재상승 → <strong>D+39(4/8) 휴전 합의로 -16% 폭락 → $93</strong> → D+40(4/9) 이스라엘 베이루트 공습으로 반등 → D+43(4/12) ~$96. 전쟁 전 대비 <strong>여전히 33% 프리미엄</strong>. Brent 선물 커브는 백워데이션(근월 > 원월) 구조 유지 — 시장은 휴전을 "일시적 이벤트"로 평가하나, <strong>12월물도 전쟁 전 대비 10%+ 프리미엄을 반영</strong>. 영구적 공급 구조 변화(사우디 손상, 이란 주권 행사)가 선물 커브에 각인되었다.
-      </div>
+      <div style="padding:6px 0;border-bottom:1px solid var(--brl)"><strong>D+53 (4/22) 휴전 만료</strong> — 실질적 합의 없이 시계만 소진 중. 이슬라마바드 결렬 후 10일 내 돌파구가 없으면 전쟁 재개 가능성 실재. 후속 협상 개최 여부가 1차 지표.</div>
+      <div style="padding:6px 0;border-bottom:1px solid var(--brl)"><strong>해협 통과량 회복 여부</strong> — 휴전 후에도 일일 5~11척(정상 100~120척의 10%). <b>일일 30척 이상 회복</b>이 실질 재개통의 판단 기준. 통행료 $100만 실제 징수 시 이란 주권 행사의 공인으로 간주됨.</div>
+      <div style="padding:6px 0;border-bottom:1px solid var(--brl)"><strong>이스라엘 레바논 전선</strong> — 베이루트 공습 300명+ 사망. 네타냐후의 "레바논 직접 협상" 선언과 타격 지속의 괴리. 헤즈볼라 보복 시 이란이 휴전 탈퇴 명분으로 활용 가능. <strong>레바논 전선이 미-이란 휴전의 실질 뇌관.</strong></div>
+      <div style="padding:6px 0;border-bottom:1px solid var(--brl)"><strong>5/14~15 트럼프 방중</strong> — 휴전 유지 시 예정대로 진행. 현재 구도에서 중국은 "안보리 거부권 + 이란유 수입 + 파키스탄 대리중재"로 이득을 공식화한 상태. 위안화 결제 이슈의 공식 의제화 여부가 분기점.</div>
+      <div style="padding:6px 0"><strong>사우디 생산능력 영구 손실</strong> — 60만bpd + 파이프라인 70만bpd 손상은 전쟁 후에도 회복 안 됨. <b>유가가 전쟁 전 $72로 복귀하기 어려운 구조적 이유.</b> 장기 프리미엄 $10~15 정착 전망.</div>
     </div>
   </div>
 </section>
@@ -722,7 +642,7 @@ section:last-of-type{border-bottom:none}
 </main>
 
 <footer class="ft">
-  원문: <a href="https://www.garrettsignal.com/p/who-breaks-first" target="_blank">Garrett's Signal — "Who Breaks First?"</a> (2026.03.14) · D+26 업데이트 (3/26) · D+43 업데이트 (4/12)<br>
+  원문: <a href="https://www.garrettsignal.com/p/who-breaks-first" target="_blank">Garrett's Signal — "Who Breaks First?"</a> (2026.03.14) · D+43 결산 (2026.04.12)<br>
   보완: Wikipedia(2026 Iran war ceasefire), CNBC, Reuters, AP, CNN, Al Jazeera, NPR, CBS, NBC, ABC, Axios, Times of Israel, Fortune, EIA, IEA, UN News, Trading Economics
 </footer>
 
@@ -896,11 +816,11 @@ draw();window.addEventListener('resize',draw);
       return [d[0],est];
     });
     function render(){
-      const W=box.clientWidth-28,H=220,mob=W<400;
+      const W=box.clientWidth-28,H=300,mob=W<400;
       cv.width=W*dpr;cv.height=H*dpr;cv.style.width=W+'px';cv.style.height=H+'px';
       ctx.setTransform(1,0,0,1,0,0);ctx.scale(dpr,dpr);ctx.clearRect(0,0,W,H);
-      const p={t:24,r:14,b:30,l:mob?40:48},cw=W-p.l-p.r,ch=H-p.t-p.b;
-      const mx=22;
+      const p={t:30,r:14,b:36,l:mob?44:52},cw=W-p.l-p.r,ch=H-p.t-p.b;
+      const mx=24;
 
       const x=i=>p.l+(i/(B.length-1))*cw;
       const y=v=>p.t+(1-v/mx)*ch;
@@ -910,44 +830,109 @@ draw();window.addEventListener('resize',draw);
       ctx.fillRect(x(13),p.t,x(B.length-1)-x(13),ch);
 
       // Grid
-      for(let v=0;v<=22;v+=5){
+      for(let v=0;v<=24;v+=4){
         ctx.strokeStyle='#EDEBE6';ctx.lineWidth=0.5;
         ctx.beginPath();ctx.moveTo(p.l,y(v));ctx.lineTo(p.l+cw,y(v));ctx.stroke();
-        ctx.fillStyle='#999';ctx.font=(mob?8:9)+'px "JetBrains Mono"';ctx.textAlign='right';
-        ctx.fillText(v+'mb',p.l-4,y(v)+3);
+        ctx.fillStyle='#999';ctx.font=(mob?8:10)+'px "JetBrains Mono"';ctx.textAlign='right';
+        ctx.fillText(v+'mb/d',p.l-4,y(v)+3);
       }
 
-      // Pre-war baseline line
-      ctx.strokeStyle='rgba(29,111,165,0.4)';ctx.lineWidth=1;ctx.setLineDash([5,3]);
-      ctx.beginPath();ctx.moveTo(p.l,y(20));ctx.lineTo(p.l+cw,y(20));ctx.stroke();ctx.setLineDash([]);
-      ctx.fillStyle='#1D6FA5';ctx.font='bold '+(mob?8:9)+'px "Noto Sans KR"';ctx.textAlign='right';
-      ctx.fillText('정상 ~20mb/d',p.l+cw-4,y(20)-4);
-
-      // Area fill
-      ctx.fillStyle='rgba(189,50,39,0.15)';
+      // ========== SUPPLY GAP VISUALIZATION (prominent) ==========
+      // Fill the gap area between pre-war 20mb/d and actual transit (war period only)
+      ctx.fillStyle='rgba(189,50,39,0.22)';
       ctx.beginPath();
-      ctx.moveTo(x(0),y(0));
-      B.forEach((d,i)=>ctx.lineTo(x(i),y(d[1])));
+      ctx.moveTo(x(13),y(20));
+      for(let i=13;i<B.length;i++){
+        ctx.lineTo(x(i),y(20));
+      }
+      for(let i=B.length-1;i>=13;i--){
+        ctx.lineTo(x(i),y(B[i][1]));
+      }
+      ctx.closePath();
+      ctx.fill();
+
+      // Pre-war baseline (strong)
+      ctx.strokeStyle='#1D6FA5';ctx.lineWidth=2.5;ctx.setLineDash([8,4]);
+      ctx.beginPath();ctx.moveTo(p.l,y(20));ctx.lineTo(p.l+cw,y(20));ctx.stroke();ctx.setLineDash([]);
+      ctx.fillStyle='#1D6FA5';ctx.font='bold '+(mob?9:11)+'px "Noto Sans KR"';ctx.textAlign='left';
+      ctx.fillText('정상 통과량 ~20mb/d',p.l+4,y(20)-6);
+
+      // Area fill under actual (war period)
+      ctx.fillStyle='rgba(122,32,24,0.35)';
+      ctx.beginPath();
+      ctx.moveTo(x(13),y(0));
+      for(let i=13;i<B.length;i++){
+        ctx.lineTo(x(i),y(B[i][1]));
+      }
       ctx.lineTo(x(B.length-1),y(0));
       ctx.closePath();ctx.fill();
 
-      // Line
-      ctx.strokeStyle='#BD3227';ctx.lineWidth=2;
+      // Pre-war line (light blue)
+      ctx.strokeStyle='#1D6FA5';ctx.lineWidth=2.5;
       ctx.beginPath();
-      B.forEach((d,i)=>{
-        i===0?ctx.moveTo(x(i),y(d[1])):ctx.lineTo(x(i),y(d[1]));
-      });
+      for(let i=0;i<=13;i++){
+        i===0?ctx.moveTo(x(i),y(B[i][1])):ctx.lineTo(x(i),y(B[i][1]));
+      }
       ctx.stroke();
 
-      // Gap annotation
-      ctx.fillStyle='#7A2018';ctx.font='bold '+(mob?9:11)+'px "Noto Sans KR"';ctx.textAlign='center';
-      ctx.fillText('↕ 공급 갭 ~17mb/d 미충당',p.l+cw*0.55,y(10));
+      // War-period line (red, thick)
+      ctx.strokeStyle='#7A2018';ctx.lineWidth=2.8;
+      ctx.beginPath();
+      for(let i=13;i<B.length;i++){
+        i===13?ctx.moveTo(x(i),y(B[i][1])):ctx.lineTo(x(i),y(B[i][1]));
+      }
+      ctx.stroke();
 
-      // X labels
-      ctx.fillStyle='#999';ctx.font=(mob?7:8)+'px "JetBrains Mono"';ctx.textAlign='center';
-      [0,10,13,20,30,40,50].forEach(i=>{
-        if(i<B.length)ctx.fillText(B[i][0],x(i),p.t+ch+12);
+      // ========== GAP ARROW & LABEL (large, central) ==========
+      // Find a point ~3/4 through war period for the arrow
+      const arrowIdx=Math.floor(13+(B.length-13)*0.55);
+      const arrowX=x(arrowIdx);
+      const topY=y(20);
+      const botY=y(B[arrowIdx][1]);
+      const midY=(topY+botY)/2;
+
+      // Thick double-headed arrow
+      ctx.strokeStyle='#BD3227';ctx.lineWidth=3.5;ctx.fillStyle='#BD3227';
+      // Vertical line
+      ctx.beginPath();ctx.moveTo(arrowX,topY+8);ctx.lineTo(arrowX,botY-8);ctx.stroke();
+      // Top arrowhead
+      ctx.beginPath();ctx.moveTo(arrowX,topY+2);ctx.lineTo(arrowX-6,topY+12);ctx.lineTo(arrowX+6,topY+12);ctx.closePath();ctx.fill();
+      // Bottom arrowhead
+      ctx.beginPath();ctx.moveTo(arrowX,botY-2);ctx.lineTo(arrowX-6,botY-12);ctx.lineTo(arrowX+6,botY-12);ctx.closePath();ctx.fill();
+
+      // Big label box
+      const gapVal=Math.round(20-B[arrowIdx][1]);
+      const labelText='공급 갭';
+      const labelVal='~'+gapVal+' mb/d';
+      const labelPct='(-'+Math.round(gapVal/20*100)+'%)';
+      const boxX=arrowX+14;
+      const boxY=midY-28;
+      const boxW=mob?88:108;
+      const boxH=56;
+      ctx.fillStyle='rgba(255,255,255,0.95)';
+      ctx.strokeStyle='#BD3227';ctx.lineWidth=2;
+      ctx.fillRect(boxX,boxY,boxW,boxH);
+      ctx.strokeRect(boxX,boxY,boxW,boxH);
+      ctx.fillStyle='#BD3227';
+      ctx.font='bold '+(mob?10:12)+'px "Noto Sans KR"';ctx.textAlign='center';
+      ctx.fillText(labelText,boxX+boxW/2,boxY+16);
+      ctx.font='900 '+(mob?14:17)+'px "JetBrains Mono"';
+      ctx.fillText(labelVal,boxX+boxW/2,boxY+34);
+      ctx.font='bold '+(mob?9:10)+'px "Noto Sans KR"';
+      ctx.fillStyle='#7A2018';
+      ctx.fillText(labelPct,boxX+boxW/2,boxY+49);
+
+      // X labels (every 10 days approximately)
+      ctx.fillStyle='#999';ctx.font=(mob?7:9)+'px "JetBrains Mono"';ctx.textAlign='center';
+      [0,7,13,18,23,28,33,38,43,48].forEach(i=>{
+        if(i<B.length)ctx.fillText(B[i][0],x(i),p.t+ch+14);
       });
+
+      // War start marker
+      ctx.strokeStyle='#BD3227';ctx.lineWidth=1.5;ctx.setLineDash([3,3]);
+      ctx.beginPath();ctx.moveTo(x(13),p.t);ctx.lineTo(x(13),p.t+ch);ctx.stroke();ctx.setLineDash([]);
+      ctx.fillStyle='#BD3227';ctx.font='bold '+(mob?8:10)+'px "Noto Sans KR"';ctx.textAlign='left';
+      ctx.fillText('⚔️ 개전 2/28',x(13)+3,p.t+ch+26);
     }
     render();
     window.addEventListener('resize',render);
@@ -968,14 +953,14 @@ draw();window.addEventListener('resize',draw);
     ['중국','🇨🇳','#1A7B3E',1200,15.5,0.25],
     ['인도','🇮🇳','#1A5276',146,5.5,0.45],
   ];
-  const days=100;
+  const days=60;
 
   function drawChart(canvasId, mode){
     const cv=document.getElementById(canvasId);if(!cv)return;
     const ctx=cv.getContext('2d'),dpr=window.devicePixelRatio||1;
     const box=cv.parentElement;
     function render(){
-      const W=box.clientWidth-28,H=240,mob=W<400;
+      const W=box.clientWidth-28,H=340,mob=W<400;
       cv.width=W*dpr;cv.height=H*dpr;cv.style.width=W+'px';cv.style.height=H+'px';
       ctx.setTransform(1,0,0,1,0,0);ctx.scale(dpr,dpr);ctx.clearRect(0,0,W,H);
       const p={t:28,r:14,b:32,l:mob?38:48},cw=W-p.l-p.r,ch=H-p.t-p.b;
@@ -1015,7 +1000,7 @@ draw();window.addEventListener('resize',draw);
         ctx.fillText(mode==='days'?Math.round(val)+'일':Math.round(val)+'mb',p.l-4,y(val)+3);
       }
       // X axis
-      for(let d=0;d<=days;d+=mob?15:10){
+      for(let d=0;d<=days;d+=mob?10:10){
         ctx.fillStyle='#999';ctx.font=(mob?7:8)+'px "JetBrains Mono"';ctx.textAlign='center';
         ctx.fillText('D+'+d,x(d),p.t+ch+14);
       }
@@ -1053,26 +1038,34 @@ draw();window.addEventListener('resize',draw);
 
       // Lines
       series.forEach(s=>{
-        ctx.strokeStyle=s.color;ctx.lineWidth=2;ctx.beginPath();
+        ctx.strokeStyle=s.color;ctx.lineWidth=2.8;ctx.beginPath();
         s.pts.forEach((v,i)=>{i===0?ctx.moveTo(x(i),y(v)):ctx.lineTo(x(i),y(v))});
         ctx.stroke();
       });
 
+      // End-point dots with D+43 value
+      series.forEach(s=>{
+        const v43=s.pts[43];
+        ctx.fillStyle=s.color;
+        ctx.beginPath();ctx.arc(x(43),y(v43),4,0,Math.PI*2);ctx.fill();
+      });
+
       // Legend
-      const lgX=p.l+8,lgY=mode==='days'?p.t+10:p.t+ch-50;
-      ctx.font=(mob?8:9)+'px "Noto Sans KR"';ctx.textAlign='left';
+      const lgX=p.l+8,lgY=mode==='days'?p.t+10:p.t+ch-70;
+      ctx.font='bold '+(mob?9:10)+'px "Noto Sans KR"';ctx.textAlign='left';
       series.forEach((s,i)=>{
-        const ly=lgY+i*14;
-        ctx.strokeStyle=s.color;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(lgX,ly);ctx.lineTo(lgX+16,ly);ctx.stroke();
-        ctx.fillStyle=s.color;ctx.fillText(s.emoji+' '+s.name,lgX+20,ly+3);
+        const ly=lgY+i*16;
+        ctx.strokeStyle=s.color;ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(lgX,ly);ctx.lineTo(lgX+20,ly);ctx.stroke();
+        ctx.fillStyle=s.color;ctx.fillText(s.emoji+' '+s.name,lgX+24,ly+3);
         // Current value at D+43
         const v43=s.pts[43];
-        ctx.fillStyle='#666';ctx.font=(mob?7:8)+'px "JetBrains Mono"';
+        ctx.fillStyle='#444';ctx.font='bold '+(mob?8:9)+'px "JetBrains Mono"';
         if(mode==='days'){
-          ctx.fillText(Math.round(v43)+'일',lgX+80,ly+3);
+          ctx.fillText(Math.round(v43)+'일',lgX+92,ly+3);
         } else {
-          ctx.fillText(Math.round(v43)+'mb',lgX+80,ly+3);
+          ctx.fillText(Math.round(v43)+'mb',lgX+92,ly+3);
         }
+        ctx.font='bold '+(mob?9:10)+'px "Noto Sans KR"';
       });
     }
     render();
