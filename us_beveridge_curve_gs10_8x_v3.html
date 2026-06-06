@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>미국 베버리지 곡선 애니메이션 — GS10 + S&P 500 + 30개월 그라데이션 궤적</title>
+<style>
+  :root{
+    --bg:#f6f7fb; --panel:#ffffff; --ink:#111827; --muted:#64748b; --grid:#d7dce5;
+    --axis:#111827; --pre:#f97316; --gfc:#6b7280; --covid:#0284c7; --post:#93c5fd;
+    --line:#334155; --fed:#7c3aed; --ten:#059669; --sp:#dc2626; --trail:#0f172a; --danger:#ef4444;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:Arial,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;}
+  .wrap{max-width:1180px;margin:0 auto;padding:22px 18px 28px}
+  .card{background:var(--panel);border:1px solid #e5e7eb;border-radius:18px;box-shadow:0 8px 24px rgba(15,23,42,.08);padding:18px 18px 14px}
+  h1{font-size:24px;line-height:1.2;margin:0 0 4px;text-align:center;font-weight:700;letter-spacing:-.02em}
+  .sub{font-size:13px;color:var(--muted);text-align:center;margin-bottom:10px}
+  .chartGrid{display:grid;grid-template-columns:1fr;gap:10px}
+  svg{display:block;width:100%;background:#fff;border-radius:10px}
+  .label{font-size:14px;fill:#111827;font-weight:700}
+  .small{font-size:12px;fill:#475569}
+  .dateLabel{font-size:22px;fill:#111827;font-weight:800}
+  .legend text{font-size:13px;fill:#111827}
+  .tooltip{position:fixed;pointer-events:none;opacity:0;background:rgba(15,23,42,.92);color:#fff;border-radius:10px;padding:9px 10px;font-size:12px;line-height:1.45;box-shadow:0 8px 20px rgba(0,0,0,.2);z-index:10;white-space:nowrap}
+  .controls{display:grid;grid-template-columns:auto auto 120px 1fr auto;align-items:center;gap:10px;margin:12px 2px 8px}
+  button{border:1px solid #cbd5e1;background:#fff;border-radius:10px;padding:9px 13px;font-size:14px;cursor:pointer;color:#0f172a}
+  button:hover{background:#f1f5f9}
+  .pill{font-size:13px;border:1px solid #cbd5e1;border-radius:999px;padding:7px 10px;background:#fff;color:#334155}
+  input[type="range"]{width:100%}
+  select{border:1px solid #cbd5e1;border-radius:10px;background:#fff;padding:8px 10px;font-size:14px;color:#0f172a}
+  .foot{font-size:12px;color:#64748b;margin-top:8px;line-height:1.55}
+  .status{font-size:13px;color:#475569;margin:8px 2px 0}
+  .line{fill:none;stroke:var(--fed);stroke-width:2.4}.tenLine{fill:none;stroke:var(--ten);stroke-width:3.2}.spLine{fill:none;stroke:var(--sp);stroke-width:2.8}.trailLine{fill:none;stroke:var(--trail);stroke-width:2.4;stroke-dasharray:6 5;opacity:.75}.trailSeg{fill:none;stroke-linecap:round;stroke-linejoin:round}.trailDot{stroke:#ffffff;stroke-width:1.2}
+  .vline{stroke:var(--danger);stroke-width:2;stroke-dasharray:5 4}
+  .activeRing{fill:none;stroke:#111827;stroke-width:2.5}
+  @media(max-width:760px){.controls{grid-template-columns:1fr 1fr 1fr;}.controls input{grid-column:1 / -1}.pill{grid-column:1 / -1;text-align:center} h1{font-size:20px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card">
+    <h1>미국 베버리지 곡선</h1>
+    <div class="sub">x축: 실업률(UNRATE) · y축: 구인율(JTSJOR) · 하단: 실효 연방기금금리(FEDFUNDS, 보라색), 미국 10년물 국채금리(GS10, 초록색), S&P 500(오른쪽 축, 빨간색). FRED 월간 데이터를 파일에 내장한 오프라인 정적 버전입니다.</div>
+    <div id="status" class="status">내장 데이터 준비 완료</div>
+    <div class="chartGrid">
+      <svg id="bev" viewBox="0 0 1100 650" aria-label="미국 베버리지 곡선"></svg>
+      <div class="controls">
+        <button id="play">▶ 재생</button>
+        <button id="pause">⏸ 멈춤</button>
+        <select id="speed" title="재생 속도">
+          <option value="900">0.5x</option>
+          <option value="450">1x</option>
+          <option value="225">2x</option>
+          <option value="110">4x</option>
+          <option value="55" selected>8x</option>
+        </select>
+        <input id="scrub" type="range" min="0" max="100" value="0" />
+        <span id="readout" class="pill">-</span>
+      </div>
+      <svg id="fed" viewBox="0 0 1100 270" aria-label="기준금리와 10년물 국채금리 차트"></svg>
+    </div>
+    <div class="foot">데이터 출처: Federal Reserve Bank of St. Louis FRED. JTSJOR: Job Openings: Total Nonfarm, Rate, Seasonally Adjusted. UNRATE: Unemployment Rate, Seasonally Adjusted. FEDFUNDS: Federal Funds Effective Rate, Monthly Average. GS10: Market Yield on U.S. Treasury Securities at 10-Year Constant Maturity, monthly average. 본 파일에는 2000-12 ~ 2026-04 공통 월간 노동·금리 관측치 304개를 내장했습니다. 2025-10은 UNRATE 값 공란으로 제외했습니다. S&P 500은 브라우저 실행 시 월간 값으로 불러오며, 불러오지 못하면 하단 오른쪽 축만 비워질 수 있습니다.</div>
+  </div>
+</div>
+<div id="tip" class="tooltip"></div>
+<script>
+(() => {
+  const RAW = [{"date":"2000-12-01","jtsjor":3.7,"unrate":3.9,"fedfunds":6.4,"gs10":5.24},{"date":"2001-01-01","jtsjor":3.8,"unrate":4.2,"fedfunds":5.98,"gs10":5.16},{"date":"2001-02-01","jtsjor":3.7,"unrate":4.2,"fedfunds":5.49,"gs10":5.1},{"date":"2001-03-01","jtsjor":3.5,"unrate":4.3,"fedfunds":5.31,"gs10":4.89},{"date":"2001-04-01","jtsjor":3.4,"unrate":4.4,"fedfunds":4.8,"gs10":5.14},{"date":"2001-05-01","jtsjor":3.2,"unrate":4.3,"fedfunds":4.21,"gs10":5.39},{"date":"2001-06-01","jtsjor":3.2,"unrate":4.5,"fedfunds":3.97,"gs10":5.28},{"date":"2001-07-01","jtsjor":3.3,"unrate":4.6,"fedfunds":3.77,"gs10":5.24},{"date":"2001-08-01","jtsjor":3.0,"unrate":4.9,"fedfunds":3.65,"gs10":4.97},{"date":"2001-09-01","jtsjor":3.0,"unrate":5.0,"fedfunds":3.07,"gs10":4.73},{"date":"2001-10-01","jtsjor":2.7,"unrate":5.3,"fedfunds":2.49,"gs10":4.57},{"date":"2001-11-01","jtsjor":2.8,"unrate":5.5,"fedfunds":2.09,"gs10":4.65},{"date":"2001-12-01","jtsjor":2.7,"unrate":5.7,"fedfunds":1.82,"gs10":5.09},{"date":"2002-01-01","jtsjor":2.7,"unrate":5.7,"fedfunds":1.73,"gs10":5.04},{"date":"2002-02-01","jtsjor":2.6,"unrate":5.7,"fedfunds":1.74,"gs10":4.91},{"date":"2002-03-01","jtsjor":2.7,"unrate":5.7,"fedfunds":1.73,"gs10":5.28},{"date":"2002-04-01","jtsjor":2.6,"unrate":5.9,"fedfunds":1.75,"gs10":5.21},{"date":"2002-05-01","jtsjor":2.6,"unrate":5.8,"fedfunds":1.75,"gs10":5.16},{"date":"2002-06-01","jtsjor":2.5,"unrate":5.8,"fedfunds":1.75,"gs10":4.93},{"date":"2002-07-01","jtsjor":2.5,"unrate":5.8,"fedfunds":1.73,"gs10":4.65},{"date":"2002-08-01","jtsjor":2.6,"unrate":5.7,"fedfunds":1.74,"gs10":4.26},{"date":"2002-09-01","jtsjor":2.5,"unrate":5.7,"fedfunds":1.75,"gs10":3.87},{"date":"2002-10-01","jtsjor":2.6,"unrate":5.7,"fedfunds":1.75,"gs10":3.94},{"date":"2002-11-01","jtsjor":2.6,"unrate":5.9,"fedfunds":1.34,"gs10":4.05},{"date":"2002-12-01","jtsjor":2.4,"unrate":6.0,"fedfunds":1.24,"gs10":4.03},{"date":"2003-01-01","jtsjor":2.6,"unrate":5.8,"fedfunds":1.24,"gs10":4.05},{"date":"2003-02-01","jtsjor":2.4,"unrate":5.9,"fedfunds":1.26,"gs10":3.9},{"date":"2003-03-01","jtsjor":2.3,"unrate":5.9,"fedfunds":1.25,"gs10":3.81},{"date":"2003-04-01","jtsjor":2.3,"unrate":6.0,"fedfunds":1.26,"gs10":3.96},{"date":"2003-05-01","jtsjor":2.5,"unrate":6.1,"fedfunds":1.26,"gs10":3.57},{"date":"2003-06-01","jtsjor":2.5,"unrate":6.3,"fedfunds":1.22,"gs10":3.33},{"date":"2003-07-01","jtsjor":2.2,"unrate":6.2,"fedfunds":1.01,"gs10":3.98},{"date":"2003-08-01","jtsjor":2.4,"unrate":6.1,"fedfunds":1.03,"gs10":4.45},{"date":"2003-09-01","jtsjor":2.3,"unrate":6.1,"fedfunds":1.01,"gs10":4.27},{"date":"2003-10-01","jtsjor":2.5,"unrate":6.0,"fedfunds":1.01,"gs10":4.29},{"date":"2003-11-01","jtsjor":2.5,"unrate":5.8,"fedfunds":1.0,"gs10":4.3},{"date":"2003-12-01","jtsjor":2.5,"unrate":5.7,"fedfunds":0.98,"gs10":4.27},{"date":"2004-01-01","jtsjor":2.6,"unrate":5.7,"fedfunds":1.0,"gs10":4.15},{"date":"2004-02-01","jtsjor":2.6,"unrate":5.6,"fedfunds":1.01,"gs10":4.08},{"date":"2004-03-01","jtsjor":2.6,"unrate":5.8,"fedfunds":1.0,"gs10":3.83},{"date":"2004-04-01","jtsjor":2.6,"unrate":5.6,"fedfunds":1.0,"gs10":4.35},{"date":"2004-05-01","jtsjor":2.7,"unrate":5.6,"fedfunds":1.0,"gs10":4.72},{"date":"2004-06-01","jtsjor":2.5,"unrate":5.6,"fedfunds":1.03,"gs10":4.73},{"date":"2004-07-01","jtsjor":2.8,"unrate":5.5,"fedfunds":1.26,"gs10":4.5},{"date":"2004-08-01","jtsjor":2.6,"unrate":5.4,"fedfunds":1.43,"gs10":4.28},{"date":"2004-09-01","jtsjor":2.8,"unrate":5.4,"fedfunds":1.61,"gs10":4.13},{"date":"2004-10-01","jtsjor":2.9,"unrate":5.5,"fedfunds":1.76,"gs10":4.1},{"date":"2004-11-01","jtsjor":2.6,"unrate":5.4,"fedfunds":1.93,"gs10":4.19},{"date":"2004-12-01","jtsjor":3.0,"unrate":5.4,"fedfunds":2.16,"gs10":4.23},{"date":"2005-01-01","jtsjor":2.8,"unrate":5.3,"fedfunds":2.28,"gs10":4.22},{"date":"2005-02-01","jtsjor":2.9,"unrate":5.4,"fedfunds":2.5,"gs10":4.17},{"date":"2005-03-01","jtsjor":2.9,"unrate":5.2,"fedfunds":2.63,"gs10":4.5},{"date":"2005-04-01","jtsjor":3.0,"unrate":5.2,"fedfunds":2.79,"gs10":4.34},{"date":"2005-05-01","jtsjor":2.8,"unrate":5.1,"fedfunds":3.0,"gs10":4.14},{"date":"2005-06-01","jtsjor":2.9,"unrate":5.0,"fedfunds":3.04,"gs10":4.0},{"date":"2005-07-01","jtsjor":3.1,"unrate":5.0,"fedfunds":3.26,"gs10":4.18},{"date":"2005-08-01","jtsjor":3.0,"unrate":4.9,"fedfunds":3.5,"gs10":4.26},{"date":"2005-09-01","jtsjor":3.1,"unrate":5.0,"fedfunds":3.62,"gs10":4.2},{"date":"2005-10-01","jtsjor":3.0,"unrate":5.0,"fedfunds":3.78,"gs10":4.46},{"date":"2005-11-01","jtsjor":3.1,"unrate":5.0,"fedfunds":4.0,"gs10":4.54},{"date":"2005-12-01","jtsjor":3.1,"unrate":4.9,"fedfunds":4.16,"gs10":4.47},{"date":"2006-01-01","jtsjor":3.1,"unrate":4.7,"fedfunds":4.29,"gs10":4.42},{"date":"2006-02-01","jtsjor":3.1,"unrate":4.8,"fedfunds":4.49,"gs10":4.57},{"date":"2006-03-01","jtsjor":3.4,"unrate":4.7,"fedfunds":4.59,"gs10":4.72},{"date":"2006-04-01","jtsjor":3.4,"unrate":4.7,"fedfunds":4.79,"gs10":4.99},{"date":"2006-05-01","jtsjor":3.2,"unrate":4.6,"fedfunds":4.94,"gs10":5.11},{"date":"2006-06-01","jtsjor":3.3,"unrate":4.6,"fedfunds":4.99,"gs10":5.11},{"date":"2006-07-01","jtsjor":3.1,"unrate":4.7,"fedfunds":5.24,"gs10":5.09},{"date":"2006-08-01","jtsjor":3.3,"unrate":4.7,"fedfunds":5.25,"gs10":4.88},{"date":"2006-09-01","jtsjor":3.3,"unrate":4.5,"fedfunds":5.25,"gs10":4.72},{"date":"2006-10-01","jtsjor":3.2,"unrate":4.4,"fedfunds":5.25,"gs10":4.73},{"date":"2006-11-01","jtsjor":3.3,"unrate":4.5,"fedfunds":5.25,"gs10":4.6},{"date":"2006-12-01","jtsjor":3.3,"unrate":4.4,"fedfunds":5.24,"gs10":4.56},{"date":"2007-01-01","jtsjor":3.3,"unrate":4.6,"fedfunds":5.25,"gs10":4.76},{"date":"2007-02-01","jtsjor":3.3,"unrate":4.5,"fedfunds":5.26,"gs10":4.72},{"date":"2007-03-01","jtsjor":3.5,"unrate":4.4,"fedfunds":5.26,"gs10":4.56},{"date":"2007-04-01","jtsjor":3.3,"unrate":4.5,"fedfunds":5.25,"gs10":4.69},{"date":"2007-05-01","jtsjor":3.3,"unrate":4.4,"fedfunds":5.25,"gs10":4.75},{"date":"2007-06-01","jtsjor":3.4,"unrate":4.6,"fedfunds":5.25,"gs10":5.1},{"date":"2007-07-01","jtsjor":3.2,"unrate":4.7,"fedfunds":5.26,"gs10":5.0},{"date":"2007-08-01","jtsjor":3.2,"unrate":4.6,"fedfunds":5.02,"gs10":4.67},{"date":"2007-09-01","jtsjor":3.3,"unrate":4.7,"fedfunds":4.94,"gs10":4.52},{"date":"2007-10-01","jtsjor":3.2,"unrate":4.7,"fedfunds":4.76,"gs10":4.53},{"date":"2007-11-01","jtsjor":3.3,"unrate":4.7,"fedfunds":4.49,"gs10":4.15},{"date":"2007-12-01","jtsjor":3.2,"unrate":5.0,"fedfunds":4.24,"gs10":4.1},{"date":"2008-01-01","jtsjor":3.2,"unrate":5.0,"fedfunds":3.94,"gs10":3.74},{"date":"2008-02-01","jtsjor":3.0,"unrate":4.9,"fedfunds":2.98,"gs10":3.74},{"date":"2008-03-01","jtsjor":3.0,"unrate":5.1,"fedfunds":2.61,"gs10":3.51},{"date":"2008-04-01","jtsjor":2.8,"unrate":5.0,"fedfunds":2.28,"gs10":3.68},{"date":"2008-05-01","jtsjor":3.0,"unrate":5.4,"fedfunds":1.98,"gs10":3.88},{"date":"2008-06-01","jtsjor":2.7,"unrate":5.6,"fedfunds":2.0,"gs10":4.1},{"date":"2008-07-01","jtsjor":2.7,"unrate":5.8,"fedfunds":2.01,"gs10":4.01},{"date":"2008-08-01","jtsjor":2.6,"unrate":6.1,"fedfunds":2.0,"gs10":3.89},{"date":"2008-09-01","jtsjor":2.3,"unrate":6.1,"fedfunds":1.81,"gs10":3.69},{"date":"2008-10-01","jtsjor":2.4,"unrate":6.5,"fedfunds":0.97,"gs10":3.81},{"date":"2008-11-01","jtsjor":2.3,"unrate":6.8,"fedfunds":0.39,"gs10":3.53},{"date":"2008-12-01","jtsjor":2.3,"unrate":7.3,"fedfunds":0.16,"gs10":2.42},{"date":"2009-01-01","jtsjor":2.0,"unrate":7.8,"fedfunds":0.15,"gs10":2.52},{"date":"2009-02-01","jtsjor":2.1,"unrate":8.3,"fedfunds":0.22,"gs10":2.87},{"date":"2009-03-01","jtsjor":1.9,"unrate":8.7,"fedfunds":0.18,"gs10":2.82},{"date":"2009-04-01","jtsjor":1.7,"unrate":9.0,"fedfunds":0.15,"gs10":2.93},{"date":"2009-05-01","jtsjor":1.9,"unrate":9.4,"fedfunds":0.18,"gs10":3.29},{"date":"2009-06-01","jtsjor":1.9,"unrate":9.5,"fedfunds":0.21,"gs10":3.72},{"date":"2009-07-01","jtsjor":1.7,"unrate":9.5,"fedfunds":0.16,"gs10":3.56},{"date":"2009-08-01","jtsjor":1.8,"unrate":9.6,"fedfunds":0.16,"gs10":3.59},{"date":"2009-09-01","jtsjor":1.9,"unrate":9.8,"fedfunds":0.15,"gs10":3.4},{"date":"2009-10-01","jtsjor":1.8,"unrate":10.0,"fedfunds":0.12,"gs10":3.39},{"date":"2009-11-01","jtsjor":1.9,"unrate":9.9,"fedfunds":0.12,"gs10":3.4},{"date":"2009-12-01","jtsjor":1.9,"unrate":9.9,"fedfunds":0.12,"gs10":3.59},{"date":"2010-01-01","jtsjor":2.1,"unrate":9.8,"fedfunds":0.11,"gs10":3.73},{"date":"2010-02-01","jtsjor":2.0,"unrate":9.8,"fedfunds":0.13,"gs10":3.69},{"date":"2010-03-01","jtsjor":2.0,"unrate":9.9,"fedfunds":0.16,"gs10":3.73},{"date":"2010-04-01","jtsjor":2.4,"unrate":9.9,"fedfunds":0.2,"gs10":3.85},{"date":"2010-05-01","jtsjor":2.2,"unrate":9.6,"fedfunds":0.2,"gs10":3.42},{"date":"2010-06-01","jtsjor":2.1,"unrate":9.4,"fedfunds":0.18,"gs10":3.2},{"date":"2010-07-01","jtsjor":2.3,"unrate":9.4,"fedfunds":0.18,"gs10":3.01},{"date":"2010-08-01","jtsjor":2.2,"unrate":9.5,"fedfunds":0.19,"gs10":2.7},{"date":"2010-09-01","jtsjor":2.2,"unrate":9.5,"fedfunds":0.19,"gs10":2.65},{"date":"2010-10-01","jtsjor":2.4,"unrate":9.4,"fedfunds":0.19,"gs10":2.54},{"date":"2010-11-01","jtsjor":2.4,"unrate":9.8,"fedfunds":0.19,"gs10":2.76},{"date":"2010-12-01","jtsjor":2.3,"unrate":9.3,"fedfunds":0.18,"gs10":3.29},{"date":"2011-01-01","jtsjor":2.3,"unrate":9.1,"fedfunds":0.17,"gs10":3.39},{"date":"2011-02-01","jtsjor":2.4,"unrate":9.0,"fedfunds":0.16,"gs10":3.58},{"date":"2011-03-01","jtsjor":2.4,"unrate":9.0,"fedfunds":0.14,"gs10":3.41},{"date":"2011-04-01","jtsjor":2.4,"unrate":9.1,"fedfunds":0.1,"gs10":3.46},{"date":"2011-05-01","jtsjor":2.4,"unrate":9.0,"fedfunds":0.09,"gs10":3.17},{"date":"2011-06-01","jtsjor":2.6,"unrate":9.1,"fedfunds":0.09,"gs10":3.0},{"date":"2011-07-01","jtsjor":2.7,"unrate":9.0,"fedfunds":0.07,"gs10":3.0},{"date":"2011-08-01","jtsjor":2.5,"unrate":9.0,"fedfunds":0.1,"gs10":2.3},{"date":"2011-09-01","jtsjor":2.8,"unrate":9.0,"fedfunds":0.08,"gs10":1.98},{"date":"2011-10-01","jtsjor":2.7,"unrate":8.8,"fedfunds":0.07,"gs10":2.15},{"date":"2011-11-01","jtsjor":2.6,"unrate":8.6,"fedfunds":0.08,"gs10":2.01},{"date":"2011-12-01","jtsjor":2.8,"unrate":8.5,"fedfunds":0.07,"gs10":1.98},{"date":"2012-01-01","jtsjor":2.8,"unrate":8.3,"fedfunds":0.08,"gs10":1.97},{"date":"2012-02-01","jtsjor":2.6,"unrate":8.3,"fedfunds":0.1,"gs10":1.97},{"date":"2012-03-01","jtsjor":2.9,"unrate":8.2,"fedfunds":0.13,"gs10":2.17},{"date":"2012-04-01","jtsjor":2.8,"unrate":8.2,"fedfunds":0.14,"gs10":2.05},{"date":"2012-05-01","jtsjor":2.8,"unrate":8.2,"fedfunds":0.16,"gs10":1.8},{"date":"2012-06-01","jtsjor":2.8,"unrate":8.2,"fedfunds":0.16,"gs10":1.62},{"date":"2012-07-01","jtsjor":2.7,"unrate":8.2,"fedfunds":0.16,"gs10":1.53},{"date":"2012-08-01","jtsjor":2.8,"unrate":8.1,"fedfunds":0.13,"gs10":1.68},{"date":"2012-09-01","jtsjor":2.8,"unrate":7.8,"fedfunds":0.14,"gs10":1.72},{"date":"2012-10-01","jtsjor":2.7,"unrate":7.8,"fedfunds":0.16,"gs10":1.75},{"date":"2012-11-01","jtsjor":2.8,"unrate":7.7,"fedfunds":0.16,"gs10":1.65},{"date":"2012-12-01","jtsjor":2.9,"unrate":7.9,"fedfunds":0.16,"gs10":1.72},{"date":"2013-01-01","jtsjor":2.8,"unrate":8.0,"fedfunds":0.14,"gs10":1.91},{"date":"2013-02-01","jtsjor":2.9,"unrate":7.7,"fedfunds":0.15,"gs10":1.98},{"date":"2013-03-01","jtsjor":2.9,"unrate":7.5,"fedfunds":0.14,"gs10":1.96},{"date":"2013-04-01","jtsjor":2.9,"unrate":7.6,"fedfunds":0.15,"gs10":1.76},{"date":"2013-05-01","jtsjor":3.0,"unrate":7.5,"fedfunds":0.11,"gs10":1.93},{"date":"2013-06-01","jtsjor":3.0,"unrate":7.5,"fedfunds":0.09,"gs10":2.3},{"date":"2013-07-01","jtsjor":2.8,"unrate":7.3,"fedfunds":0.09,"gs10":2.58},{"date":"2013-08-01","jtsjor":2.9,"unrate":7.2,"fedfunds":0.08,"gs10":2.74},{"date":"2013-09-01","jtsjor":2.9,"unrate":7.2,"fedfunds":0.08,"gs10":2.81},{"date":"2013-10-01","jtsjor":3.0,"unrate":7.2,"fedfunds":0.09,"gs10":2.62},{"date":"2013-11-01","jtsjor":2.9,"unrate":6.9,"fedfunds":0.08,"gs10":2.72},{"date":"2013-12-01","jtsjor":2.9,"unrate":6.7,"fedfunds":0.09,"gs10":2.9},{"date":"2014-01-01","jtsjor":2.9,"unrate":6.6,"fedfunds":0.07,"gs10":2.86},{"date":"2014-02-01","jtsjor":3.1,"unrate":6.7,"fedfunds":0.07,"gs10":2.71},{"date":"2014-03-01","jtsjor":3.1,"unrate":6.7,"fedfunds":0.08,"gs10":2.72},{"date":"2014-04-01","jtsjor":3.2,"unrate":6.2,"fedfunds":0.09,"gs10":2.71},{"date":"2014-05-01","jtsjor":3.3,"unrate":6.3,"fedfunds":0.09,"gs10":2.56},{"date":"2014-06-01","jtsjor":3.5,"unrate":6.1,"fedfunds":0.1,"gs10":2.6},{"date":"2014-07-01","jtsjor":3.4,"unrate":6.2,"fedfunds":0.09,"gs10":2.54},{"date":"2014-08-01","jtsjor":3.7,"unrate":6.1,"fedfunds":0.09,"gs10":2.42},{"date":"2014-09-01","jtsjor":3.4,"unrate":5.9,"fedfunds":0.09,"gs10":2.53},{"date":"2014-10-01","jtsjor":3.5,"unrate":5.7,"fedfunds":0.09,"gs10":2.3},{"date":"2014-11-01","jtsjor":3.3,"unrate":5.8,"fedfunds":0.09,"gs10":2.33},{"date":"2014-12-01","jtsjor":3.5,"unrate":5.6,"fedfunds":0.12,"gs10":2.21},{"date":"2015-01-01","jtsjor":3.7,"unrate":5.7,"fedfunds":0.11,"gs10":1.88},{"date":"2015-02-01","jtsjor":3.7,"unrate":5.5,"fedfunds":0.11,"gs10":1.98},{"date":"2015-03-01","jtsjor":3.6,"unrate":5.4,"fedfunds":0.11,"gs10":2.04},{"date":"2015-04-01","jtsjor":3.8,"unrate":5.4,"fedfunds":0.12,"gs10":1.94},{"date":"2015-05-01","jtsjor":3.8,"unrate":5.6,"fedfunds":0.12,"gs10":2.2},{"date":"2015-06-01","jtsjor":3.6,"unrate":5.3,"fedfunds":0.13,"gs10":2.36},{"date":"2015-07-01","jtsjor":4.1,"unrate":5.2,"fedfunds":0.13,"gs10":2.32},{"date":"2015-08-01","jtsjor":3.7,"unrate":5.1,"fedfunds":0.14,"gs10":2.17},{"date":"2015-09-01","jtsjor":3.7,"unrate":5.0,"fedfunds":0.14,"gs10":2.17},{"date":"2015-10-01","jtsjor":3.9,"unrate":5.0,"fedfunds":0.12,"gs10":2.07},{"date":"2015-11-01","jtsjor":3.8,"unrate":5.1,"fedfunds":0.12,"gs10":2.26},{"date":"2015-12-01","jtsjor":3.9,"unrate":5.0,"fedfunds":0.24,"gs10":2.24},{"date":"2016-01-01","jtsjor":4.0,"unrate":4.8,"fedfunds":0.34,"gs10":2.09},{"date":"2016-02-01","jtsjor":3.9,"unrate":4.9,"fedfunds":0.38,"gs10":1.78},{"date":"2016-03-01","jtsjor":4.1,"unrate":5.0,"fedfunds":0.36,"gs10":1.89},{"date":"2016-04-01","jtsjor":3.9,"unrate":5.1,"fedfunds":0.37,"gs10":1.81},{"date":"2016-05-01","jtsjor":3.9,"unrate":4.8,"fedfunds":0.37,"gs10":1.81},{"date":"2016-06-01","jtsjor":3.8,"unrate":4.9,"fedfunds":0.38,"gs10":1.64},{"date":"2016-07-01","jtsjor":4.0,"unrate":4.8,"fedfunds":0.39,"gs10":1.5},{"date":"2016-08-01","jtsjor":3.8,"unrate":4.9,"fedfunds":0.4,"gs10":1.56},{"date":"2016-09-01","jtsjor":3.9,"unrate":5.0,"fedfunds":0.4,"gs10":1.63},{"date":"2016-10-01","jtsjor":3.7,"unrate":4.9,"fedfunds":0.4,"gs10":1.76},{"date":"2016-11-01","jtsjor":4.0,"unrate":4.7,"fedfunds":0.41,"gs10":2.14},{"date":"2016-12-01","jtsjor":3.9,"unrate":4.7,"fedfunds":0.54,"gs10":2.49},{"date":"2017-01-01","jtsjor":3.7,"unrate":4.7,"fedfunds":0.65,"gs10":2.43},{"date":"2017-02-01","jtsjor":3.9,"unrate":4.6,"fedfunds":0.66,"gs10":2.42},{"date":"2017-03-01","jtsjor":3.8,"unrate":4.4,"fedfunds":0.79,"gs10":2.48},{"date":"2017-04-01","jtsjor":4.0,"unrate":4.4,"fedfunds":0.9,"gs10":2.3},{"date":"2017-05-01","jtsjor":3.8,"unrate":4.4,"fedfunds":0.91,"gs10":2.3},{"date":"2017-06-01","jtsjor":4.1,"unrate":4.3,"fedfunds":1.04,"gs10":2.19},{"date":"2017-07-01","jtsjor":4.1,"unrate":4.3,"fedfunds":1.15,"gs10":2.32},{"date":"2017-08-01","jtsjor":4.1,"unrate":4.4,"fedfunds":1.16,"gs10":2.21},{"date":"2017-09-01","jtsjor":4.1,"unrate":4.3,"fedfunds":1.15,"gs10":2.2},{"date":"2017-10-01","jtsjor":4.2,"unrate":4.2,"fedfunds":1.15,"gs10":2.36},{"date":"2017-11-01","jtsjor":4.1,"unrate":4.2,"fedfunds":1.16,"gs10":2.35},{"date":"2017-12-01","jtsjor":4.1,"unrate":4.1,"fedfunds":1.3,"gs10":2.4},{"date":"2018-01-01","jtsjor":4.3,"unrate":4.0,"fedfunds":1.41,"gs10":2.58},{"date":"2018-02-01","jtsjor":4.2,"unrate":4.1,"fedfunds":1.42,"gs10":2.86},{"date":"2018-03-01","jtsjor":4.4,"unrate":4.0,"fedfunds":1.51,"gs10":2.84},{"date":"2018-04-01","jtsjor":4.4,"unrate":4.0,"fedfunds":1.69,"gs10":2.87},{"date":"2018-05-01","jtsjor":4.5,"unrate":3.8,"fedfunds":1.7,"gs10":2.98},{"date":"2018-06-01","jtsjor":4.6,"unrate":4.0,"fedfunds":1.82,"gs10":2.91},{"date":"2018-07-01","jtsjor":4.6,"unrate":3.8,"fedfunds":1.91,"gs10":2.89},{"date":"2018-08-01","jtsjor":4.6,"unrate":3.8,"fedfunds":1.91,"gs10":2.89},{"date":"2018-09-01","jtsjor":4.7,"unrate":3.7,"fedfunds":1.95,"gs10":3.0},{"date":"2018-10-01","jtsjor":4.7,"unrate":3.8,"fedfunds":2.19,"gs10":3.15},{"date":"2018-11-01","jtsjor":4.8,"unrate":3.8,"fedfunds":2.2,"gs10":3.12},{"date":"2018-12-01","jtsjor":4.8,"unrate":3.9,"fedfunds":2.27,"gs10":2.83},{"date":"2019-01-01","jtsjor":4.8,"unrate":4.0,"fedfunds":2.4,"gs10":2.71},{"date":"2019-02-01","jtsjor":4.5,"unrate":3.8,"fedfunds":2.4,"gs10":2.68},{"date":"2019-03-01","jtsjor":4.6,"unrate":3.8,"fedfunds":2.41,"gs10":2.57},{"date":"2019-04-01","jtsjor":4.6,"unrate":3.7,"fedfunds":2.42,"gs10":2.53},{"date":"2019-05-01","jtsjor":4.6,"unrate":3.6,"fedfunds":2.39,"gs10":2.4},{"date":"2019-06-01","jtsjor":4.6,"unrate":3.6,"fedfunds":2.38,"gs10":2.07},{"date":"2019-07-01","jtsjor":4.5,"unrate":3.7,"fedfunds":2.4,"gs10":2.06},{"date":"2019-08-01","jtsjor":4.5,"unrate":3.6,"fedfunds":2.13,"gs10":1.63},{"date":"2019-09-01","jtsjor":4.5,"unrate":3.5,"fedfunds":2.04,"gs10":1.7},{"date":"2019-10-01","jtsjor":4.6,"unrate":3.6,"fedfunds":1.83,"gs10":1.71},{"date":"2019-11-01","jtsjor":4.3,"unrate":3.6,"fedfunds":1.55,"gs10":1.81},{"date":"2019-12-01","jtsjor":4.2,"unrate":3.6,"fedfunds":1.55,"gs10":1.86},{"date":"2020-01-01","jtsjor":4.5,"unrate":3.6,"fedfunds":1.55,"gs10":1.76},{"date":"2020-02-01","jtsjor":4.4,"unrate":3.5,"fedfunds":1.58,"gs10":1.5},{"date":"2020-03-01","jtsjor":3.8,"unrate":4.4,"fedfunds":0.65,"gs10":0.87},{"date":"2020-04-01","jtsjor":3.4,"unrate":14.8,"fedfunds":0.05,"gs10":0.66},{"date":"2020-05-01","jtsjor":4.0,"unrate":13.2,"fedfunds":0.05,"gs10":0.67},{"date":"2020-06-01","jtsjor":4.3,"unrate":11.0,"fedfunds":0.08,"gs10":0.73},{"date":"2020-07-01","jtsjor":4.5,"unrate":10.2,"fedfunds":0.09,"gs10":0.62},{"date":"2020-08-01","jtsjor":4.4,"unrate":8.4,"fedfunds":0.1,"gs10":0.65},{"date":"2020-09-01","jtsjor":4.4,"unrate":7.8,"fedfunds":0.09,"gs10":0.68},{"date":"2020-10-01","jtsjor":4.6,"unrate":6.9,"fedfunds":0.09,"gs10":0.79},{"date":"2020-11-01","jtsjor":4.6,"unrate":6.7,"fedfunds":0.09,"gs10":0.87},{"date":"2020-12-01","jtsjor":4.5,"unrate":6.7,"fedfunds":0.09,"gs10":0.93},{"date":"2021-01-01","jtsjor":4.8,"unrate":6.4,"fedfunds":0.09,"gs10":1.08},{"date":"2021-02-01","jtsjor":5.2,"unrate":6.2,"fedfunds":0.08,"gs10":1.26},{"date":"2021-03-01","jtsjor":5.6,"unrate":6.1,"fedfunds":0.07,"gs10":1.61},{"date":"2021-04-01","jtsjor":6.1,"unrate":6.1,"fedfunds":0.07,"gs10":1.64},{"date":"2021-05-01","jtsjor":6.4,"unrate":5.8,"fedfunds":0.06,"gs10":1.62},{"date":"2021-06-01","jtsjor":6.6,"unrate":5.9,"fedfunds":0.08,"gs10":1.52},{"date":"2021-07-01","jtsjor":7.0,"unrate":5.4,"fedfunds":0.1,"gs10":1.32},{"date":"2021-08-01","jtsjor":6.9,"unrate":5.1,"fedfunds":0.09,"gs10":1.28},{"date":"2021-09-01","jtsjor":6.8,"unrate":4.7,"fedfunds":0.08,"gs10":1.37},{"date":"2021-10-01","jtsjor":7.0,"unrate":4.5,"fedfunds":0.08,"gs10":1.58},{"date":"2021-11-01","jtsjor":7.0,"unrate":4.1,"fedfunds":0.08,"gs10":1.56},{"date":"2021-12-01","jtsjor":7.1,"unrate":3.9,"fedfunds":0.08,"gs10":1.47},{"date":"2022-01-01","jtsjor":7.0,"unrate":4.0,"fedfunds":0.08,"gs10":1.76},{"date":"2022-02-01","jtsjor":7.2,"unrate":3.9,"fedfunds":0.08,"gs10":1.93},{"date":"2022-03-01","jtsjor":7.5,"unrate":3.7,"fedfunds":0.2,"gs10":2.13},{"date":"2022-04-01","jtsjor":7.3,"unrate":3.7,"fedfunds":0.33,"gs10":2.75},{"date":"2022-05-01","jtsjor":7.1,"unrate":3.6,"fedfunds":0.77,"gs10":2.9},{"date":"2022-06-01","jtsjor":6.9,"unrate":3.6,"fedfunds":1.21,"gs10":3.14},{"date":"2022-07-01","jtsjor":7.0,"unrate":3.5,"fedfunds":1.68,"gs10":2.9},{"date":"2022-08-01","jtsjor":6.2,"unrate":3.6,"fedfunds":2.33,"gs10":2.9},{"date":"2022-09-01","jtsjor":6.6,"unrate":3.5,"fedfunds":2.56,"gs10":3.52},{"date":"2022-10-01","jtsjor":6.4,"unrate":3.6,"fedfunds":3.08,"gs10":3.98},{"date":"2022-11-01","jtsjor":6.4,"unrate":3.6,"fedfunds":3.78,"gs10":3.89},{"date":"2022-12-01","jtsjor":6.6,"unrate":3.5,"fedfunds":4.1,"gs10":3.62},{"date":"2023-01-01","jtsjor":6.2,"unrate":3.5,"fedfunds":4.33,"gs10":3.53},{"date":"2023-02-01","jtsjor":6.0,"unrate":3.6,"fedfunds":4.57,"gs10":3.75},{"date":"2023-03-01","jtsjor":5.9,"unrate":3.5,"fedfunds":4.65,"gs10":3.66},{"date":"2023-04-01","jtsjor":6.0,"unrate":3.4,"fedfunds":4.83,"gs10":3.46},{"date":"2023-05-01","jtsjor":5.7,"unrate":3.6,"fedfunds":5.06,"gs10":3.57},{"date":"2023-06-01","jtsjor":5.6,"unrate":3.6,"fedfunds":5.08,"gs10":3.75},{"date":"2023-07-01","jtsjor":5.3,"unrate":3.5,"fedfunds":5.12,"gs10":3.9},{"date":"2023-08-01","jtsjor":5.6,"unrate":3.7,"fedfunds":5.33,"gs10":4.17},{"date":"2023-09-01","jtsjor":5.6,"unrate":3.7,"fedfunds":5.33,"gs10":4.38},{"date":"2023-10-01","jtsjor":5.2,"unrate":3.9,"fedfunds":5.33,"gs10":4.8},{"date":"2023-11-01","jtsjor":5.2,"unrate":3.7,"fedfunds":5.33,"gs10":4.5},{"date":"2023-12-01","jtsjor":5.2,"unrate":3.8,"fedfunds":5.33,"gs10":4.02},{"date":"2024-01-01","jtsjor":5.1,"unrate":3.7,"fedfunds":5.33,"gs10":4.06},{"date":"2024-02-01","jtsjor":5.1,"unrate":3.9,"fedfunds":5.33,"gs10":4.21},{"date":"2024-03-01","jtsjor":5.0,"unrate":3.9,"fedfunds":5.33,"gs10":4.21},{"date":"2024-04-01","jtsjor":4.6,"unrate":3.9,"fedfunds":5.33,"gs10":4.54},{"date":"2024-05-01","jtsjor":4.7,"unrate":3.9,"fedfunds":5.33,"gs10":4.48},{"date":"2024-06-01","jtsjor":4.5,"unrate":4.1,"fedfunds":5.33,"gs10":4.31},{"date":"2024-07-01","jtsjor":4.5,"unrate":4.2,"fedfunds":5.33,"gs10":4.25},{"date":"2024-08-01","jtsjor":4.6,"unrate":4.2,"fedfunds":5.33,"gs10":3.87},{"date":"2024-09-01","jtsjor":4.2,"unrate":4.1,"fedfunds":5.13,"gs10":3.72},{"date":"2024-10-01","jtsjor":4.5,"unrate":4.1,"fedfunds":4.83,"gs10":4.1},{"date":"2024-11-01","jtsjor":4.6,"unrate":4.2,"fedfunds":4.64,"gs10":4.36},{"date":"2024-12-01","jtsjor":4.4,"unrate":4.1,"fedfunds":4.48,"gs10":4.39},{"date":"2025-01-01","jtsjor":4.5,"unrate":4.0,"fedfunds":4.33,"gs10":4.63},{"date":"2025-02-01","jtsjor":4.4,"unrate":4.2,"fedfunds":4.33,"gs10":4.45},{"date":"2025-03-01","jtsjor":4.2,"unrate":4.2,"fedfunds":4.33,"gs10":4.28},{"date":"2025-04-01","jtsjor":4.3,"unrate":4.2,"fedfunds":4.33,"gs10":4.28},{"date":"2025-05-01","jtsjor":4.4,"unrate":4.3,"fedfunds":4.33,"gs10":4.42},{"date":"2025-06-01","jtsjor":4.3,"unrate":4.1,"fedfunds":4.33,"gs10":4.38},{"date":"2025-07-01","jtsjor":4.3,"unrate":4.3,"fedfunds":4.33,"gs10":4.39},{"date":"2025-08-01","jtsjor":4.2,"unrate":4.3,"fedfunds":4.33,"gs10":4.26},{"date":"2025-09-01","jtsjor":4.3,"unrate":4.4,"fedfunds":4.22,"gs10":4.12},{"date":"2025-11-01","jtsjor":4.1,"unrate":4.5,"fedfunds":3.88,"gs10":4.09},{"date":"2025-12-01","jtsjor":4.0,"unrate":4.4,"fedfunds":3.72,"gs10":4.14},{"date":"2026-01-01","jtsjor":4.4,"unrate":4.3,"fedfunds":3.64,"gs10":4.21},{"date":"2026-02-01","jtsjor":4.2,"unrate":4.4,"fedfunds":3.64,"gs10":4.13},{"date":"2026-03-01","jtsjor":4.2,"unrate":4.3,"fedfunds":3.64,"gs10":4.25},{"date":"2026-04-01","jtsjor":4.6,"unrate":4.3,"fedfunds":3.64,"gs10":4.32}];
+  const data = RAW.map(d => ({...d, date:new Date(d.date+'T00:00:00'), sp500:null}));
+  let sp500Loaded = false;
+  const statusEl = document.getElementById('status');
+  const bev = document.getElementById('bev');
+  const fed = document.getElementById('fed');
+  const playBtn = document.getElementById('play');
+  const pauseBtn = document.getElementById('pause');
+  const speedSel = document.getElementById('speed');
+  const scrub = document.getElementById('scrub');
+  const readout = document.getElementById('readout');
+  const tip = document.getElementById('tip');
+
+  let idx = 0, timer = null;
+  const W=1100,H=650,m={l:78,r:42,t:52,b:72};
+  const FW=1100,FH=270,fm={l:78,r:42,t:30,b:54};
+  const NS='http://www.w3.org/2000/svg';
+  const make=(tag,attrs={},parent)=>{const el=document.createElementNS(NS,tag);for(const [k,v] of Object.entries(attrs)) el.setAttribute(k,v);if(parent) parent.appendChild(el);return el;};
+  const fmtDate=d=>`${d.getFullYear()}/${String(d.getMonth()+1).padStart(2,'0')}`;
+  const pct=v=>`${v.toFixed(1)}%`;
+  const niceMin=v=>Math.floor(v*2)/2, niceMax=v=>Math.ceil(v*2)/2;
+  const xScale=(x,x0,x1)=>m.l+(x-x0)/(x1-x0)*(W-m.l-m.r);
+  const yScale=(y,y0,y1)=>H-m.b-(y-y0)/(y1-y0)*(H-m.t-m.b);
+  const fxScale=(t,t0,t1)=>fm.l+(t-t0)/(t1-t0)*(FW-fm.l-fm.r);
+  const fyScale=(y,y0,y1)=>FH-fm.b-(y-y0)/(y1-y0)*(FH-fm.t-fm.b);
+  const linePath=(arr,xf,yf)=>arr.map((d,i)=>(i?'L':'M')+xf(d)+' '+yf(d)).join(' ');
+  const linePathNullable=(arr,xf,yf,pred)=>{let open=false;const out=[];arr.forEach(d=>{if(pred(d)){out.push((open?'L':'M')+xf(d)+' '+yf(d));open=true;}else{open=false;}});return out.join(' ');};
+  const idxFmt=v=>Number.isFinite(v)?v.toLocaleString('en-US',{maximumFractionDigits:0}):'-';
+  const lerp=(a,b,t)=>a+(b-a)*t;
+  const trailColor=t=>`hsl(${lerp(220,15,t)}, ${lerp(62,86,t)}%, ${lerp(72,54,t)}%)`;
+  const monthKey=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+
+  function regime(d){
+    const t=d.date;
+    if(t < new Date('2007-12-01')) return {name:'금융위기 이전', c:'var(--pre)'};
+    if(t < new Date('2020-03-01')) return {name:'금융위기 이후~코로나 전', c:'var(--gfc)'};
+    if(t < new Date('2022-01-01')) return {name:'코로나 팬데믹', c:'var(--covid)'};
+    return {name:'코로나 팬데믹 이후', c:'var(--post)'};
+  }
+
+  function showTip(ev,d,reg){
+    tip.style.opacity=1;
+    tip.style.left=(ev.clientX+14)+'px';
+    tip.style.top=(ev.clientY+14)+'px';
+    tip.innerHTML=`<b>${fmtDate(d.date)}</b><br>${reg}<br>실업률: ${pct(d.unrate)}<br>구인율: ${pct(d.jtsjor)}<br>기준금리: ${pct(d.fedfunds)}<br>10년물: ${pct(d.gs10)}`;
+  }
+  function hideTip(){tip.style.opacity=0;}
+  function stop(){if(timer){clearInterval(timer);timer=null;}}
+  function step(){if(idx<data.length-1){idx++;draw();}else stop();}
+  function play(){stop();timer=setInterval(step, Number(speedSel.value));}
+
+
+  async function loadSP500(){
+    const start = Math.floor(data[0].date.getTime()/1000);
+    const end = Math.floor(new Date(data[data.length-1].date.getFullYear(), data[data.length-1].date.getMonth()+1, 5).getTime()/1000);
+    const direct = `https://query1.finance.yahoo.com/v8/finance/chart/%5EGSPC?period1=${start}&period2=${end}&interval=1mo&events=history`;
+    const urls = [direct, 'https://api.allorigins.win/raw?url=' + encodeURIComponent(direct)];
+    for (const url of urls){
+      try{
+        const res = await fetch(url, {cache:'no-store'});
+        if(!res.ok) throw new Error(res.status + ' ' + res.statusText);
+        const json = await res.json();
+        const r = json?.chart?.result?.[0];
+        const ts = r?.timestamp || [];
+        const close = r?.indicators?.quote?.[0]?.close || [];
+        if(!ts.length || !close.length) throw new Error('S&P 500 응답 형식 확인 실패');
+        const m = new Map();
+        ts.forEach((t,i)=>{
+          const v = close[i];
+          if(Number.isFinite(v)){
+            const d = new Date(t*1000);
+            m.set(`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`, v);
+          }
+        });
+        data.forEach(d=>{ const v=m.get(monthKey(d.date)); d.sp500 = Number.isFinite(v) ? v : null; });
+        sp500Loaded = true;
+        return true;
+      }catch(e){ /* try fallback */ }
+    }
+    sp500Loaded = false;
+    return false;
+  }
+
+  function draw(){
+    bev.innerHTML=''; fed.innerHTML='';
+    const ux0=niceMin(Math.min(...data.map(d=>d.unrate))-0.3), ux1=niceMax(Math.max(...data.map(d=>d.unrate))+0.4);
+    const vy0=Math.max(0, niceMin(Math.min(...data.map(d=>d.jtsjor))-0.3)), vy1=niceMax(Math.max(...data.map(d=>d.jtsjor))+0.5);
+    const f0=0, f1=niceMax(Math.max(...data.flatMap(d=>[d.fedfunds,d.gs10]))+0.5);
+    const spVals=data.map(d=>d.sp500).filter(Number.isFinite);
+    const sp0=spVals.length ? Math.floor(Math.min(...spVals)/250)*250 : 0;
+    const sp1=spVals.length ? Math.ceil(Math.max(...spVals)/250)*250 : 1;
+    const spyScale=(y)=>FH-fm.b-(y-sp0)/(sp1-sp0)*(FH-fm.t-fm.b);
+    const t0=data[0].date.getTime(), t1=data[data.length-1].date.getTime();
+
+    make('rect',{x:0,y:0,width:W,height:H,fill:'#fff'},bev);
+    for(let x=Math.ceil(ux0); x<=ux1; x+=1){ const px=xScale(x,ux0,ux1); make('line',{x1:px,y1:m.t,x2:px,y2:H-m.b,stroke:'var(--grid)'},bev); make('text',{x:px,y:H-m.b+28,'text-anchor':'middle',class:'small'},bev).textContent=x+'%'; }
+    for(let y=Math.ceil(vy0); y<=vy1; y+=1){ const py=yScale(y,vy0,vy1); make('line',{x1:m.l,y1:py,x2:W-m.r,y2:py,stroke:'var(--grid)'},bev); make('text',{x:m.l-16,y:py+5,'text-anchor':'end',class:'small'},bev).textContent=y+'%'; }
+    make('line',{x1:m.l,y1:H-m.b,x2:W-m.r,y2:H-m.b,stroke:'var(--axis)'},bev);
+    make('line',{x1:m.l,y1:m.t,x2:m.l,y2:H-m.b,stroke:'var(--axis)'},bev);
+    make('text',{x:W/2,y:H-22,'text-anchor':'middle',class:'label'},bev).textContent='실업률 (u)';
+    make('text',{x:24,y:H/2,transform:`rotate(-90 24 ${H/2})`,'text-anchor':'middle',class:'label'},bev).textContent='구인율 (v)';
+
+    const d0=Math.max(ux0,vy0), d1=Math.min(ux1,vy1);
+    make('line',{x1:xScale(d0,ux0,ux1),y1:yScale(d0,vy0,vy1),x2:xScale(d1,ux0,ux1),y2:yScale(d1,vy0,vy1),stroke:'#84cc16','stroke-width':1.8,'stroke-dasharray':'7 5'},bev);
+    make('text',{x:xScale(d1,ux0,ux1)-54,y:yScale(d1,vy0,vy1)-14,fill:'#65a30d','font-size':18,'font-weight':700},bev).textContent='u = v';
+    make('text',{x:m.l,y:34,class:'dateLabel'},bev).textContent=fmtDate(data[idx].date);
+
+    const leg=make('g',{class:'legend',transform:`translate(${W-318},70)`},bev);
+    make('rect',{x:0,y:0,width:270,height:126,fill:'#fff',stroke:'#111827','stroke-width':1},leg);
+    [['금융위기 이전','var(--pre)'],['금융위기 이후~코로나 전','var(--gfc)'],['코로나 팬데믹','var(--covid)'],['코로나 팬데믹 이후','var(--post)']].forEach((it,i)=>{make('circle',{cx:22,cy:28+i*25,r:4,fill:it[1]},leg); make('text',{x:38,y:33+i*25},leg).textContent=it[0];});
+
+    const recentTrail=data.slice(Math.max(0,idx-29),idx+1);
+    if(recentTrail.length>1){
+      const n=recentTrail.length;
+      for(let i=1;i<n;i++){
+        const a=recentTrail[i-1], b=recentTrail[i], t=i/(n-1);
+        make('line',{
+          x1:xScale(a.unrate,ux0,ux1), y1:yScale(a.jtsjor,vy0,vy1),
+          x2:xScale(b.unrate,ux0,ux1), y2:yScale(b.jtsjor,vy0,vy1),
+          class:'trailSeg',
+          stroke:trailColor(t),
+          'stroke-width':lerp(2.0,6.0,t),
+          opacity:lerp(.18,.95,t)
+        },bev);
+      }
+      recentTrail.forEach((d,i)=>{
+        const t=i/(n-1 || 1);
+        make('circle',{
+          cx:xScale(d.unrate,ux0,ux1), cy:yScale(d.jtsjor,vy0,vy1),
+          r:lerp(2.2,5.2,t),
+          fill:trailColor(t),
+          opacity:lerp(.22,.95,t),
+          class:'trailDot'
+        },bev);
+      });
+    }
+
+    data.slice(0,idx+1).forEach((d,i)=>{
+      const r=regime(d); const age=(idx-i); const opacity=Math.max(.10, 1-age/220);
+      const c=make('circle',{cx:xScale(d.unrate,ux0,ux1),cy:yScale(d.jtsjor,vy0,vy1),r:i===idx?7:3.6,fill:r.c,opacity:i===idx?1:opacity,stroke:i===idx?'#111827':'none','stroke-width':i===idx?1.8:0},bev);
+      c.addEventListener('mousemove',ev=>showTip(ev,d,r.name));
+      c.addEventListener('mouseleave',hideTip);
+    });
+
+    const cur=data[idx];
+    make('circle',{cx:xScale(cur.unrate,ux0,ux1),cy:yScale(cur.jtsjor,vy0,vy1),r:11,class:'activeRing'},bev);
+    make('text',{x:xScale(cur.unrate,ux0,ux1)+13,y:yScale(cur.jtsjor,vy0,vy1)-13,class:'label'},bev).textContent=`${fmtDate(cur.date)}  u ${pct(cur.unrate)} · v ${pct(cur.jtsjor)}`;
+
+    make('rect',{x:0,y:0,width:FW,height:FH,fill:'#fff'},fed);
+    for(let y=0; y<=f1; y+=1){ const py=fyScale(y,f0,f1); make('line',{x1:fm.l,y1:py,x2:FW-fm.r,y2:py,stroke:'var(--grid)'},fed); make('text',{x:fm.l-15,y:py+5,'text-anchor':'end',class:'small'},fed).textContent=y+'%'; }
+    if(spVals.length){
+      const step=Math.max(500, Math.ceil((sp1-sp0)/5/250)*250);
+      for(let y=Math.ceil(sp0/step)*step; y<=sp1; y+=step){
+        const py=spyScale(y);
+        make('text',{x:FW-fm.r+14,y:py+5,'text-anchor':'start',class:'small',fill:'var(--sp)'},fed).textContent=idxFmt(y);
+      }
+    }
+    const year0=data[0].date.getFullYear(), year1=data[data.length-1].date.getFullYear();
+    for(let y=Math.ceil(year0/2)*2; y<=year1; y+=2){ const px=fxScale(new Date(`${y}-01-01`).getTime(),t0,t1); make('line',{x1:px,y1:fm.t,x2:px,y2:FH-fm.b,stroke:'var(--grid)'},fed); make('text',{x:px,y:FH-fm.b+24,'text-anchor':'middle',class:'small'},fed).textContent=String(y).slice(2); }
+    make('line',{x1:fm.l,y1:FH-fm.b,x2:FW-fm.r,y2:FH-fm.b,stroke:'var(--axis)'},fed);
+    make('line',{x1:fm.l,y1:fm.t,x2:fm.l,y2:FH-fm.b,stroke:'var(--axis)'},fed);
+    if(spVals.length) make('line',{x1:FW-fm.r,y1:fm.t,x2:FW-fm.r,y2:FH-fm.b,stroke:'var(--sp)'},fed);
+    make('path',{d:linePath(data,d=>fxScale(d.date.getTime(),t0,t1),d=>fyScale(d.fedfunds,f0,f1)),class:'line'},fed);
+    make('path',{d:linePath(data,d=>fxScale(d.date.getTime(),t0,t1),d=>fyScale(d.gs10,f0,f1)),class:'tenLine'},fed);
+    if(spVals.length) make('path',{d:linePathNullable(data,d=>fxScale(d.date.getTime(),t0,t1),d=>spyScale(d.sp500),d=>Number.isFinite(d.sp500)),class:'spLine'},fed);
+    const px=fxScale(cur.date.getTime(),t0,t1);
+    make('line',{x1:px,y1:fm.t,x2:px,y2:FH-fm.b,class:'vline'},fed);
+    make('circle',{cx:px,cy:fyScale(cur.fedfunds,f0,f1),r:6,fill:'var(--fed)',stroke:'#111827','stroke-width':1.3},fed);
+    make('circle',{cx:px,cy:fyScale(cur.gs10,f0,f1),r:6,fill:'var(--ten)',stroke:'#111827','stroke-width':1.3},fed);
+    if(Number.isFinite(cur.sp500)) make('circle',{cx:px,cy:spyScale(cur.sp500),r:6,fill:'var(--sp)',stroke:'#111827','stroke-width':1.3},fed);
+    make('text',{x:fm.l,y:22,class:'label'},fed).textContent='정책금리·10년물·S&P 500';
+    make('circle',{cx:fm.l+252,cy:17,r:5,fill:'var(--fed)'},fed); make('text',{x:fm.l+264,y:22,class:'small'},fed).textContent='FEDFUNDS';
+    make('circle',{cx:fm.l+345,cy:17,r:5,fill:'var(--ten)'},fed); make('text',{x:fm.l+357,y:22,class:'small'},fed).textContent='미국 10년물(GS10)';
+    make('circle',{cx:fm.l+495,cy:17,r:5,fill:'var(--sp)'},fed); make('text',{x:fm.l+507,y:22,class:'small'},fed).textContent='S&P 500(우축)';
+    make('text',{x:FW-48,y:22,'text-anchor':'end',class:'label'},fed).textContent=`${fmtDate(cur.date)} · FFR ${pct(cur.fedfunds)} · 10Y ${pct(cur.gs10)}${Number.isFinite(cur.sp500) ? ' · S&P ' + idxFmt(cur.sp500) : ''}`;
+
+    scrub.max=data.length-1;
+    scrub.value=idx;
+    readout.textContent=`${fmtDate(cur.date)} | 실업률 ${pct(cur.unrate)} | 구인율 ${pct(cur.jtsjor)} | 기준금리 ${pct(cur.fedfunds)} | 10년물 ${pct(cur.gs10)}${Number.isFinite(cur.sp500) ? ' | S&P 500 ' + idxFmt(cur.sp500) : ''}`;
+  }
+
+  statusEl.textContent = `데이터 범위: ${fmtDate(data[0].date)} ~ ${fmtDate(data[data.length-1].date)} · 관측치 ${data.length}개 · S&P 500 로딩 중`;
+  draw();
+  loadSP500().then(ok=>{
+    statusEl.textContent = `데이터 범위: ${fmtDate(data[0].date)} ~ ${fmtDate(data[data.length-1].date)} · 관측치 ${data.length}개 · 베버리지 최근 30개월 그라데이션 궤적 표시 · S&P 500 ${ok ? '우측 축 표시' : '로드 실패'}`;
+    draw();
+  });
+
+  playBtn.addEventListener('click',play);
+  pauseBtn.addEventListener('click',stop);
+  speedSel.addEventListener('change',()=>{ if(timer) play(); });
+  scrub.addEventListener('input',e=>{ stop(); idx=Number(e.target.value); draw(); });
+})();
+</script>
+</body>
+</html>
