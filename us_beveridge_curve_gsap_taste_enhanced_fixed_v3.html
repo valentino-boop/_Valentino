@@ -1,0 +1,451 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>미국 베버리지 곡선 — GSAP Timeline Compact Fixed</title>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+<style>
+  :root{
+    --bg:#ede7dd;
+    --paper:#fbfaf7;
+    --panel:#fffdf8;
+    --panel2:#f5f0e8;
+    --ink:#171412;
+    --muted:#6f685f;
+    --grid:#ded6c9;
+    --axis:#27211d;
+    --pre:#b7791f;
+    --gfc:#6b7280;
+    --covid:#0e7490;
+    --post:#2563eb;
+    --fed:#6d28d9;
+    --ten:#047857;
+    --sp:#be123c;
+    --accent:#111827;
+    --warn:#c2410c;
+    --shadow:0 24px 70px rgba(40,33,25,.14);
+    --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    --sans: Inter, "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", Arial, sans-serif;
+    --stage-scale:1;
+  }
+  *{box-sizing:border-box}
+  html,body{width:100%;height:100%;overflow:hidden}
+  body{
+    margin:0;
+    color:var(--ink);
+    font-family:var(--sans);
+    background:
+      radial-gradient(circle at 12% 8%, rgba(255,255,255,.75), transparent 30%),
+      linear-gradient(135deg,#e8dfd1 0%,#f7f2ea 43%,#e9e1d6 100%);
+  }
+  .page{
+    width:100vw;
+    height:100vh;
+    min-height:0;
+    padding:0;
+    display:grid;
+    place-items:center;
+    overflow:hidden;
+  }
+  .stage{
+    width:1440px;
+    height:810px;
+    min-height:0;
+    aspect-ratio:auto;
+    background:linear-gradient(180deg,var(--paper),#f7f3eb);
+    border:1px solid rgba(39,33,29,.12);
+    border-radius:28px;
+    box-shadow:var(--shadow);
+    overflow:hidden;
+    position:relative;
+    transform:scale(var(--stage-scale));
+    transform-origin:center center;
+  }
+  .stage::before{
+    content:"";
+    position:absolute;inset:0;
+    background-image:linear-gradient(rgba(23,20,18,.03) 1px, transparent 1px),linear-gradient(90deg,rgba(23,20,18,.03) 1px, transparent 1px);
+    background-size:48px 48px;
+    pointer-events:none;
+    mask-image:linear-gradient(180deg,rgba(0,0,0,.5),transparent 70%);
+  }
+  .topbar{
+    position:absolute;left:34px;right:34px;top:24px;height:82px;
+    display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:18px;align-items:start;z-index:2;
+  }
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  h1{font-size:34px;line-height:1.02;margin:0;font-weight:850;letter-spacing:-.055em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .subtitle{
+    font-size:13px;color:var(--muted);line-height:1.55;max-width:880px;margin-top:8px;
+    display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  }
+  .statusBox{
+    justify-self:end;text-align:right;border:1px solid rgba(39,33,29,.14);background:rgba(255,253,248,.80);
+    backdrop-filter:blur(10px);border-radius:16px;padding:12px 14px;min-width:0;width:300px;max-width:300px;overflow:hidden;
+  }
+  .statusBox .date{font-family:var(--mono);font-size:24px;font-weight:800;letter-spacing:-.04em;color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .statusBox .scene{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .layout{
+    position:absolute;left:34px;right:34px;top:122px;bottom:86px;
+    display:grid;grid-template-columns:minmax(0,1fr) 306px;grid-template-rows:minmax(0,1fr) 186px;gap:14px;
+  }
+  .chartPanel,.metricPanel,.lowerPanel{
+    position:relative;background:rgba(255,253,248,.84);border:1px solid rgba(39,33,29,.12);border-radius:22px;box-shadow:0 12px 32px rgba(40,33,25,.075);overflow:hidden;
+  }
+  .chartPanel{grid-column:1;grid-row:1}.metricPanel{grid-column:2;grid-row:1 / span 2;padding:18px}.lowerPanel{grid-column:1;grid-row:2}
+  svg{display:block;width:100%;height:100%}
+  .axisText{font-size:13px;fill:var(--muted);font-weight:650}.tickText{font-size:11px;fill:var(--muted);font-family:var(--mono);font-variant-numeric:tabular-nums}.grid{stroke:var(--grid);stroke-width:1}.axis{stroke:var(--axis);stroke-width:1.5}.uvLine{stroke:#92a159;stroke-width:1.7;stroke-dasharray:7 7;opacity:.78}.dot{stroke:rgba(255,253,248,.8);stroke-width:1.1}.trail{fill:none;stroke-linecap:round;stroke-linejoin:round}.currentRing{fill:none;stroke:var(--ink);stroke-width:2.7}.currentHalo{fill:rgba(23,20,18,.08)}.calloutText{font-size:12px;fill:var(--ink);font-weight:800}.calloutSub{font-size:10px;fill:var(--muted);font-family:var(--mono)}.lineFed{fill:none;stroke:var(--fed);stroke-width:2.7}.lineTen{fill:none;stroke:var(--ten);stroke-width:2.8}.lineSp{fill:none;stroke:var(--sp);stroke-width:2.3}.ghostLine{opacity:.18}.cursor{stroke:#111827;stroke-width:2.2;stroke-dasharray:5 5}
+  .metricTitle{font-size:11px;color:var(--muted);font-family:var(--mono);letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.bigNumber{font-size:45px;line-height:1.02;font-weight:900;letter-spacing:-.08em;font-variant-numeric:tabular-nums;margin:9px 0 10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.bigNumber small{font-size:19px;letter-spacing:-.03em}.metricHint{font-size:12.5px;color:var(--muted);line-height:1.68;letter-spacing:-.01em;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;margin-top:2px}.metricGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:17px}.miniMetric{border:1px solid rgba(39,33,29,.12);background:rgba(245,240,232,.72);border-radius:15px;padding:11px;min-width:0}.miniMetric .k{font-size:9.5px;color:var(--muted);font-family:var(--mono);letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.miniMetric .v{font-size:22px;font-weight:850;letter-spacing:-.055em;font-variant-numeric:tabular-nums;margin-top:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.sceneCard{margin-top:16px;border-radius:18px;background:#171412;color:#fff;padding:15px 15px 14px;height:146px;overflow:hidden}.sceneCard .tag{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#c9c0b5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.sceneCard .headline{font-size:21px;line-height:1.14;font-weight:850;letter-spacing:-.055em;margin-top:9px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}.sceneCard .body{font-size:12.8px;line-height:1.52;color:#d9d2c7;margin-top:9px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+  .legend{position:absolute;left:18px;top:16px;display:flex;gap:9px;align-items:center;z-index:2;background:rgba(255,253,248,.84);border:1px solid rgba(39,33,29,.1);border-radius:999px;padding:8px 10px;max-width:calc(100% - 36px);overflow:hidden}.legend span{display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--muted);white-space:nowrap}.legend i{width:8px;height:8px;border-radius:50%;display:inline-block;flex:0 0 auto}.lowerTitle{position:absolute;left:18px;top:14px;z-index:2;font-size:12px;font-weight:850;letter-spacing:-.02em;max-width:360px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.lowerLegend{position:absolute;right:18px;top:14px;z-index:2;display:flex;gap:11px;font-size:11px;color:var(--muted);font-family:var(--mono);white-space:nowrap}.lowerLegend i{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:4px}.controls{position:absolute;left:34px;right:34px;bottom:24px;height:42px;display:grid;grid-template-columns:auto auto auto minmax(0,1fr) 200px;gap:9px;align-items:center;z-index:3}.controls button,.controls select{height:38px;border:1px solid rgba(39,33,29,.16);background:rgba(255,253,248,.88);color:var(--ink);border-radius:999px;padding:0 13px;font:700 12px var(--sans);cursor:pointer;white-space:nowrap}.controls button:hover{background:#fff}.controls input[type=range]{width:100%;accent-color:#171412}.readout{font-family:var(--mono);font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:right}.source{position:absolute;left:42px;right:42px;bottom:5px;font-size:9.5px;color:rgba(111,104,95,.72);z-index:2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.renderMode .controls,.renderMode .source{display:none}.renderMode .layout{bottom:28px}.renderMode .stage{border-radius:0;box-shadow:none}
+  @media(max-width:980px){
+    .stage{width:1440px;height:810px;min-height:0;aspect-ratio:auto}
+    .readout{display:block}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <main class="stage" id="stage">
+    <header class="topbar">
+      <div>
+        <div class="eyebrow">GSAP timeline · macro data story</div>
+        <h1>미국 베버리지 곡선</h1>
+        <div class="subtitle">실업률과 구인율의 월간 이동을 하나의 시간축으로 묶었습니다. 하단에는 FEDFUNDS, GS10, S&amp;P 500을 동기화해 노동시장과 금융여건을 함께 봅니다.</div>
+      </div>
+      <aside class="statusBox">
+        <div class="date" id="dateLabel">----</div>
+        <div class="scene" id="sceneLabel">데이터 로딩 중</div>
+      </aside>
+    </header>
+    <section class="layout">
+      <section class="chartPanel">
+        <div class="legend">
+          <span><i style="background:var(--pre)"></i>Pre-GFC</span>
+          <span><i style="background:var(--gfc)"></i>Post-GFC</span>
+          <span><i style="background:var(--covid)"></i>COVID</span>
+          <span><i style="background:var(--post)"></i>Post-COVID</span>
+        </div>
+        <svg id="bev" viewBox="0 0 1000 560" aria-label="미국 베버리지 곡선"></svg>
+      </section>
+      <aside class="metricPanel">
+        <div class="metricTitle">Current coordinate</div>
+        <div class="bigNumber" id="uBig">-<small>%</small></div>
+        <div class="metricHint" id="coordHint">실업률을 x축으로, 구인율을 y축으로 표시합니다.</div>
+        <div class="metricGrid">
+          <div class="miniMetric"><div class="k">Job openings</div><div class="v" id="vMetric">-</div></div>
+          <div class="miniMetric"><div class="k">Fed funds</div><div class="v" id="ffrMetric">-</div></div>
+          <div class="miniMetric"><div class="k">10Y yield</div><div class="v" id="tenMetric">-</div></div>
+          <div class="miniMetric"><div class="k">S&amp;P 500</div><div class="v" id="spMetric">-</div></div>
+        </div>
+        <div class="sceneCard" id="sceneCard">
+          <div class="tag">Regime note</div>
+          <div class="headline" id="sceneHead">데이터 준비 중</div>
+          <div class="body" id="sceneBody">기존 HTML의 내장 RAW 데이터를 읽어 장면형 애니메이션으로 재구성합니다.</div>
+        </div>
+      </aside>
+      <section class="lowerPanel">
+        <div class="lowerTitle">정책금리 · 10년물 · S&amp;P 500</div>
+        <div class="lowerLegend"><span><i style="background:var(--fed)"></i>FFR</span><span><i style="background:var(--ten)"></i>GS10</span><span><i style="background:var(--sp)"></i>S&amp;P</span></div>
+        <svg id="lower" viewBox="0 0 1000 210" aria-label="금융여건 동기화 차트"></svg>
+      </section>
+    </section>
+    <nav class="controls">
+      <button id="play">▶ 재생</button>
+      <button id="pause">⏸ 멈춤</button>
+      <select id="speed" title="재생 속도"><option value="0.5">0.5x</option><option value="1">1x</option><option value="2">2x</option><option value="4">4x</option><option value="8" selected>8x</option></select>
+      <input id="scrub" type="range" min="0" max="1" step="0.0001" value="0" />
+      <div class="readout" id="readout">2000.12 · u 3.9% · v 3.7%</div>
+    </nav>
+    <div class="source">Data source: original embedded FRED dataset from us_beveridge_curve_gs10_8x_v3.html. Enhanced file parses that source when available. Use ?render=1 to hide controls.</div>
+  </main>
+</div>
+<script>
+(() => {
+  const params = new URLSearchParams(location.search);
+  if (params.get('render') === '1') document.body.classList.add('renderMode');
+  const fitStage = () => {
+    const pad = params.get('render') === '1' ? 0 : 18;
+    const s = Math.min((window.innerWidth - pad) / 1440, (window.innerHeight - pad) / 810, 1);
+    document.documentElement.style.setProperty('--stage-scale', Math.max(0.35, s).toFixed(4));
+  };
+  fitStage();
+  window.addEventListener('resize', fitStage, {passive:true});
+  const DURATION = Math.max(12, Number(params.get('duration') || 72));
+  const SOURCE_CANDIDATES = [
+    './us_beveridge_curve_gs10_8x_v3.html',
+    'https://valentino-boop.github.io/_Valentino/us_beveridge_curve_gs10_8x_v3.html'
+  ];
+  const FALLBACK_RAW = [
+    {date:'2000-12-01',jtsjor:3.7,unrate:3.9,fedfunds:6.40,gs10:5.24,sp500:1320},
+    {date:'2002-12-01',jtsjor:2.4,unrate:6.0,fedfunds:1.24,gs10:4.03,sp500:880},
+    {date:'2007-12-01',jtsjor:3.2,unrate:5.0,fedfunds:4.24,gs10:4.10,sp500:1470},
+    {date:'2009-10-01',jtsjor:1.8,unrate:10.0,fedfunds:0.12,gs10:3.39,sp500:1040},
+    {date:'2015-12-01',jtsjor:3.9,unrate:5.0,fedfunds:0.24,gs10:2.24,sp500:2044},
+    {date:'2019-12-01',jtsjor:4.2,unrate:3.6,fedfunds:1.55,gs10:1.86,sp500:3230},
+    {date:'2020-04-01',jtsjor:3.4,unrate:14.8,fedfunds:0.05,gs10:0.66,sp500:2912},
+    {date:'2021-12-01',jtsjor:7.1,unrate:3.9,fedfunds:0.08,gs10:1.47,sp500:4766},
+    {date:'2022-03-01',jtsjor:7.5,unrate:3.7,fedfunds:0.20,gs10:2.13,sp500:4530},
+    {date:'2023-08-01',jtsjor:5.6,unrate:3.7,fedfunds:5.33,gs10:4.17,sp500:4508},
+    {date:'2024-09-01',jtsjor:4.2,unrate:4.1,fedfunds:5.13,gs10:3.72,sp500:5762},
+    {date:'2026-04-01',jtsjor:4.6,unrate:4.3,fedfunds:3.64,gs10:4.32,sp500:6200}
+  ];
+  const beats = [
+    {date:'2000-12-01',key:'intro',head:'장기 궤적의 출발점',body:'2000년대 초반의 낮은 실업률과 중간 수준 구인율에서 이동을 시작합니다.'},
+    {date:'2008-09-01',key:'gfc',head:'금융위기 충격',body:'구인율이 낮아지고 실업률이 높아지며 곡선이 우하향 방향으로 밀립니다.'},
+    {date:'2020-04-01',key:'covid',head:'코로나 쇼크',body:'실업률이 급등하면서 포인트가 오른쪽으로 급격히 튑니다.'},
+    {date:'2021-12-01',key:'tight',head:'노동시장 과열',body:'구인율이 급등해 베버리지 곡선이 위쪽으로 이동합니다.'},
+    {date:'2023-08-01',key:'rates',head:'고금리 구간',body:'정책금리가 고점권에 머무는 동안 구인율은 팬데믹 고점에서 내려옵니다.'},
+    {date:'2026-04-01',key:'current',head:'현재 국면',body:'실업률은 완만히 상승했고 구인율은 과열권에서 내려온 상태를 보여줍니다.'}
+  ];
+  const els = {
+    bev:document.getElementById('bev'), lower:document.getElementById('lower'), play:document.getElementById('play'), pause:document.getElementById('pause'), speed:document.getElementById('speed'), scrub:document.getElementById('scrub'), readout:document.getElementById('readout'),
+    dateLabel:document.getElementById('dateLabel'), sceneLabel:document.getElementById('sceneLabel'), uBig:document.getElementById('uBig'), coordHint:document.getElementById('coordHint'), vMetric:document.getElementById('vMetric'), ffrMetric:document.getElementById('ffrMetric'), tenMetric:document.getElementById('tenMetric'), spMetric:document.getElementById('spMetric'), sceneHead:document.getElementById('sceneHead'), sceneBody:document.getElementById('sceneBody')
+  };
+  const NS='http://www.w3.org/2000/svg';
+  const make=(tag,attrs={},parent)=>{const el=document.createElementNS(NS,tag);for(const [k,v] of Object.entries(attrs)) el.setAttribute(k,v);if(parent) parent.appendChild(el);return el;};
+  const lerp=(a,b,t)=>a+(b-a)*t;
+  const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+  const pct=v=>Number.isFinite(v)?`${v.toFixed(1)}%`:'-';
+  const num=v=>Number.isFinite(v)?v.toLocaleString('en-US',{maximumFractionDigits:0}):'-';
+  const fmtDate=d=>`${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}`;
+  const monthKey=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+  const parseDate=s=>new Date(s+'T00:00:00');
+  const niceMin=v=>Math.floor(v*2)/2, niceMax=v=>Math.ceil(v*2)/2;
+  const linePath=(arr,xf,yf)=>arr.map((d,i)=>(i?'L':'M')+xf(d)+' '+yf(d)).join(' ');
+  const linePathNullable=(arr,xf,yf,pred)=>{let open=false;const out=[];arr.forEach(d=>{if(pred(d)){out.push((open?'L':'M')+xf(d)+' '+yf(d));open=true;}else open=false;});return out.join(' ')};
+
+  let data = [];
+  let bounds = {};
+  let tl = null;
+  let state = {frame:0};
+  let raf = 0;
+  let fallbackStart = 0;
+
+  function normalize(raw){
+    return raw.map(d=>({
+      ...d,
+      date: d.date instanceof Date ? d.date : parseDate(d.date),
+      sp500: Number.isFinite(d.sp500) ? d.sp500 : null
+    })).filter(d=>Number.isFinite(d.jtsjor)&&Number.isFinite(d.unrate)&&Number.isFinite(d.fedfunds)&&Number.isFinite(d.gs10)).sort((a,b)=>a.date-b.date);
+  }
+  async function loadOriginalRaw(){
+    for(const url of SOURCE_CANDIDATES){
+      try{
+        const res = await fetch(url,{cache:'no-store'});
+        if(!res.ok) throw new Error(res.status);
+        const text = await res.text();
+        const m = text.match(/const\s+RAW\s*=\s*(\[[\s\S]*?\]);\s*const\s+data\s*=/);
+        if(!m) throw new Error('RAW block not found');
+        const raw = JSON.parse(m[1]);
+        if(raw.length > 20) return normalize(raw);
+      }catch(e){/* try next */}
+    }
+    return normalize(FALLBACK_RAW);
+  }
+  async function loadSP500(){
+    const missing = data.some(d=>!Number.isFinite(d.sp500));
+    if(!missing) return true;
+    const start = Math.floor(data[0].date.getTime()/1000);
+    const end = Math.floor(new Date(data[data.length-1].date.getFullYear(), data[data.length-1].date.getMonth()+1, 5).getTime()/1000);
+    const direct = `https://query1.finance.yahoo.com/v8/finance/chart/%5EGSPC?period1=${start}&period2=${end}&interval=1mo&events=history`;
+    const urls = [direct, 'https://api.allorigins.win/raw?url=' + encodeURIComponent(direct)];
+    for(const url of urls){
+      try{
+        const res = await fetch(url,{cache:'no-store'});
+        if(!res.ok) throw new Error(res.status);
+        const json = await res.json();
+        const r = json?.chart?.result?.[0];
+        const ts = r?.timestamp || [];
+        const close = r?.indicators?.quote?.[0]?.close || [];
+        const m = new Map();
+        ts.forEach((t,i)=>{const v=close[i]; if(Number.isFinite(v)){const d=new Date(t*1000); m.set(monthKey(d),v);}});
+        data.forEach(d=>{const v=m.get(monthKey(d.date)); if(Number.isFinite(v)) d.sp500=v;});
+        return true;
+      }catch(e){/* try fallback */}
+    }
+    return false;
+  }
+  function regime(d){
+    if(d.date < parseDate('2007-12-01')) return {name:'금융위기 이전', color:'var(--pre)'};
+    if(d.date < parseDate('2020-03-01')) return {name:'금융위기 이후~코로나 전', color:'var(--gfc)'};
+    if(d.date < parseDate('2022-01-01')) return {name:'코로나 팬데믹', color:'var(--covid)'};
+    return {name:'코로나 이후', color:'var(--post)'};
+  }
+  function computeBounds(){
+    const ux0=niceMin(Math.min(...data.map(d=>d.unrate))-0.4), ux1=niceMax(Math.max(...data.map(d=>d.unrate))+0.5);
+    const vy0=Math.max(0,niceMin(Math.min(...data.map(d=>d.jtsjor))-0.4)), vy1=niceMax(Math.max(...data.map(d=>d.jtsjor))+0.6);
+    const f0=0, f1=niceMax(Math.max(...data.flatMap(d=>[d.fedfunds,d.gs10]))+0.5);
+    const spVals=data.map(d=>d.sp500).filter(Number.isFinite);
+    const sp0=spVals.length?Math.floor(Math.min(...spVals)/250)*250:0;
+    const sp1=spVals.length?Math.ceil(Math.max(...spVals)/250)*250:1;
+    bounds={ux0,ux1,vy0,vy1,f0,f1,sp0,sp1,t0:data[0].date.getTime(),t1:data[data.length-1].date.getTime()};
+  }
+  function xMain(x){return 76+(x-bounds.ux0)/(bounds.ux1-bounds.ux0)*(1000-112)}
+  function yMain(y){return 510-(y-bounds.vy0)/(bounds.vy1-bounds.vy0)*(510-92)}
+  function xLower(t){return 76+(t-bounds.t0)/(bounds.t1-bounds.t0)*(1000-112)}
+  function yLower(y){return 172-(y-bounds.f0)/(bounds.f1-bounds.f0)*(172-58)}
+  function ySp(y){return 172-(y-bounds.sp0)/(bounds.sp1-bounds.sp0)*(172-58)}
+  function pointAt(frame){
+    const i=Math.floor(clamp(frame,0,data.length-1));
+    const j=Math.min(i+1,data.length-1);
+    const t=clamp(frame-i,0,1);
+    const a=data[i], b=data[j];
+    return {
+      i,j,t,date:new Date(lerp(a.date.getTime(),b.date.getTime(),t)),
+      unrate:lerp(a.unrate,b.unrate,t),jtsjor:lerp(a.jtsjor,b.jtsjor,t),
+      fedfunds:lerp(a.fedfunds,b.fedfunds,t),gs10:lerp(a.gs10,b.gs10,t),
+      sp500:Number.isFinite(a.sp500)&&Number.isFinite(b.sp500)?lerp(a.sp500,b.sp500,t):(Number.isFinite(a.sp500)?a.sp500:null)
+    };
+  }
+  function currentBeat(cur){
+    let out=beats[0];
+    for(const b of beats){if(cur.date >= parseDate(b.date)) out=b;}
+    return out;
+  }
+  function drawStatic(frame){
+    const cur = pointAt(frame);
+    const floorIdx = Math.floor(clamp(frame,0,data.length-1));
+    const active = currentBeat(cur);
+    const reg = regime(cur);
+    els.bev.innerHTML=''; els.lower.innerHTML='';
+    make('rect',{x:0,y:0,width:1000,height:560,fill:'transparent'},els.bev);
+    for(let x=Math.ceil(bounds.ux0);x<=bounds.ux1;x+=1){const px=xMain(x);make('line',{x1:px,y1:92,x2:px,y2:510,class:'grid'},els.bev);make('text',{x:px,y:537,'text-anchor':'middle',class:'tickText'},els.bev).textContent=x+'%'}
+    for(let y=Math.ceil(bounds.vy0);y<=bounds.vy1;y+=1){const py=yMain(y);make('line',{x1:76,y1:py,x2:964,y2:py,class:'grid'},els.bev);make('text',{x:61,y:py+4,'text-anchor':'end',class:'tickText'},els.bev).textContent=y+'%'}
+    make('line',{x1:76,y1:510,x2:964,y2:510,class:'axis'},els.bev);make('line',{x1:76,y1:92,x2:76,y2:510,class:'axis'},els.bev);
+    make('text',{x:520,y:552,'text-anchor':'middle',class:'axisText'},els.bev).textContent='실업률 UNRATE';
+    make('text',{x:24,y:284,transform:'rotate(-90 24 284)','text-anchor':'middle',class:'axisText'},els.bev).textContent='구인율 JTSJOR';
+    const d0=Math.max(bounds.ux0,bounds.vy0), d1=Math.min(bounds.ux1,bounds.vy1);
+    make('line',{x1:xMain(d0),y1:yMain(d0),x2:xMain(d1),y2:yMain(d1),class:'uvLine'},els.bev);make('text',{x:xMain(d1)-34,y:yMain(d1)-12,fill:'#7a873e','font-size':15,'font-weight':850},els.bev).textContent='u = v';
+    const history=data.slice(0,floorIdx+1);
+    history.forEach((d,i)=>{const r=regime(d);const age=floorIdx-i;const op=clamp(1-age/260,.10,.82);make('circle',{cx:xMain(d.unrate),cy:yMain(d.jtsjor),r:3.2,fill:r.color,opacity:op,class:'dot'},els.bev)});
+    const trailStart=Math.max(0,floorIdx-29);
+    const trail=[...data.slice(trailStart,floorIdx+1),cur];
+    for(let i=1;i<trail.length;i++){
+      const a=trail[i-1], b=trail[i], t=i/(trail.length-1||1);
+      const hue=lerp(212,18,t), sat=lerp(38,84,t), lum=lerp(72,48,t);
+      make('line',{x1:xMain(a.unrate),y1:yMain(a.jtsjor),x2:xMain(b.unrate),y2:yMain(b.jtsjor),class:'trail',stroke:`hsl(${hue}, ${sat}%, ${lum}%)`,'stroke-width':lerp(2.2,7,t),opacity:lerp(.18,.96,t)},els.bev);
+    }
+    beats.forEach(b=>{
+      const ix=data.findIndex(d=>monthKey(d.date)===b.date.slice(0,7));
+      if(ix>=0 && ix<=floorIdx){
+        const d=data[ix], x=xMain(d.unrate), y=yMain(d.jtsjor);
+        const rightSide = x < 760;
+        const tx = rightSide ? x + 72 : x - 72;
+        const ax = rightSide ? x + 66 : x - 66;
+        const anchor = rightSide ? 'start' : 'end';
+        make('circle',{cx:x,cy:y,r:7,fill:'#fff',stroke:'#171412','stroke-width':1.8},els.bev);
+        make('line',{x1:x+(rightSide?9:-9),y1:y-9,x2:ax,y2:y-38,stroke:'#171412','stroke-width':1,opacity:.55},els.bev);
+        make('text',{x:tx,y:y-42,'text-anchor':anchor,class:'calloutText'},els.bev).textContent=b.head;
+        make('text',{x:tx,y:y-25,'text-anchor':anchor,class:'calloutSub'},els.bev).textContent=b.date.slice(0,7);
+      }
+    });
+    const cx=xMain(cur.unrate), cy=yMain(cur.jtsjor);
+    make('circle',{cx,cy,r:24,class:'currentHalo'},els.bev);make('circle',{cx,cy,r:14,class:'currentRing'},els.bev);make('circle',{cx,cy,r:7.5,fill:reg.color,stroke:'#fff','stroke-width':2},els.bev);
+    const currentLabelX = cx > 830 ? cx - 130 : cx + 18;
+    make('text',{x:currentLabelX,y:cy-18,fill:'#171412','font-size':16,'font-weight':900},els.bev).textContent=`u ${pct(cur.unrate)} · v ${pct(cur.jtsjor)}`;
+
+    make('rect',{x:0,y:0,width:1000,height:210,fill:'transparent'},els.lower);
+    for(let y=0;y<=bounds.f1;y+=1){const py=yLower(y);make('line',{x1:76,y1:py,x2:964,y2:py,class:'grid'},els.lower);make('text',{x:60,y:py+4,'text-anchor':'end',class:'tickText'},els.lower).textContent=y+'%'}
+    for(let year=Math.ceil(data[0].date.getFullYear()/2)*2;year<=data[data.length-1].date.getFullYear();year+=2){const px=xLower(new Date(`${year}-01-01T00:00:00`).getTime());make('line',{x1:px,y1:58,x2:px,y2:172,class:'grid'},els.lower);make('text',{x:px,y:194,'text-anchor':'middle',class:'tickText'},els.lower).textContent=String(year).slice(2)}
+    make('line',{x1:76,y1:172,x2:964,y2:172,class:'axis'},els.lower);make('line',{x1:76,y1:58,x2:76,y2:172,class:'axis'},els.lower);
+    const shown=[...data.slice(0,floorIdx+1),cur];
+    make('path',{d:linePath(data,d=>xLower(d.date.getTime()),d=>yLower(d.fedfunds)),class:'lineFed ghostLine'},els.lower);
+    make('path',{d:linePath(data,d=>xLower(d.date.getTime()),d=>yLower(d.gs10)),class:'lineTen ghostLine'},els.lower);
+    make('path',{d:linePath(shown,d=>xLower(d.date.getTime()),d=>yLower(d.fedfunds)),class:'lineFed'},els.lower);
+    make('path',{d:linePath(shown,d=>xLower(d.date.getTime()),d=>yLower(d.gs10)),class:'lineTen'},els.lower);
+    const spAll=data.filter(d=>Number.isFinite(d.sp500));
+    if(spAll.length>2){
+      make('path',{d:linePathNullable(data,d=>xLower(d.date.getTime()),d=>ySp(d.sp500),d=>Number.isFinite(d.sp500)),class:'lineSp ghostLine'},els.lower);
+      make('path',{d:linePathNullable(shown,d=>xLower(d.date.getTime()),d=>ySp(d.sp500),d=>Number.isFinite(d.sp500)),class:'lineSp'},els.lower);
+      make('line',{x1:964,y1:58,x2:964,y2:172,stroke:'var(--sp)','stroke-width':1.4,opacity:.55},els.lower);
+    }
+    const lx=xLower(cur.date.getTime());
+    make('line',{x1:lx,y1:58,x2:lx,y2:172,class:'cursor'},els.lower);
+    make('circle',{cx:lx,cy:yLower(cur.fedfunds),r:5.8,fill:'var(--fed)',stroke:'#fff','stroke-width':1.6},els.lower);
+    make('circle',{cx:lx,cy:yLower(cur.gs10),r:5.8,fill:'var(--ten)',stroke:'#fff','stroke-width':1.6},els.lower);
+    if(Number.isFinite(cur.sp500)) make('circle',{cx:lx,cy:ySp(cur.sp500),r:5.8,fill:'var(--sp)',stroke:'#fff','stroke-width':1.6},els.lower);
+
+    els.dateLabel.textContent=fmtDate(cur.date);
+    els.sceneLabel.textContent=`${reg.name} · ${data.length}개 월간 관측치`;
+    els.uBig.innerHTML=`${cur.unrate.toFixed(1)}<small>%</small>`;
+    els.coordHint.textContent=`x = 실업률, y = 구인율입니다. 현재 좌표는 (${cur.unrate.toFixed(1)}, ${cur.jtsjor.toFixed(1)})입니다.`;
+    els.vMetric.textContent=pct(cur.jtsjor); els.ffrMetric.textContent=pct(cur.fedfunds); els.tenMetric.textContent=pct(cur.gs10); els.spMetric.textContent=Number.isFinite(cur.sp500)?num(cur.sp500):'-';
+    els.sceneHead.textContent=active.head; els.sceneBody.textContent=active.body;
+    els.scrub.value=clamp(frame/(data.length-1),0,1);
+    els.readout.textContent=`${fmtDate(cur.date)} · u ${pct(cur.unrate)} · v ${pct(cur.jtsjor)}`;
+  }
+  function renderFrame(frame){
+    state.frame=clamp(frame,0,data.length-1);
+    drawStatic(state.frame);
+  }
+  function setProgress(p){
+    p=clamp(p,0,1);
+    if(tl && window.gsap) tl.progress(p).pause(); else renderFrame(p*(data.length-1));
+  }
+  function setTime(sec){setProgress(sec/DURATION)}
+  function fallbackPlay(){
+    cancelAnimationFrame(raf);
+    if(state.frame >= data.length-1) renderFrame(0);
+    const startFrame = state.frame;
+    fallbackStart=performance.now();
+    const speed=Number(els.speed.value||1);
+    const tick=()=>{
+      const elapsed=(performance.now()-fallbackStart)/1000*speed;
+      const nextFrame = startFrame + (elapsed / DURATION) * (data.length-1);
+      if(nextFrame >= data.length-1){
+        renderFrame(data.length-1);
+        cancelAnimationFrame(raf);
+        return;
+      }
+      renderFrame(nextFrame);
+      raf=requestAnimationFrame(tick);
+    };
+    tick();
+  }
+  function fallbackPause(){cancelAnimationFrame(raf)}
+  function setupTimeline(){
+    renderFrame(0);
+    if(window.gsap){
+      tl = gsap.timeline({paused:true, defaults:{ease:'none'}, onUpdate:()=>drawStatic(state.frame)});
+      tl.to(state,{frame:data.length-1,duration:DURATION,ease:'none'});
+      beats.forEach(b=>{
+        const ix=data.findIndex(d=>monthKey(d.date)===b.date.slice(0,7));
+        if(ix>=0) tl.addLabel(b.key, DURATION*ix/(data.length-1));
+      });
+      gsap.from('.topbar',{autoAlpha:0,y:-18,duration:.7,ease:'power3.out'});
+      gsap.from('.chartPanel,.metricPanel,.lowerPanel',{autoAlpha:0,y:20,duration:.8,stagger:.08,ease:'power3.out'});
+    }
+    window.__VIDEO_TIMELINE__ = tl;
+    window.__VIDEO_DURATION__ = DURATION;
+    window.__SET_TIME__ = setTime;
+    window.__SET_PROGRESS__ = setProgress;
+    window.__RENDER_FRAME__ = renderFrame;
+    window.__BEVERIDGE_DATA__ = data;
+  }
+  els.play.addEventListener('click',()=>{
+    if(tl){
+      tl.timeScale(Number(els.speed.value||1));
+      if(tl.progress() >= 0.9999){
+        tl.restart();
+      }else{
+        tl.play();
+      }
+    } else {
+      if(state.frame >= data.length-1) renderFrame(0);
+      fallbackPlay();
+    }
+  });
+  els.pause.addEventListener('click',()=>{ if(tl) tl.pause(); else fallbackPause(); });
+  els.speed.addEventListener('change',()=>{ if(tl) tl.timeScale(Number(els.speed.value||1)); });
+  els.scrub.addEventListener('input',e=>{ if(tl) tl.pause(); else fallbackPause(); setProgress(Number(e.target.value)); });
+  (async()=>{
+    data = await loadOriginalRaw();
+    computeBounds();
+    setupTimeline();
+    loadSP500().then(()=>{computeBounds(); renderFrame(state.frame);});
+  })();
+})();
+</script>
+</body>
+</html>
