@@ -3,73 +3,70 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>????? ????? ?? ??</title>
+<title>커피전문점 브랜드평판 월별 랭킹</title>
 <style>
 :root {
   color-scheme: light;
-  --ink: #18211f;
+  --ink: #171f1d;
   --muted: #66736f;
-  --paper: #f6f1e8;
-  --panel: #fffdfa;
-  --line: #d9ddd6;
-  --grid: #e9ece6;
-  --accent: #0f766e;
-  --rank: #7a4f20;
+  --paper: #f5f1ea;
+  --panel: #fffdf8;
+  --line: #d8ddd6;
+  --grid: #e7ebe5;
+  --accent: #0057b8;
+  --rank: #70491f;
 }
 * { box-sizing: border-box; }
-body {
-  margin: 0;
-  background: var(--paper);
-  color: var(--ink);
-  font-family: "Pretendard", "Noto Sans KR", "Apple SD Gothic Neo", "Segoe UI", sans-serif;
-}
-.wrap { width: min(1220px, calc(100% - 32px)); margin: 0 auto; padding: 30px 0 36px; }
-header { display: grid; grid-template-columns: 1fr auto; gap: 18px; align-items: end; padding-bottom: 18px; border-bottom: 1px solid var(--line); }
-h1 { margin: 0; font-size: clamp(28px, 4vw, 48px); line-height: 1.08; letter-spacing: 0; }
+body { margin: 0; background: var(--paper); color: var(--ink); font-family: "Pretendard", "Noto Sans KR", "Apple SD Gothic Neo", "Segoe UI", sans-serif; }
+.wrap { width: min(1720px, calc(100% - 28px)); margin: 0 auto; padding: 26px 0 34px; }
+header { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 18px; align-items: end; padding-bottom: 16px; border-bottom: 1px solid var(--line); }
+h1 { margin: 0; font-size: clamp(28px, 3.4vw, 48px); line-height: 1.08; letter-spacing: 0; }
 .lead { margin-top: 10px; color: var(--muted); font-size: 15px; }
-.metrics { display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
-.metric { min-width: 112px; border: 1px solid var(--line); background: rgba(255,255,255,.62); border-radius: 8px; padding: 10px 12px; }
-.metric b { display: block; font-size: 19px; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.metrics { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+.metric { min-width: 104px; border: 1px solid var(--line); background: rgba(255,255,255,.66); border-radius: 8px; padding: 9px 11px; }
+.metric b { display: block; font-size: 18px; line-height: 1.1; font-variant-numeric: tabular-nums; }
 .metric span { color: var(--muted); font-size: 12px; }
-.board { margin-top: 22px; display: grid; grid-template-columns: minmax(0, 1fr) 280px; gap: 18px; }
-.chart-card, .side { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 18px 44px rgba(45,39,30,.08); }
-.chart-head { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center; padding: 14px 16px; border-bottom: 1px solid var(--line); background: #fbfaf7; }
-.chart-head h2, .side h2 { margin: 0; font-size: 16px; letter-spacing: 0; }
-select { height: 36px; min-width: 120px; border: 1px solid #b8c5c0; border-radius: 8px; background: #fff; color: var(--ink); padding: 0 10px; font-weight: 700; }
-.chart-wrap { position: relative; height: 610px; padding: 18px 12px 10px; overflow-x: auto; }
-svg { display: block; min-width: 980px; width: 100%; height: 570px; }
+.board { margin-top: 18px; display: grid; grid-template-columns: 1fr; gap: 14px; }
+.chart-card, .details { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 16px 40px rgba(44, 39, 30, .075); }
+.chart-head { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center; padding: 13px 16px; border-bottom: 1px solid var(--line); background: #fbfaf7; }
+.chart-head h2, .details h2 { margin: 0; font-size: 15px; letter-spacing: 0; }
+select { height: 34px; min-width: 124px; border: 1px solid #b6c2bd; border-radius: 8px; background: #fff; color: var(--ink); padding: 0 10px; font-weight: 750; }
+.chart-wrap { position: relative; height: 690px; padding: 18px 18px 8px; overflow-x: auto; overflow-y: hidden; }
+svg { display: block; min-width: 2240px; width: 100%; height: 642px; }
 .grid-line { stroke: var(--grid); stroke-width: 1; }
-.rank-label { fill: var(--rank); font-size: 13px; font-weight: 800; }
-.month-label { fill: #7b8581; font-size: 11px; }
-.brand-line { fill: none; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; opacity: .78; }
-.brand-line.dim { opacity: .16; }
-.brand-point { stroke: #fffdfa; stroke-width: 2; cursor: pointer; }
+.rank-label { fill: var(--rank); font-size: 14px; font-weight: 850; }
+.month-label { fill: #68736f; font-size: 11px; font-weight: 700; }
+.year-label { fill: #202b28; font-size: 12px; font-weight: 850; }
+.year-tick { stroke: #cbd3cf; stroke-width: 1.2; }
+.brand-line { fill: none; stroke-width: 4.8; stroke-linecap: round; stroke-linejoin: round; opacity: .9; }
+.brand-line.dim { opacity: .13; }
+.brand-point { stroke: #fffdf8; stroke-width: 2.2; cursor: pointer; }
 .brand-point.dim { opacity: .18; }
-.brand-name { font-size: 13px; font-weight: 850; paint-order: stroke; stroke: #fffdfa; stroke-width: 5px; stroke-linejoin: round; }
-.selected-guide { stroke: #1f2933; stroke-width: 1.5; stroke-dasharray: 4 5; opacity: .45; }
-.side { padding: 16px; align-self: start; }
-.side-top { display: flex; justify-content: space-between; gap: 10px; align-items: center; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
-#selectedMonth { color: var(--accent); font-weight: 850; font-variant-numeric: tabular-nums; }
-.rank-list { display: grid; gap: 9px; margin-top: 14px; }
-.rank-row { display: grid; grid-template-columns: 34px 1fr auto; gap: 10px; align-items: center; min-height: 42px; padding: 9px 0; border-bottom: 1px solid #eceee9; }
-.rank-num { color: #84908c; text-align: right; font-weight: 900; font-size: 18px; }
-.rank-brand { font-weight: 850; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.rank-score { font-variant-numeric: tabular-nums; font-weight: 800; color: #24302d; }
-.legend { display: flex; flex-wrap: wrap; gap: 8px; padding-top: 14px; margin-top: 12px; border-top: 1px solid var(--line); }
-.legend button { border: 1px solid var(--line); background: #fff; border-radius: 999px; padding: 6px 9px; color: var(--ink); font-size: 12px; cursor: pointer; }
+.brand-name { font-size: 14px; font-weight: 900; paint-order: stroke; stroke: #fffdf8; stroke-width: 5px; stroke-linejoin: round; }
+.selected-guide { stroke: #17201d; stroke-width: 1.6; stroke-dasharray: 4 5; opacity: .48; }
+.details { display: grid; grid-template-columns: minmax(360px, 520px) minmax(0, 1fr); gap: 18px; padding: 14px 16px; }
+.details-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding-bottom: 10px; border-bottom: 1px solid var(--line); }
+#selectedMonth { color: var(--accent); font-weight: 900; font-variant-numeric: tabular-nums; }
+.rank-list { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; margin-top: 11px; }
+.rank-row { min-height: 78px; padding: 10px; border: 1px solid #e4e8e1; border-radius: 8px; background: #fff; }
+.rank-num { color: #7d8985; font-weight: 950; font-size: 18px; }
+.rank-brand { margin-top: 6px; font-weight: 900; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rank-score { margin-top: 5px; font-variant-numeric: tabular-nums; font-weight: 850; color: #26312f; font-size: 13px; }
+.legend { display: flex; flex-wrap: wrap; align-content: start; gap: 8px; }
+.legend button { border: 1px solid var(--line); background: #fff; border-radius: 999px; padding: 7px 10px; color: var(--ink); font-size: 12px; font-weight: 750; cursor: pointer; }
 .legend button.active { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
-.swatch { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; vertical-align: 0; }
-.source { display: flex; justify-content: space-between; gap: 12px; color: var(--muted); font-size: 12px; padding-top: 12px; margin-top: 12px; border-top: 1px solid var(--line); }
-@media (max-width: 900px) {
+.swatch { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 7px; vertical-align: -1px; }
+.source { display: flex; justify-content: space-between; gap: 12px; color: var(--muted); font-size: 12px; margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--line); }
+@media (max-width: 980px) {
   header { grid-template-columns: 1fr; } .metrics { justify-content: flex-start; }
-  .board { grid-template-columns: 1fr; } .side { order: -1; }
-  .chart-wrap { height: 530px; } svg { height: 492px; min-width: 860px; }
+  .chart-wrap { height: 610px; } svg { height: 570px; min-width: 1900px; }
+  .details { grid-template-columns: 1fr; } .rank-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 560px) {
-  .wrap { width: min(100% - 22px, 1220px); padding-top: 22px; }
+  .wrap { width: min(100% - 20px, 1720px); padding-top: 20px; }
   .chart-head { grid-template-columns: 1fr; } select { width: 100%; }
-  .rank-row { grid-template-columns: 28px 1fr; } .rank-score { grid-column: 2; }
-  .source { flex-direction: column; }
+  .chart-wrap { height: 560px; padding-inline: 10px; } svg { height: 520px; min-width: 1680px; }
+  .rank-list { grid-template-columns: 1fr; } .source { flex-direction: column; }
 }
 </style>
 </head>
@@ -77,42 +74,37 @@ svg { display: block; min-width: 980px; width: 100%; height: 570px; }
 <main class="wrap">
   <header>
     <div>
-      <h1>????? ?????<br>?? Top 5 ??</h1>
-      <div class="lead">2021? 1??? 2026? 8???, ?? 1?~5? ?? ??? ???????</div>
+      <h1>커피전문점 브랜드평판<br>월별 Top 5 랭킹</h1>
+      <div class="lead">2021년 1월부터 2026년 8월까지, 매월 1위~5위 순위 이동과 브랜드평판지수</div>
     </div>
-    <div class="metrics" aria-label="??? ??">
-      <div class="metric"><b>2021-01</b><span>?? ?</span></div>
-      <div class="metric"><b>2026-08</b><span>?? ?</span></div>
-      <div class="metric"><b>68</b><span>? ???</span></div>
-      <div class="metric"><b>7</b><span>?? ???</span></div>
+    <div class="metrics" aria-label="데이터 요약">
+      <div class="metric"><b>2021-01</b><span>시작 월</span></div>
+      <div class="metric"><b>2026-08</b><span>최근 월</span></div>
+      <div class="metric"><b>68</b><span>월 데이터</span></div>
+      <div class="metric"><b>7</b><span>등장 브랜드</span></div>
     </div>
   </header>
-
   <section class="board">
     <div class="chart-card">
-      <div class="chart-head">
-        <h2>?? ?? ??</h2>
-        <select id="monthSelect" aria-label="? ??"></select>
-      </div>
-      <div class="chart-wrap"><svg id="chart" role="img" aria-label="?? ????? ????? 1??? 5? ?? ??"></svg></div>
+      <div class="chart-head"><h2>순위 이동 Bump Chart</h2><select id="monthSelect" aria-label="월 선택"></select></div>
+      <div class="chart-wrap"><svg id="chart" role="img" aria-label="월별 커피전문점 브랜드평판 1위부터 5위 순위 이동"></svg></div>
     </div>
-    <aside class="side">
-      <div class="side-top"><h2>?? ? Top 5</h2><span id="selectedMonth">2026-08</span></div>
-      <div id="rankList" class="rank-list"></div>
-      <div id="legend" class="legend" aria-label="??? ??"></div>
-      <div class="source"><span>??: brikorea.com ??????? ???</span><span>?? ???? ???????? ??</span></div>
-    </aside>
+    <div class="details">
+      <section><div class="details-head"><h2>선택 월 Top 5</h2><span id="selectedMonth">2026-08</span></div><div id="rankList" class="rank-list"></div></section>
+      <section><div class="details-head"><h2>브랜드</h2><span>클릭하면 강조</span></div><div id="legend" class="legend" aria-label="브랜드 필터"></div><div class="source"><span>원천: brikorea.com 브랜드평판지수 게시판</span><span>본문 텍스트의 브랜드평판지수만 사용</span></div></section>
+    </div>
   </section>
 </main>
 <script>
 const rawRows = [["2021-01",1,"스타벅스",2270618],["2021-01",2,"투썸플레이스",1501733],["2021-01",3,"이디야",604014],["2021-01",4,"메가커피",528079],["2021-01",5,"빽다방",262701],["2021-02",1,"스타벅스",2434383],["2021-02",2,"투썸플레이스",922303],["2021-02",3,"메가커피",539306],["2021-02",4,"이디야",501090],["2021-02",5,"빽다방",266424],["2021-03",1,"스타벅스",2782568],["2021-03",2,"투썸플레이스",935532],["2021-03",3,"엔제리너스",653652],["2021-03",4,"메가커피",643106],["2021-03",5,"이디야",432778],["2021-04",1,"스타벅스",3224097],["2021-04",2,"투썸플레이스",1114602],["2021-04",3,"메가커피",800617],["2021-04",4,"이디야",535184],["2021-04",5,"빽다방",372072],["2021-05",1,"스타벅스",3518722],["2021-05",2,"투썸플레이스",1179416],["2021-05",3,"메가커피",803913],["2021-05",4,"이디야",665242],["2021-05",5,"빽다방",440277],["2021-06",1,"스타벅스",3709707],["2021-06",2,"투썸플레이스",1190910],["2021-06",3,"메가커피",864645],["2021-06",4,"이디야",720242],["2021-06",5,"빽다방",476096],["2021-07",1,"스타벅스",3918805],["2021-07",2,"투썸플레이스",1321916],["2021-07",3,"메가커피",1062764],["2021-07",4,"이디야",637348],["2021-07",5,"빽다방",483178],["2021-08",1,"스타벅스",3966973],["2021-08",2,"투썸플레이스",1376933],["2021-08",3,"메가커피",1147202],["2021-08",4,"이디야",1015071],["2021-08",5,"빽다방",603275],["2021-09",1,"스타벅스",3659749],["2021-09",2,"투썸플레이스",1242420],["2021-09",3,"메가커피",1061101],["2021-09",4,"이디야",711182],["2021-09",5,"빽다방",544360],["2021-10",1,"스타벅스",3944276],["2021-10",2,"투썸플레이스",1290978],["2021-10",3,"메가커피",1230470],["2021-10",4,"이디야",639669],["2021-10",5,"빽다방",568819],["2021-11",1,"스타벅스",2532067],["2021-11",2,"투썸플레이스",1299036],["2021-11",3,"메가커피",1104381],["2021-11",4,"이디야",819663],["2021-11",5,"빽다방",526771],["2021-12",1,"스타벅스",3730189],["2021-12",2,"투썸플레이스",1491376],["2021-12",3,"메가커피",1030601],["2021-12",4,"이디야",764819],["2021-12",5,"빽다방",445363],["2022-01",1,"스타벅스",3222700],["2022-01",2,"투썸플레이스",1771756],["2022-01",3,"빽다방",964166],["2022-01",4,"메가커피",951091],["2022-01",5,"이디야",658214],["2022-02",1,"스타벅스",3033530],["2022-02",2,"투썸플레이스",1971234],["2022-02",3,"메가커피",9216796],["2022-02",4,"이디야",702128],["2022-02",5,"빽다방",421717],["2022-03",1,"스타벅스",2886248],["2022-03",2,"투썸플레이스",1407473],["2022-03",3,"메가커피",10883066],["2022-03",4,"이디야",696238],["2022-03",5,"빽다방",470285],["2022-04",1,"스타벅스",3908133],["2022-04",2,"투썸플레이스",1249848],["2022-04",3,"메가커피",1126408],["2022-04",4,"이디야",992530],["2022-04",5,"빽다방",792321],["2022-05",1,"스타벅스",4039414],["2022-05",2,"메가커피",1431581],["2022-05",3,"투썸플레이스",1351664],["2022-05",4,"이디야",741031],["2022-05",5,"빽다방",626206],["2022-06",1,"스타벅스",4662439],["2022-06",2,"메가커피",1471297],["2022-06",3,"투썸플레이스",1298196],["2022-06",4,"이디야",740280],["2022-06",5,"빽다방",641622],["2022-07",1,"스타벅스",3910760],["2022-07",2,"메가커피",1417220],["2022-07",3,"투썸플레이스",1340388],["2022-07",4,"이디야",764006],["2022-07",5,"빽다방",645312],["2022-08",1,"스타벅스",1577062],["2022-08",2,"메가커피",1453743],["2022-08",3,"투썸플레이스",1354163],["2022-08",4,"이디야",730424],["2022-08",5,"빽다방",640809],["2022-09",1,"스타벅스",2453879],["2022-09",2,"메가커피",1361434],["2022-09",3,"투썸플레이스",1205722],["2022-09",4,"이디야",644948],["2022-09",5,"빽다방",639928],["2022-10",1,"스타벅스",3996641],["2022-10",2,"메가커피",1575979],["2022-10",3,"투썸플레이스",1324048],["2022-10",4,"빽다방",808247],["2022-10",5,"이디야",773208],["2022-11",1,"스타벅스",3866161],["2022-11",2,"메가커피",1470284],["2022-11",3,"투썸플레이스",1333838],["2022-11",4,"이디야",820435],["2022-11",5,"컴포즈커피",699394],["2022-12",1,"스타벅스",3902574],["2022-12",2,"메가커피",1571994],["2022-12",3,"투썸플레이스",1511677],["2022-12",4,"이디야",766111],["2022-12",5,"컴포즈커피",739670],["2023-01",1,"스타벅스",3991176],["2023-01",2,"메가커피",1415467],["2023-01",3,"이디야",809956],["2023-01",4,"컴포즈커피",570611],["2023-01",5,"빽다방",543929],["2023-02",1,"스타벅스",3070165],["2023-02",2,"메가커피",1672284],["2023-02",3,"컴포즈커피",973485],["2023-02",4,"빽다방",945817],["2023-02",5,"이디야",913592],["2023-03",1,"스타벅스",3476260],["2023-03",2,"메가커피",1626429],["2023-03",3,"투썸플레이스",1482675],["2023-03",4,"이디야",818608],["2023-03",5,"컴포즈커피",743972],["2023-04",1,"스타벅스",3480308],["2023-04",2,"메가커피",1832462],["2023-04",3,"투썸플레이스",1359668],["2023-04",4,"이디야",838865],["2023-04",5,"컴포즈커피",784615],["2023-05",1,"스타벅스",3169235],["2023-05",2,"메가커피",1749367],["2023-05",3,"투썸플레이스",1216048],["2023-05",4,"빽다방",921528],["2023-05",5,"이디야",873350],["2023-06",1,"스타벅스",3681934],["2023-06",2,"메가커피",1915762],["2023-06",3,"투썸플레이스",1032938],["2023-06",4,"컴포즈커피",1012395],["2023-06",5,"빽다방",868723],["2023-07",1,"스타벅스",4703854],["2023-07",2,"메가커피",2842670],["2023-07",3,"컴포즈커피",1919713],["2023-07",4,"투썸플레이스",1561253],["2023-07",5,"빽다방",1483704],["2023-08",1,"스타벅스",4470393],["2023-08",2,"메가커피",3076662],["2023-08",3,"컴포즈커피",1511845],["2023-08",4,"투썸플레이스",1498985],["2023-08",5,"이디야",956305],["2023-09",1,"스타벅스",4625360],["2023-09",2,"메가커피",1830019],["2023-09",3,"투썸플레이스",1523227],["2023-09",4,"빽다방",1211000],["2023-09",5,"컴포즈커피",1018391],["2023-10",1,"스타벅스",4147798],["2023-10",2,"메가커피",1858430],["2023-10",3,"투썸플레이스",1393284],["2023-10",4,"빽다방",816155],["2023-10",5,"컴포즈커피",789105],["2023-11",1,"스타벅스",3795310],["2023-11",2,"메가커피",1863357],["2023-11",3,"빽다방",1433484],["2023-11",4,"투썸플레이스",1325716],["2023-11",5,"컴포즈커피",793560],["2023-12",1,"스타벅스",3990732],["2023-12",2,"메가커피",1810161],["2023-12",3,"투썸플레이스",1362850],["2023-12",4,"이디야",783867],["2023-12",5,"빽다방",769006],["2024-01",1,"스타벅스",3174190],["2024-01",2,"메가커피",2004836],["2024-01",3,"투썸플레이스",1126640],["2024-01",4,"빽다방",1014735],["2024-01",5,"컴포즈커피",854736],["2024-02",1,"스타벅스",3194576],["2024-02",2,"메가커피",1666016],["2024-02",3,"투썸플레이스",1401003],["2024-02",4,"컴포즈커피",1222450],["2024-02",5,"빽다방",842227],["2024-03",1,"스타벅스",3299648],["2024-03",2,"메가커피",1933006],["2024-03",3,"투썸플레이스",1551801],["2024-03",4,"컴포즈커피",1454192],["2024-03",5,"빽다방",936300],["2024-04",1,"스타벅스",3511967],["2024-04",2,"메가커피",1789970],["2024-04",3,"투썸플레이스",1378992],["2024-04",4,"컴포즈커피",989930],["2024-04",5,"빽다방",949029],["2024-05",1,"스타벅스",3460531],["2024-05",2,"메가커피",1808218],["2024-05",3,"투썸플레이스",1380500],["2024-05",4,"컴포즈커피",1280303],["2024-05",5,"빽다방",1137838],["2024-06",1,"스타벅스",3589736],["2024-06",2,"메가커피",2025557],["2024-06",3,"컴포즈커피",1670642],["2024-06",4,"투썸플레이스",1517588],["2024-06",5,"빽다방",1367434],["2024-07",1,"스타벅스",2873807],["2024-07",2,"메가커피",1941091],["2024-07",3,"컴포즈커피",1315864],["2024-07",4,"투썸플레이스",1150350],["2024-07",5,"빽다방",953866],["2024-08",1,"스타벅스",3256107],["2024-08",2,"메가커피",2135291],["2024-08",3,"투썸플레이스",1506814],["2024-08",4,"빽다방",1145010],["2024-08",5,"컴포즈커피",1013230],["2024-09",1,"스타벅스",3604583],["2024-09",2,"메가커피",2000167],["2024-09",3,"컴포즈커피",1545870],["2024-09",4,"투썸플레이스",1482564],["2024-09",5,"빽다방",950092],["2024-10",1,"스타벅스",5512977],["2024-10",2,"메가커피",2094284],["2024-10",3,"투썸플레이스",1627276],["2024-10",4,"컴포즈커피",1388611],["2024-10",5,"빽다방",1255011],["2024-11",1,"스타벅스",4066719],["2024-11",2,"메가커피",2133658],["2024-11",3,"빽다방",1496403],["2024-11",4,"컴포즈커피",1421822],["2024-11",5,"투썸플레이스",1297722],["2024-12",1,"스타벅스",4060747],["2024-12",2,"메가커피",2058732],["2024-12",3,"이디야",1191138],["2024-12",4,"빽다방",1184277],["2024-12",5,"컴포즈커피",987984],["2025-01",1,"스타벅스",4313893],["2025-01",2,"메가커피",1950473],["2025-01",3,"이디야",1206726],["2025-01",4,"투썸플레이스",1128522],["2025-01",5,"컴포즈커피",944912],["2025-02",1,"스타벅스",4366671],["2025-02",2,"메가커피",2063134],["2025-02",3,"이디야",1441361],["2025-02",4,"빽다방",1226935],["2025-02",5,"투썸플레이스",1123022],["2025-03",1,"스타벅스",4347194],["2025-03",2,"메가커피",2173356],["2025-03",3,"이디야",1199477],["2025-03",4,"컴포즈커피",1094332],["2025-03",5,"빽다방",1042581],["2025-04",1,"스타벅스",4244046],["2025-04",2,"메가커피",2194383],["2025-04",3,"이디야",1237394],["2025-04",4,"투썸플레이스",1077573],["2025-04",5,"컴포즈커피",901753],["2025-05",1,"스타벅스",3824900],["2025-05",2,"메가커피",2243084],["2025-05",3,"이디야",1624666],["2025-05",4,"투썸플레이스",1409355],["2025-05",5,"컴포즈커피",1376560],["2025-06",1,"스타벅스",3204756],["2025-06",2,"메가커피",1880879],["2025-06",3,"이디야",1313959],["2025-06",4,"컴포즈커피",969968],["2025-06",5,"투썸플레이스",705891],["2025-07",1,"스타벅스",4239198],["2025-07",2,"메가커피",2660402],["2025-07",3,"이디야",1663612],["2025-07",4,"컴포즈커피",1166772],["2025-07",5,"투썸플레이스",1097405],["2025-08",1,"스타벅스",5796980],["2025-08",2,"메가커피",4665416],["2025-08",3,"컴포즈커피",1715947],["2025-08",4,"이디야",1418714],["2025-08",5,"투썸플레이스",1276669],["2025-09",1,"스타벅스",5478125],["2025-09",2,"메가커피",2339364],["2025-09",3,"컴포즈커피",1324926],["2025-09",4,"투썸플레이스",1163755],["2025-09",5,"이디야",1075380],["2025-10",1,"스타벅스",4925291],["2025-10",2,"메가커피",4031529],["2025-10",3,"컴포즈커피",1680219],["2025-10",4,"이디야",1449812],["2025-10",5,"투썸플레이스",1399686],["2025-11",1,"스타벅스",4582052],["2025-11",2,"메가커피",3961658],["2025-11",3,"이디야",1508143],["2025-11",4,"컴포즈커피",1474617],["2025-11",5,"투썸플레이스",1438653],["2025-12",1,"스타벅스",4627641],["2025-12",2,"메가커피",3525460],["2025-12",3,"컴포즈커피",2175121],["2025-12",4,"투썸플레이스",1612913],["2025-12",5,"이디야",1521690],["2026-01",1,"스타벅스",5111835],["2026-01",2,"메가커피",3077660],["2026-01",3,"투썸플레이스",1932385],["2026-01",4,"이디야",977200],["2026-01",5,"컴포즈커피",888062],["2026-02",1,"스타벅스",5366220],["2026-02",2,"메가커피",2717257],["2026-02",3,"투썸플레이스",1353647],["2026-02",4,"이디야",1210872],["2026-02",5,"컴포즈커피",1026351],["2026-03",1,"스타벅스",5320488],["2026-03",2,"메가커피",2098576],["2026-03",3,"투썸플레이스",1939380],["2026-03",4,"이디야",946459],["2026-03",5,"컴포즈커피",900447],["2026-04",1,"스타벅스",5630908],["2026-04",2,"메가커피",3033337],["2026-04",3,"투썸플레이스",1546168],["2026-04",4,"이디야",1105265],["2026-04",5,"컴포즈커피",907255],["2026-05",1,"스타벅스",5965354],["2026-05",2,"메가커피",2570668],["2026-05",3,"투썸플레이스",1711798],["2026-05",4,"컴포즈커피",976930],["2026-05",5,"이디야",958659],["2026-06",1,"메가커피",3532228],["2026-06",2,"투썸플레이스",1694967],["2026-06",3,"컴포즈커피",1210566],["2026-06",4,"이디야",924284],["2026-06",5,"빽다방",818946],["2026-07",1,"메가커피",2750063],["2026-07",2,"투썸플레이스",1450207],["2026-07",3,"컴포즈커피",1176307],["2026-07",4,"이디야",1116376],["2026-07",5,"스타벅스",922710],["2026-08",1,"메가커피",2011441],["2026-08",2,"투썸플레이스",1725154],["2026-08",3,"컴포즈커피",1004962],["2026-08",4,"이디야",940726],["2026-08",5,"스타벅스",752620]];
+const brandColors = {"스타벅스":"#00704A","메가커피":"#0057B8","투썸플레이스":"#C2185B","이디야":"#F28C28","빽다방":"#D32F2F","컴포즈커피":"#6F42C1","엔제리너스":"#0097A7"};
 const rows = rawRows.map(row => ({ month: row[0], rank: row[1], brand: row[2], score: row[3] }));
 const months = [...new Set(rows.map(row => row.month))].sort();
 const brands = [...new Set(rows.map(row => row.brand))].sort();
 const byMonth = new Map(months.map(month => [month, rows.filter(row => row.month === month).sort((a,b) => a.rank - b.rank)]));
 const byBrand = new Map(brands.map(brand => [brand, rows.filter(row => row.brand === brand).sort((a,b) => months.indexOf(a.month) - months.indexOf(b.month))]));
-const palette = ["#0f766e", "#b7791f", "#2563eb", "#be123c", "#6d5dfc", "#15803d", "#c2410c", "#0369a1", "#7c3aed"];
-const color = new Map(brands.map((brand, index) => [brand, palette[index % palette.length]]));
+const fallbackPalette = ["#00704A", "#0057B8", "#C2185B", "#F28C28", "#D32F2F", "#6F42C1", "#0097A7", "#111827"];
+const color = new Map(brands.map((brand, index) => [brand, brandColors[brand] || fallbackPalette[index % fallbackPalette.length]]));
 const svg = document.getElementById("chart");
 const select = document.getElementById("monthSelect");
 const rankList = document.getElementById("rankList");
@@ -120,103 +112,48 @@ const selectedMonth = document.getElementById("selectedMonth");
 const legend = document.getElementById("legend");
 let activeBrand = null;
 let activeMonth = months[months.length - 1];
-
-months.forEach(month => {
-  const option = document.createElement("option");
-  option.value = month;
-  option.textContent = month;
-  if (month === activeMonth) option.selected = true;
-  select.appendChild(option);
-});
-
+months.forEach(month => { const option = document.createElement("option"); option.value = month; option.textContent = month; if (month === activeMonth) option.selected = true; select.appendChild(option); });
 function fmt(value) { return new Intl.NumberFormat("ko-KR").format(value); }
 function xFor(index, width, left, right) { return left + (width - left - right) * index / Math.max(1, months.length - 1); }
 function yFor(rank, top, rowGap) { return top + (rank - 1) * rowGap; }
-function make(tag, attrs = {}, text = "") {
-  const el = document.createElementNS("http://www.w3.org/2000/svg", tag);
-  Object.entries(attrs).forEach(([key, value]) => el.setAttribute(key, value));
-  if (text) el.textContent = text;
-  return el;
-}
+function make(tag, attrs = {}, text = "") { const el = document.createElementNS("http://www.w3.org/2000/svg", tag); Object.entries(attrs).forEach(([key, value]) => el.setAttribute(key, value)); if (text) el.textContent = text; return el; }
 function pathFor(entries, width, left, right, top, rowGap) {
   if (!entries.length) return "";
-  const points = entries.map(row => ({
-    x: xFor(months.indexOf(row.month), width, left, right),
-    y: yFor(row.rank, top, rowGap)
-  }));
+  const points = entries.map(row => ({ x: xFor(months.indexOf(row.month), width, left, right), y: yFor(row.rank, top, rowGap) }));
   let path = `M ${points[0].x.toFixed(1)} ${points[0].y.toFixed(1)}`;
-  for (let i = 1; i < points.length; i += 1) {
-    const prev = points[i - 1];
-    const next = points[i];
-    const dx = (next.x - prev.x) * 0.5;
-    path += ` C ${(prev.x + dx).toFixed(1)} ${prev.y.toFixed(1)}, ${(next.x - dx).toFixed(1)} ${next.y.toFixed(1)}, ${next.x.toFixed(1)} ${next.y.toFixed(1)}`;
-  }
+  for (let i = 1; i < points.length; i += 1) { const prev = points[i - 1]; const next = points[i]; const dx = (next.x - prev.x) * 0.5; path += ` C ${(prev.x + dx).toFixed(1)} ${prev.y.toFixed(1)}, ${(next.x - dx).toFixed(1)} ${next.y.toFixed(1)}, ${next.x.toFixed(1)} ${next.y.toFixed(1)}`; }
   return path;
 }
 function renderChart() {
-  const width = Math.max(980, svg.parentElement.clientWidth - 24);
-  const height = window.innerWidth <= 900 ? 492 : 570;
-  const left = 72, right = 80, top = 54, rowGap = (height - 128) / 4;
+  const width = Math.max(2240, svg.parentElement.clientWidth - 28);
+  const height = window.innerWidth <= 560 ? 520 : window.innerWidth <= 980 ? 570 : 642;
+  const left = 140, right = 170, top = 56, rowGap = (height - 176) / 4;
   svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
   svg.innerHTML = "";
-
-  for (let rank = 1; rank <= 5; rank += 1) {
-    const y = yFor(rank, top, rowGap);
-    svg.appendChild(make("line", { x1: left, x2: width - right, y1: y, y2: y, class: "grid-line" }));
-    svg.appendChild(make("text", { x: 22, y: y + 5, class: "rank-label" }, `${rank}?`));
-  }
+  for (let rank = 1; rank <= 5; rank += 1) { const y = yFor(rank, top, rowGap); svg.appendChild(make("line", { x1: left, x2: width - right, y1: y, y2: y, class: "grid-line" })); svg.appendChild(make("text", { x: 38, y: y + 5, class: "rank-label" }, `${rank}?`)); }
   months.forEach((month, index) => {
-    if (index % 3 !== 0 && index !== months.length - 1) return;
     const x = xFor(index, width, left, right);
-    svg.appendChild(make("text", { x, y: height - 28, "text-anchor": "middle", class: "month-label" }, month));
+    const year = month.slice(0, 4);
+    const isJanuary = month.endsWith("-01");
+    const showMonth = index % 2 === 0 || index === months.length - 1 || isJanuary;
+    if (isJanuary) { svg.appendChild(make("line", { x1: x, x2: x, y1: top - 30, y2: yFor(5, top, rowGap) + 30, class: "year-tick" })); svg.appendChild(make("text", { x, y: height - 18, "text-anchor": "middle", class: "year-label" }, year)); }
+    if (showMonth) { const label = make("text", { x, y: height - 52, "text-anchor": "end", class: "month-label", transform: `rotate(-42 ${x} ${height - 52})` }, month.slice(2)); svg.appendChild(label); }
   });
   const selectedX = xFor(months.indexOf(activeMonth), width, left, right);
-  svg.appendChild(make("line", { x1: selectedX, x2: selectedX, y1: top - 24, y2: yFor(5, top, rowGap) + 26, class: "selected-guide" }));
-
+  svg.appendChild(make("line", { x1: selectedX, x2: selectedX, y1: top - 34, y2: yFor(5, top, rowGap) + 34, class: "selected-guide" }));
   brands.forEach(brand => {
-    const entries = byBrand.get(brand);
-    if (!entries.length) return;
+    const entries = byBrand.get(brand); if (!entries.length) return;
     const dim = activeBrand && activeBrand !== brand;
     svg.appendChild(make("path", { d: pathFor(entries, width, left, right, top, rowGap), stroke: color.get(brand), class: `brand-line${dim ? " dim" : ""}` }));
-    entries.forEach(row => {
-      const circle = make("circle", { cx: xFor(months.indexOf(row.month), width, left, right), cy: yFor(row.rank, top, rowGap), r: row.month === activeMonth ? 6 : 4, fill: color.get(brand), class: `brand-point${dim ? " dim" : ""}` });
-      circle.addEventListener("click", () => { activeMonth = row.month; select.value = row.month; update(); });
-      svg.appendChild(circle);
-    });
-    const first = entries[0];
-    const last = entries[entries.length - 1];
-    svg.appendChild(make("text", { x: xFor(months.indexOf(first.month), width, left, right) - 9, y: yFor(first.rank, top, rowGap) + 4, fill: color.get(brand), class: "brand-name", "text-anchor": "end" }, brand));
-    svg.appendChild(make("text", { x: xFor(months.indexOf(last.month), width, left, right) + 9, y: yFor(last.rank, top, rowGap) + 4, fill: color.get(brand), class: "brand-name" }, brand));
+    entries.forEach(row => { const cx = xFor(months.indexOf(row.month), width, left, right); const cy = yFor(row.rank, top, rowGap); const circle = make("circle", { cx, cy, r: row.month === activeMonth ? 6.5 : 4.4, fill: color.get(brand), class: `brand-point${dim ? " dim" : ""}` }); circle.addEventListener("click", () => { activeMonth = row.month; select.value = row.month; update(); }); svg.appendChild(circle); });
+    const first = entries[0], last = entries[entries.length - 1];
+    svg.appendChild(make("text", { x: xFor(months.indexOf(first.month), width, left, right) - 12, y: yFor(first.rank, top, rowGap) + 5, fill: color.get(brand), class: "brand-name", "text-anchor": "end" }, brand));
+    svg.appendChild(make("text", { x: xFor(months.indexOf(last.month), width, left, right) + 12, y: yFor(last.rank, top, rowGap) + 5, fill: color.get(brand), class: "brand-name" }, brand));
   });
 }
-function renderSide() {
-  selectedMonth.textContent = activeMonth;
-  rankList.innerHTML = "";
-  byMonth.get(activeMonth).forEach(row => {
-    const el = document.createElement("div");
-    el.className = "rank-row";
-    el.innerHTML = `<div class="rank-num">${row.rank}</div><div class="rank-brand"><span class="swatch" style="background:${color.get(row.brand)}"></span>${row.brand}</div><div class="rank-score">${fmt(row.score)}</div>`;
-    el.addEventListener("mouseenter", () => { activeBrand = row.brand; update(false); });
-    el.addEventListener("mouseleave", () => { activeBrand = null; update(false); });
-    rankList.appendChild(el);
-  });
-}
-function renderLegend() {
-  legend.innerHTML = "";
-  brands.forEach(brand => {
-    const button = document.createElement("button");
-    button.type = "button";
-    button.className = activeBrand === brand ? "active" : "";
-    button.innerHTML = `<span class="swatch" style="background:${color.get(brand)}"></span>${brand}`;
-    button.addEventListener("click", () => { activeBrand = activeBrand === brand ? null : brand; update(false); });
-    legend.appendChild(button);
-  });
-}
-function update(includeSide = true) {
-  renderChart();
-  if (includeSide) renderSide();
-  renderLegend();
-}
+function renderSide() { selectedMonth.textContent = activeMonth; rankList.innerHTML = ""; byMonth.get(activeMonth).forEach(row => { const el = document.createElement("div"); el.className = "rank-row"; el.innerHTML = `<div class="rank-num">${row.rank}?</div><div class="rank-brand"><span class="swatch" style="background:${color.get(row.brand)}"></span>${row.brand}</div><div class="rank-score">${fmt(row.score)}</div>`; el.addEventListener("mouseenter", () => { activeBrand = row.brand; update(false); }); el.addEventListener("mouseleave", () => { activeBrand = null; update(false); }); rankList.appendChild(el); }); }
+function renderLegend() { legend.innerHTML = ""; brands.forEach(brand => { const button = document.createElement("button"); button.type = "button"; button.className = activeBrand === brand ? "active" : ""; button.innerHTML = `<span class="swatch" style="background:${color.get(brand)}"></span>${brand}`; button.addEventListener("click", () => { activeBrand = activeBrand === brand ? null : brand; update(false); }); legend.appendChild(button); }); }
+function update(includeSide = true) { renderChart(); if (includeSide) renderSide(); renderLegend(); }
 select.addEventListener("change", event => { activeMonth = event.target.value; update(); });
 window.addEventListener("resize", () => update(false));
 update();
